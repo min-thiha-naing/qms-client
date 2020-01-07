@@ -1,0 +1,39 @@
+<div id="login-background" fxFlexFill fxLayout="row" fxLayoutAlign="start center">
+    <div id="floating-container" fxFlexLayout="row" fxFlexOffset="15vw" fxFlex="50">
+        <!-- Login section -->
+        <div fxFlex="50">
+            <div class="title">Q Login</div>
+            <div class="container">
+                <mat-radio-group class="user-radio-group">
+                    <mat-radio-button class="user-radio-btn" value="user">User</mat-radio-button>
+                    <mat-radio-button class="user-radio-btn" value="admin">Admin</mat-radio-button>
+                </mat-radio-group>
+                <form id="login-form" [formGroup]="loginForm" fxLayout="column" fxLayoutAlign="start stretch">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Username</mat-label>
+                        <input matInput formControlName="username">
+                        <mat-icon matSuffix>person_outline</mat-icon>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Password</mat-label>
+                        <input matInput formControlName="password">
+                        <mat-icon matSuffix>lock_outline</mat-icon>
+                    </mat-form-field>
+                    <button type="submit" mat-raised-button color="primary">LOGIN</button>
+                </form>
+            </div>
+        </div>
+
+        <mat-divider vertical="true"></mat-divider>
+        <!-- Info section -->
+        <div fxFlex="auto">
+            <div class="title">Info</div>
+            <mat-list role="list" class="container">
+                <mat-list-item role="listitem">Institution</mat-list-item>
+                <mat-list-item role="listitem">Clinic</mat-list-item>
+                <mat-list-item role="listitem">Terminal</mat-list-item>
+                <mat-list-item role="listitem">IP Addr</mat-list-item>
+            </mat-list>
+        </div>
+    </div>
+</div>

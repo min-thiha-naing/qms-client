@@ -1,0 +1,30 @@
+.header-container{
+    padding: 1vw 2vw;
+}
+
+.left-section, .right-section{
+    font-size: 14px;
+}
+
+.queue-no{
+    background:yellow;
+    text-align: right;
+    text-transform: uppercase;
+    padding: 5px 15px;
+    border: solid 1px lightgrey;
+}
+
+.button-section{
+
+    #refresh-btn{
+        color: green;
+    }
+
+    #about-btn{
+        color: blue;
+    }
+
+    #exit-btn{
+        color: red;
+    }
+}

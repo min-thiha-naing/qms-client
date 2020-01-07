@@ -1,0 +1,34 @@
+@import 'src/themes/starter-variables.scss';
+
+#login-background{
+    background-image: url('/assets/images/business_blue.jpg');
+    background-size: cover;
+}
+
+#floating-container{
+    height: fit-content;
+    background: white;
+}
+
+.title{
+    display: flex;
+    background-color: rgb(67, 110, 165);
+    color: white;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-radio-group{
+    display: flex;
+    margin-bottom: 15px;
+    
+    mat-radio-button{
+        display: flex;
+        margin: 5px;
+    }
+}
+
+.container{
+    padding: 20px;
+}

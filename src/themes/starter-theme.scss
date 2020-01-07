@@ -1,0 +1,8 @@
+@import '~@angular/material/theming';
+@import './starter-variables.scss';
+
+@include mat-core();
+
+$starter-theme: mat-light-theme($starter-theme-primary, $starter-theme-accent, $starter-theme-warn);
+
+@include angular-material-theme($starter-theme);
