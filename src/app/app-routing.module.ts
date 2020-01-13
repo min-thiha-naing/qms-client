@@ -22,6 +22,10 @@ const routes: Routes = [
     loadChildren: './rt/rt.module#RtModule',
   },
   {
+    path: 'crt',
+    loadChildren: './crt/crt.module#CrtModule',
+  },
+  {
     path: '**',
     redirectTo: 'login',
     pathMatch: 'full',
