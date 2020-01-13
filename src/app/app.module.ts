@@ -6,14 +6,21 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { LoginComponent } from './login/login.component';
+import { AuthComponent } from './auth/auth.component';
 import { MaterialModule } from './material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { FakeDbService } from './fake-db/fake-db.service';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { TestComponent } from './test/test.component';
+import { MatDialog } from '@angular/material';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    AuthComponent,
+    TestComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,8 +29,19 @@ import { ReactiveFormsModule } from '@angular/forms';
     FlexLayoutModule,
     MaterialModule,
     ReactiveFormsModule,
+    HttpClientModule,
+    InMemoryWebApiModule.forRoot(
+      FakeDbService,
+      { delay: 0, passThruUnknownUrl: true }
+    )
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

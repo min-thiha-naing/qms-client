@@ -5,6 +5,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { MaterialModule } from '../material.module';
 import { HeaderComponent } from '../shared/layout/header/header.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { RoomModuleTabComponent } from './room-module-tab/room-module-tab.component';
+import { AddServicePointComponent } from './add-service-point/add-service-point.component';
+import { MatDialogModule } from '@angular/material';
 
 const routes: Routes = [
   {
@@ -19,12 +22,18 @@ const routes: Routes = [
   declarations: [
     RtComponent,
     HeaderComponent,
+    RoomModuleTabComponent,
+    AddServicePointComponent,
+  ],
+  entryComponents: [
+    AddServicePointComponent,
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     MaterialModule,
     FlexLayoutModule,
+    MatDialogModule
   ],
   exports: [
     RouterModule,

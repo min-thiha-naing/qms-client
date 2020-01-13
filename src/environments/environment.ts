@@ -3,7 +3,19 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  // baseUrl: 'http://192.168.200.10:8080/api/',
+  // rootUrl: 'http://192.168.200.10:8080/',
+  baseUrl: 'http://192.168.1.4:8081',
+  rootUrl: 'http://192.168.1.4:8081',
+  // baseUrl: 'http://localhost:8081/',
+  // rootUrl: 'http://localhost:8081/',
+  oauth2ClientID: 'client',
+  oauth2ClientPassword: 'admin',
+  // oauth2ClientID: 'easy-note-api-client-id',
+  // oauth2ClientPassword: 'easy-note-api-client-password'
+
+  terminalId: '3555',
 };
 
 /*

@@ -9,7 +9,14 @@ import {
   MatIconModule,
   MatButtonModule,
   MatListModule,
-} from '@angular/material'
+  MatTabsModule,
+  MatTableModule,
+  MatGridListModule,
+  MatCheckboxModule,
+  MatDialogModule,
+} from '@angular/material';
+
+import {DropdownModule} from 'primeng/dropdown';
 
 
 
@@ -27,6 +34,13 @@ import {
     MatIconModule,
     MatButtonModule,
     MatListModule,
+    MatTabsModule,
+    MatTableModule,
+    MatGridListModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    DropdownModule
+,
   ]
 })
 export class MaterialModule { }

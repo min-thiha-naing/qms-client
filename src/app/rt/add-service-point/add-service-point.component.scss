@@ -1,0 +1,10 @@
+@import "src/themes/starter-variables.scss";
+
+.first-header-bar, .second-header-bar{
+    height: 3em;
+    font-size: 14px;
+}
+
+.first-header-bar{
+    background-color: mat-color($starter-theme-primary);
+}

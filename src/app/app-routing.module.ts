@@ -1,20 +1,29 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+import { AuthComponent } from './auth/auth.component';
+import { AuthService } from './auth/auth.service';
+import { TestComponent } from './test/test.component';
 
 
 const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent,
+    component: AuthComponent,
+    resolve: {
+      terminal: AuthService,
+    }
+  },
+  {
+    path: 'test',
+    component: TestComponent,
   },
   {
     path: 'rt',
     loadChildren: './rt/rt.module#RtModule',
   },
   {
-    path: '',
-    redirectTo: 'rt',
+    path: '**',
+    redirectTo: 'login',
     pathMatch: 'full',
   }
 ];
