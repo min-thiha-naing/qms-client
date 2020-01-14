@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.subs.add(this.qS._servingQ.asObservable().subscribe(q=> this.servingQ = q));
+    this.subs.add(this.qS._crtServingQ.asObservable().subscribe(q=> this.servingQ = q));
   }
 
   logout() {
