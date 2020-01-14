@@ -79,9 +79,10 @@ export class PaymentTabComponent implements OnInit {
     this.subs.add(this.qS._crtHoldQs.asObservable().subscribe(Qs => this.holdQDS = new MatTableDataSource<any>(Qs)));
     this.subs.add(this.qS._crtMissQs.asObservable().subscribe(Qs => this.missQDS = new MatTableDataSource<any>(Qs)));
 
-    this.subs.add(this.qS._servingQ.asObservable().subscribe(Q => {
+    this.subs.add(this.qS._crtServingQ.asObservable().subscribe(Q => {
       this.servingQ = Q;
       if (this.servingQ) {
+        console.log(this.servingQ)
         if (this.servingQ.planList) {
           console.log(this.transform.planListToDestLocList(this.servingQ.planList));
           this.journeyListDS = new MatTableDataSource<any>(this.transform.planListToDestLocList(this.servingQ.planList));
@@ -173,6 +174,7 @@ export class PaymentTabComponent implements OnInit {
   }
 
   onClickNoResp() {
+    console.log(this.servingQ)
     if (this.servingQ) {
       this.loading = true;
       this.qS.crtMissQ(this.servingQ).subscribe(
@@ -229,6 +231,7 @@ export class PaymentTabComponent implements OnInit {
       queue: queue,
       fromPanel: fromPanel,
     };
+    console.log(this.selectedRowData)
   }
 
   ngOnDestroy() {

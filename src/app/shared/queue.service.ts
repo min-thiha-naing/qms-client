@@ -40,7 +40,7 @@ export class QueueService {
   }
 
   get crtAllQs() {
-    return this._rtAllQs.asObservable().pipe(map(allQs => {
+    return this._crtAllQs.asObservable().pipe(map(allQs => {
       // In case there is serving Q
       if (allQs[0] && allQs[0].queueStatusId == QueueStatus.SERVING) {
         allQs[0].planList = this.sortLocByOrderId(allQs[0].planList);
@@ -61,6 +61,9 @@ export class QueueService {
     this.getRtAllQ();
     this.getRtHoldQ();
     this.getRtMissQ();
+    this.getCrtAllQ();
+    this.getCrtHoldQ();
+    this.getCrtMissQ();
     this.socketClient.onMessage('/user/queue/reply').subscribe(q => {
       if (q.queueStatusId === QueueStatus.MISS) {
         this.addRespToQueueList(this._rtMissQs, q);
@@ -219,6 +222,7 @@ export class QueueService {
   }
 
   crtHoldQ(queue: any) {
+    console.log("queue")
     console.log(queue)
     return this.api.changeQ(queue.id, 'h').pipe(tap(resp => {
       this.removeFromQueueList(this._crtAllQs, resp);
