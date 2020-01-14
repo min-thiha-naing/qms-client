@@ -15,12 +15,15 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { TestComponent } from './test/test.component';
 import { NgxLoadingModule } from 'ngx-loading';
+import { MatDialog } from '@angular/material';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
     TestComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,6 +47,7 @@ import { NgxLoadingModule } from 'ngx-loading';
       multi: true,
     },
   ],
+  entryComponents:[ConfirmDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

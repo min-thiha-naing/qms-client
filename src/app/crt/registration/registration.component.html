@@ -1,0 +1,402 @@
+<div class="patient" style="margin-top: 8px !important;">
+    <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+        <span>Patient Information:</span>
+        <button mat-raised-button>
+            Clear All Record
+        </button>
+    </div>
+    <div class="info">
+        <form #patientForm="ngForm">
+            <table>
+                <tr>
+                    <td>
+                        <span class="label">1. NRIC/FIN: *</span>
+                    </td>
+                    <td>
+                        :<input #nirc name="nirc" autocomplete="off">
+                    </td>
+                    <td>
+                        <span class="label">4. Category*</span>
+                    </td>
+                    <td>
+                        :
+                        <select required>
+                            <option *ngFor="let category of categories" [value]="category.id">
+                                {{category.categoryName}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <span class="label">6. Change Category</span>
+                    </td>
+                    <td rowspan="3" style="height: 50px; text-align: center;">
+                        <button mat-raised-button color="primary" style="height: 50px;">
+                            CHANGE Q
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="label">2. Name</span>
+                    </td>
+                    <td>
+                        :<input #nirc name="nirc" autocomplete="off">
+                    </td>
+                    <td>
+                        <span class="label">5. Questionnaire</span>
+                    </td>
+                    <td>
+                        : Y | N | Y | X | X X | 8
+                    </td>
+                    <td>
+                        <span class="label">6. Change Category</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="label">3. Vasit Type</span>
+                    </td>
+                    <td>
+                        :<select required>
+                            <option *ngFor="let visitType of visitTypes" [value]="visitType.id">
+                                {{visitType.name}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <span class="label">6. EPIC Failure</span>
+                    </td>
+                    <td>
+                        : Outstanding Payment
+                    </td>
+                    <td>
+                        <span class="label">6. Change Category</span>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<!-- <mat-divider style="margin: 20px 0px;"></mat-divider> -->
+<div class="registration" fxLayout="row" fxLayoutAlign="space-between">
+    <div fxFlex="74" style="border: 1px solid rgba(0, 0, 0, 0.12)">
+
+        <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="info">
+                [Total Q=], [Fresh Q=], [Miss Q=], [Missed Back=]
+            </div>
+            <!-- <div class="status">
+                [ Server Status: <span>Online</span> ]
+            </div> -->
+        </div>
+
+        <div class="registration-list">
+            <table #queueTable mat-table [dataSource]="queueDataSource">
+
+                <ng-container matColumnDef="qNo">
+                    <th mat-header-cell *matHeaderCellDef> Q.No </th>
+                    <td mat-cell *matCellDef="let element"> {{element.qNo}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="mrn">
+                    <th mat-header-cell *matHeaderCellDef> MRN </th>
+                    <td mat-cell *matCellDef="let element"> {{element.mrn}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="visitType">
+                    <th mat-header-cell *matHeaderCellDef> Visit Type </th>
+                    <td mat-cell *matCellDef="let element"> {{element.visitType}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="apptTime">
+                    <th mat-header-cell *matHeaderCellDef> Appt Time </th>
+                    <td mat-cell *matCellDef="let element"> {{element.apptTime}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="waitTime">
+                    <th mat-header-cell *matHeaderCellDef> Wait Time </th>
+                    <td mat-cell *matCellDef="let element"> {{element.waitTime}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="tWaitTime">
+                    <th mat-header-cell *matHeaderCellDef> T.Wait Time </th>
+                    <td mat-cell *matCellDef="let element"> {{element.tWaitTime}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="callTime">
+                    <th mat-header-cell *matHeaderCellDef> Call Time </th>
+                    <td mat-cell *matCellDef="let element"> {{element.callTime}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="remarks">
+                    <th mat-header-cell *matHeaderCellDef> Remarks </th>
+                    <td mat-cell *matCellDef="let element"> {{element.remarks}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="queueDisplayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: queueDisplayedColumns;"></tr>
+            </table>
+
+        </div>
+    </div>
+    <div class="standard" fxFlex="25">
+        <div class="header" fxLayout="row" fxLayoutAlign="space-between center" z>
+            <div>
+                Standard Actions
+            </div>
+            <div>
+                Legend
+            </div>
+        </div>
+        <div class="actions">
+            <table>
+                <tbody>
+                    <tr>
+                        <td fxFlex="50">
+                            <button mat-raised-button>
+                                <span>NEXT Q</span>
+                                <span fxLayout="row" fxLayoutAlign="space-around center">
+                                    <mat-icon>double_arrow</mat-icon>
+                                </span>
+                            </button>
+                        </td>
+                        <td fxFlex="50">
+                            <button mat-raised-button>
+                                <span>SILENT CALL</span>
+                                <span fxLayout="row" fxLayoutAlign="space-around center">
+                                    <mat-icon>volume_off</mat-icon>
+                                </span> 
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td fxFlex="50">
+                            <button mat-raised-button>
+                                <span> CALL Q</span>
+                                <span fxLayout="row" fxLayoutAlign="space-around center">
+                                    <mat-icon>volume_up</mat-icon>
+                                </span>
+                            </button>
+                        </td>
+                        <td fxFlex="50">
+                            <button mat-raised-button>
+                                <span>PRINT CALL</span>
+                                <span fxLayout="row" fxLayoutAlign="space-around center">
+                                    <mat-icon>print</mat-icon>
+                                </span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td fxFlex="50">
+                            <button mat-raised-button>
+                                <span>MISS Q</span>
+                                <span fxLayout="row" fxLayoutAlign="space-around center">
+                                    <mat-icon>report_problem</mat-icon>
+                                </span>
+                            </button>
+                        </td>
+                        <td fxFlex="50">
+                            <button mat-raised-button>
+                                <span>ADD REMARKS</span>
+                                <span fxLayout="row" fxLayoutAlign="space-around center">
+                                    <mat-icon>chat</mat-icon>
+                                </span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td fxFlex="50">
+                            <button mat-raised-button>
+                                <span>TRANSFER</span>
+                                <span fxLayout="row" fxLayoutAlign="space-around center">
+                                    <mat-icon>send</mat-icon>
+                                </span>
+                            </button>
+                        </td>
+                        <td fxFlex="50">
+                            <button mat-raised-button>
+                                <span>END Q</span>
+                                <span fxLayout="row" fxLayoutAlign="space-around center">
+                                    <mat-icon>home</mat-icon>
+                                </span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- <mat-divider style="margin: 20px 0px;"></mat-divider> -->
+
+<div class="service" fxLayout="row" fxLayoutAlign="space-between">
+    <div class="location" fxFlex="40">
+        <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+            <span>New Service Locations</span>
+            <span>
+                Institution:
+                <select>
+                    <option value="volvo" selected>Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                </select>
+            </span>
+        </div>
+
+        <div class="info">
+            <div class="clinic">
+                <span>
+                    Select Clinic:
+                </span>
+                <select>
+                    <option value="volvo" selected>Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                </select>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="location-list">
+                <table mat-table [dataSource]="locationDataSource">
+
+                    <!-- Checkbox Column -->
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox></mat-checkbox>
+                            <!-- <mat-checkbox 
+                                (change)="$event ? masterLocationToggle() : null"
+                                [checked]="locationSelection.hasValue() && isAllLocationSelected()"
+                                [indeterminate]="locationSelection.hasValue() && !isAllLocationSelected()"
+                                [aria-label]="checkboxLocationLabel()"
+                                >
+                            </mat-checkbox> -->
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox></mat-checkbox>
+                            <!-- <mat-checkbox 
+                                (click)="$event.stopPropagation()"
+                                (change)="$event ? locationSelection.toggle(row) : null"
+                                [checked]="locationSelection.isSelected(row)" [aria-label]="checkboxLocationLabel(row)"
+                                >
+                            </mat-checkbox> -->
+                        </td>
+                    </ng-container>
+
+                    <!-- Location Column -->
+                    <ng-container matColumnDef="location">
+                        <th mat-header-cell *matHeaderCellDef> Location </th>
+                        <td mat-cell *matCellDef="let element"> {{element.locationName}} </td>
+                    </ng-container>
+
+                    <!-- InQ Column -->
+                    <ng-container matColumnDef="inQ">
+                        <th mat-header-cell *matHeaderCellDef> In Q </th>
+                        <td mat-cell *matCellDef="let element"> InQ </td>
+                    </ng-container>
+
+                    <!-- Order Column -->
+                    <ng-container matColumnDef="order">
+                        <th mat-header-cell *matHeaderCellDef> Order </th>
+                        <td mat-cell *matCellDef="let element"> Order </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="locationDisplayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: locationDisplayedColumns;"
+                        (click)="locationSelection.toggle(row)"></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions" fxFlex="10" fxLayout="column" fxLayoutAlign="space-around center">
+        <button mat-raised-button (click)="addToFirst()">
+            <span>ADD TO FIRST</span>
+            <span fxLayout="row" fxLayoutAlign="space-around center">
+                <mat-icon>double_arrow</mat-icon>
+                1
+            </span>
+        </button>
+        <button mat-raised-button (click)="addToLast()">
+            ADD TO LAST
+            <span fxLayout="row" fxLayoutAlign="space-around center">
+                <mat-icon>double_arrow</mat-icon>
+                L
+            </span>
+        </button>
+        <button mat-raised-button (click)="removeJourneySelectedRows()">
+            REMOVE
+            <mat-icon>clear</mat-icon>
+        </button>
+    </div>
+
+    <div class="journey" fxFlex="50">
+        <div class="header">
+            <span>Current Journey List</span>
+        </div>
+        <div class="info">
+            <div class="journey-list">
+                <table #journeyTable mat-table [dataSource]="journeyDataSource">
+
+                    <!-- Checkbox Column -->
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox></mat-checkbox>
+                            <!-- <mat-checkbox (change)="$event ? masterJourneyToggle() : null"
+                                [checked]="journeySelection.hasValue() && isAllJourneySelected()"
+                                [indeterminate]="journeySelection.hasValue() && !isAllJourneySelected()"
+                                [aria-label]="checkboxJourneyLabel()">
+                            </mat-checkbox> -->
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox></mat-checkbox>
+                            <!-- <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? journeySelection.toggle(row) : null"
+                                [checked]="journeySelection.isSelected(row)" [aria-label]="checkboxJourneyLabel(row)">
+                            </mat-checkbox> -->
+                        </td>
+                    </ng-container>
+
+                    <!-- Clinic Column -->
+                    <ng-container matColumnDef="clinic">
+                        <th mat-header-cell *matHeaderCellDef> Clinic </th>
+                        <td mat-cell *matCellDef="let element"> clinic </td>
+                    </ng-container>
+
+                    <!-- Location Column -->
+                    <ng-container matColumnDef="location">
+                        <th mat-header-cell *matHeaderCellDef> Location </th>
+                        <td mat-cell *matCellDef="let element"> {{element.locationName}} </td>
+                    </ng-container>
+
+                    <!-- ApptTime Column -->
+                    <ng-container matColumnDef="apptTime">
+                        <th mat-header-cell *matHeaderCellDef> ApptTime </th>
+                        <td mat-cell *matCellDef="let element"> ApptTime </td>
+                    </ng-container>
+
+                    <!-- CreatedBy Column -->
+                    <ng-container matColumnDef="createdBy">
+                        <th mat-header-cell *matHeaderCellDef> Created By </th>
+                        <td mat-cell *matCellDef="let element"> createdBy </td>
+                    </ng-container>
+
+                    <!-- Status Column -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef> Status </th>
+                        <td mat-cell *matCellDef="let element"> status </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="journeyDisplayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: journeyDisplayedColumns;"
+                        (click)="journeySelection.toggle(row)"></tr>
+                </table>
+            </div>
+        </div>
+    </div>

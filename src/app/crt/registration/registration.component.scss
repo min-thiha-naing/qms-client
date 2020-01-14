@@ -1,0 +1,165 @@
+.patient {
+    background: #fff;
+    width: 100%;
+    .header {
+      padding: 6px;
+      background: #3f51b5;
+      color: #fff;
+
+      button {
+        line-height: 30px;
+        background-color: lightgray;
+      }
+    }
+
+    .info {
+      margin-bottom: 20px;
+
+      table,
+      td {
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-collapse: collapse;
+      }
+      table {
+        width: 100%;
+
+        input {
+          width: 97%;
+        }
+
+        .label {
+          padding-left: 5px;
+          font-weight: 500;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
+  .registration {
+    background: #fff;
+    .header {
+      padding: 10px;
+      background: #3f51b5;
+      color: #fff;
+
+      .status {
+        span {
+          color: #28ff28;
+        }
+      }
+    }
+
+    .registration-list {
+      height: 300px;
+      overflow: auto;
+
+      table {
+        width: 100%;
+      }
+    }
+  }
+
+  .standard {
+    background: #fff;
+    .header {
+      padding: 10px;
+      background: #3f51b5;
+      color: #fff;
+    }
+
+    .actions {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      height: 300px;
+      
+      table {
+        width: 100%;
+        border-collapse: collapse;
+
+        td {
+          text-align: center;
+          padding: 7px 10px;
+        }
+
+        button {
+          width: 85%;
+          background-color: lightgray;
+          .mat-button-wrapper {
+            flex-direction: column;
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+    }
+  }
+
+  .service {
+    margin: 20px 0px;
+
+    .location {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: #fff;
+      .header {
+        padding: 10px;
+        background: #3f51b5;
+        color: #fff;
+      }
+
+      .info {
+        .clinic {
+          padding-left: 5px;
+          font-weight: 500;
+          font-size: 12px;
+          padding: 10px 20px;
+        }
+
+        .location-list {
+          height: 200px;
+          overflow: auto;
+
+          table {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .actions {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      height: 285px;
+      background: #fff;
+
+      button {
+        width: 85%;
+        background-color: lightgray;
+        .mat-button-wrapper {
+          line-height: 2;
+          flex-direction: column;
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+
+    .journey {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: #fff;
+      .header {
+        padding: 10px;
+        background: #3f51b5;
+        color: #fff;
+      }
+
+      .info {
+        .journey-list {
+          height: 239px;
+          overflow: auto;
+
+          table {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }

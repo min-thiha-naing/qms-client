@@ -15,6 +15,12 @@ export class QueueService {
   _rtMissQs = new BehaviorSubject<any[]>([]);
 
   _servingQ = new BehaviorSubject<any>({ queueNo: null });
+  /////crt
+  _crtAllQs = new BehaviorSubject<any[]>([]);
+  _crtHoldQs = new BehaviorSubject<any[]>([]);
+  _crtMissQs = new BehaviorSubject<any[]>([]);
+
+  _crtServingQ = new BehaviorSubject<any>({ queueNo: null });
 
   get rtAllQs() {
     return this._rtAllQs.asObservable().pipe(map(allQs => {
@@ -72,7 +78,37 @@ export class QueueService {
       }
     );
   }
+  ///////crt
+  getCrtAllQ() {
+    this.api.getCRTAllQ().subscribe(
+      resp => {
+        this._crtAllQs.next(resp);
+        // In case there is serving Q
+        if (resp[0].queueStatusId == QueueStatus.SERVING) {
+          console.log('serving Q passed');
+          console.log(resp[0]);
+          this._crtServingQ.next(resp[0]);
+        }
+      }
+    );
+  }
 
+  getCrtHoldQ() {
+    this.api.getCRTHoldQ().subscribe(
+      resp => {
+        this._crtHoldQs.next(resp);
+      }
+    );
+  }
+
+  getCrtMissQ() {
+    this.api.getCRTMissQ().subscribe(
+      resp => {
+        this._crtMissQs.next(resp);
+      }
+    );
+  }
+  ///////
   ringAllQ(queue: any) {
     return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
       // especially for serving Q which will be returned
@@ -114,6 +150,15 @@ export class QueueService {
     }));
   }
 
+
+  ringCrtAllQ(queue: any) {
+    return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
+      // especially for serving Q which will be returned
+      let newQ = this.returnQModifiedWithCallTime(queue, resp)
+      this.replaceCurrentQWithResp(this._crtAllQs, newQ);
+    }));
+  }
+
   serveAndTransfer(queue: any) {
     return this.api.serveAndTransfer(queue).pipe(tap(resp => {
       this.removeFromQueueList(this._rtAllQs, queue);
@@ -129,6 +174,36 @@ export class QueueService {
       _queues.next(newQs);
     }
   }
+  ringCrtHoldQ(queue: any) {
+    return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
+      let newQ = this.returnQModifiedWithCallTime(queue, resp)
+      this.removeFromQueueList(this._rtHoldQs, queue);
+      this.addRespToQueueList(this._crtAllQs, newQ);
+    }));
+  }
+
+  ringCrtMissQ(queue: any) {
+    return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
+      let newQ = this.returnQModifiedWithCallTime(queue, resp)
+      this.removeFromQueueList(this._crtMissQs, queue);
+      this.addRespToQueueList(this._crtAllQs, newQ);
+    }));
+  }
+
+  crtMissQ(queue: any) {
+    return this.api.changeQ(queue.id, 'm').pipe(tap(resp => {
+      this.removeFromQueueList(this._crtAllQs, resp);
+      this.addRespToQueueList(this._crtMissQs, resp);
+    }));
+  }
+
+  crtHoldQ(queue: any) {
+    return this.api.changeQ(queue.id, 'h').pipe(tap(resp => {
+      this.removeFromQueueList(this._crtAllQs, resp);
+      this.addRespToQueueList(this._crtHoldQs, resp);
+    }));
+  }
+  /////////
 
   removeFromQueueList(_queues: BehaviorSubject<any[]>, response) {
     let newQs = [..._queues.getValue()].filter(q => q.id != response.id);

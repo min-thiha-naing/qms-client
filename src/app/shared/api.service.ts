@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Appointment } from '../model/appointment';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,18 @@ export class ApiService {
     return this.http.put<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/${id}/${status}/${sessionStorage.getItem('terminalId')}`, {});
   }
 
+  getCRTAllQ() {
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/ALL/5404`);
+  }
+
+  getCRTHoldQ() {
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/HOLD/5404`);
+  }
+
+  getCRTMissQ() {
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/MISS/5404`);
+  }
+
 
   getDepartments() {
     return this.http.get<any[]>(`${environment.baseUrl}/departments/department`);
@@ -45,6 +58,9 @@ export class ApiService {
 
   serveAndTransfer(queue) {
     return this.http.put<any>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/serve`, queue);
+  }
+  getAppointments() {
+    return this.http.get<Appointment[]>(`${environment.baseUrl}/liveAppointmentPatients/liveAppointmentPatient`)
   }
 
 }

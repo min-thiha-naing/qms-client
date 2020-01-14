@@ -1,0 +1,118 @@
+@import "src/themes/starter-variables.scss";
+
+.header-bar {
+  //font-size: 14px;
+  color: white;
+  background-color: mat-color($starter-theme-primary);
+  padding: 12px;
+}
+
+//  Left size
+
+.header-plus-table-container {
+  border: 0.5px solid grey;
+
+  .table-container {
+    max-height: 30vh;
+    overflow: auto;
+
+    mat-table {
+      width: 100%;
+
+      mat-row {
+        cursor: pointer;
+
+        &.selected {
+          background: mat-color($row-selected);
+          mat-cell {
+            color: white;
+          }
+        }
+
+        &.serving {
+          background: mat-color($row-serving) !important;
+          mat-cell {
+            color: white;
+          }
+        }
+
+        mat-cell {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+//  Right side
+.btn-grid {
+  background-color: lightsteelblue;
+  mat-grid-tile {
+    button {
+      font-size: 12px;
+      margin: 10px;
+      width: 100%;
+      border: 1px grey groove;
+    }
+    border: 0.5px grey solid;
+  }
+}
+
+.red-grid-area {
+  background-color: pink;
+}
+
+.right-bottom-tabs {
+  border: 0.5px solid grey;
+  ::ng-deep {
+    .mat-tab-label,
+    .mat-tab-label-active {
+      min-width: 0 !important;
+      padding: 0px 20px !important;
+      margin: 3px !important;
+    }
+  }
+}
+
+// journey list table
+
+.journey-list-container {
+  width: 100%;
+  mat-table {
+    width: 100%;
+
+    .mat-column-tick,.mat-column-cross{
+      display: flex;
+      justify-content: center;
+      word-wrap: break-word !important;
+      white-space: unset !important;
+      flex: 0 0 40px !important;
+      width: 50px !important;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    
+      word-break: break-word;
+    
+      -ms-hyphens: auto;
+      -moz-hyphens: auto;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+    }
+
+    mat-header-row{
+      //background-color: lightgrey;
+    }
+
+    mat-cell {
+      font-size: 12px;
+    }
+
+    mat-icon {
+      font-size: 20px;
+    }
+  }
+}
+
+.mat-flat-button{
+    background-color: lightgray;
+}
