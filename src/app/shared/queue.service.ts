@@ -14,6 +14,12 @@ export class QueueService {
   _rtMissQs = new BehaviorSubject<any[]>([]);
 
   _servingQ = new BehaviorSubject<any>({ queueNo: null });
+  /////crt
+  _crtAllQs = new BehaviorSubject<any[]>([]);
+  _crtHoldQs = new BehaviorSubject<any[]>([]);
+  _crtMissQs = new BehaviorSubject<any[]>([]);
+
+  _crtServingQ = new BehaviorSubject<any>({ queueNo: null });
 
   constructor(
     private api: ApiService,
@@ -21,6 +27,10 @@ export class QueueService {
     this.getRtAllQ();
     this.getRtHoldQ();
     this.getRtMissQ();
+    //////crt
+    this.getCrtAllQ();
+    this.getCrtHoldQ();
+    this.getCrtMissQ();
   }
 
   getRtAllQ() {
@@ -52,7 +62,37 @@ export class QueueService {
       }
     );
   }
+///////crt
+  getCrtAllQ() {
+    this.api.getCRTAllQ().subscribe(
+      resp => {
+        this._crtAllQs.next(resp);
+        // In case there is serving Q
+        if (resp[0].queueStatusId == QueueStatus.SERVING) {
+          console.log('serving Q passed');
+          console.log(resp[0]);
+          this._crtServingQ.next(resp[0]);
+        }
+      }
+    );
+  }
 
+  getCrtHoldQ() {
+    this.api.getCRTHoldQ().subscribe(
+      resp => {
+        this._crtHoldQs.next(resp);
+      }
+    );
+  }
+
+  getCrtMissQ() {
+    this.api.getCRTMissQ().subscribe(
+      resp => {
+        this._crtMissQs.next(resp);
+      }
+    );
+  }
+///////
   ringAllQ(queue: any) {
     return this.api.ringQ(queue.id, 'R').pipe(tap(resp => {
       // especially for serving Q which will be returned

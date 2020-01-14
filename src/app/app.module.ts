@@ -22,6 +22,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     AppComponent,
     AuthComponent,
     TestComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +45,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
       multi: true,
     },
   ],
-  entryComponent: [ConfirmDialogComponent],
+  entryComponents:[ConfirmDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -25,6 +25,19 @@ export class ApiService {
     return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatus/miss/${sessionStorage.getItem('terminalId')}`);
   }
 
+  getCRTAllQ() {
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/ALL/5404`);
+  }
+
+  getCRTHoldQ() {
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/HOLD/5404`);
+  }
+
+  getCRTMissQ() {
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/MISS/5404`);
+  }
+
+
   ringQ(id, status) {
     return this.http.put<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/${id}/${status}/${sessionStorage.getItem('terminalId')}`,{});
   }

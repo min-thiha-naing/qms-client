@@ -6,6 +6,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDialogModule } from '@angular/material';
 import { CrtComponent } from './crt.component';
 import { PaymentTabComponent } from './payment-tab/payment-tab.component';
+import { HeaderComponent } from '../shared/layout/header/header.component';
 
 const routes: Routes = [
   {
@@ -15,7 +16,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [PaymentTabComponent],
+  declarations: [
+    PaymentTabComponent,
+    HeaderComponent,
+    CrtComponent
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
