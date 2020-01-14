@@ -42,11 +42,11 @@ export class PaymentTabComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.subs.add(this.qS._rtAllQs.asObservable().subscribe(Qs => this.allQDS = new MatTableDataSource<any>(Qs)));
-    this.subs.add(this.qS._rtHoldQs.asObservable().subscribe(Qs => this.holdQDS = new MatTableDataSource<any>(Qs)));
-    this.subs.add(this.qS._rtMissQs.asObservable().subscribe(Qs => this.missQDS = new MatTableDataSource<any>(Qs)));
+    this.subs.add(this.qS._crtAllQs.asObservable().subscribe(Qs => this.allQDS = new MatTableDataSource<any>(Qs)));
+    this.subs.add(this.qS._crtHoldQs.asObservable().subscribe(Qs => this.holdQDS = new MatTableDataSource<any>(Qs)));
+    this.subs.add(this.qS._crtMissQs.asObservable().subscribe(Qs => this.missQDS = new MatTableDataSource<any>(Qs)));
 
-    this.subs.add(this.qS._servingQ.asObservable().subscribe(Q => {
+    this.subs.add(this.qS._crtServingQ.asObservable().subscribe(Q => {
       this.servingQ = Q;
       this.journeyListDS = new MatTableDataSource<any>(this.servingQ.planList);
     }));
@@ -57,14 +57,14 @@ export class PaymentTabComponent implements OnInit {
       case 'all': {
         if (this.servingQ.queueNo) {
           //  all Q highlighted , serving Q exist -> serve serving Q AGAIN
-          this.qS.ringAllQ(this.servingQ).subscribe(
+          this.qS.ringCrtAllQ(this.servingQ).subscribe(
             res => {
               console.log(res);
             }
           );
         } else {
           // all Q highlighted , No serving Q -> serve selected Q
-          this.qS.ringAllQ(this.selectedRowData.queue).subscribe(
+          this.qS.ringCrtAllQ(this.selectedRowData.queue).subscribe(
             res => {
               console.log(res);
             }
@@ -100,7 +100,7 @@ export class PaymentTabComponent implements OnInit {
   }
 
   onClickExit() {
-    const message = `Are you sure you want to do this?`;
+    const message = `Are you sure you want to do this? The queue will be terminated and cannot be revived!`;
 
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
 
