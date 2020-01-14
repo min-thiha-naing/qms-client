@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Appointment } from '../model/appointment';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,10 @@ export class ApiService {
 
   getWorkgroupsByDpt(dptId){
     return this.http.get<any[]>(`${environment.baseUrl}/workgroups/listWorkgroupByDepartmentId/${dptId}`);
+  }
+
+  getAppointments(){
+    return this.http.get<Appointment[]>(`${environment.baseUrl}/liveAppointmentPatients/liveAppointmentPatient`)
   }
 
 }

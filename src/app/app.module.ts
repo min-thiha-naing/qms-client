@@ -22,7 +22,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     AppComponent,
     AuthComponent,
     TestComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,

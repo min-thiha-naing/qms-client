@@ -8,7 +8,7 @@
 
             <ng-container matColumnDef="no">
                 <th mat-header-cell *matHeaderCellDef> No.</th>
-                <td mat-cell *matCellDef="let element"> {{element.no}} </td>
+                <td mat-cell *matCellDef="let element , let i = index"> {{i+1}} </td>
             </ng-container>
 
             <ng-container matColumnDef="salut">
@@ -18,17 +18,17 @@
 
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef> Patient Name </th>
-                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.patientName}} </td>
             </ng-container>
 
             <ng-container matColumnDef="nric">
                 <th mat-header-cell *matHeaderCellDef> Patient Nric </th>
-                <td mat-cell *matCellDef="let element"> {{element.nric}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.patientNric}} </td>
             </ng-container>
 
             <ng-container matColumnDef="apptTime">
                 <th mat-header-cell *matHeaderCellDef> Appointment Time </th>
-                <td mat-cell *matCellDef="let element"> {{element.apptTime}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.apptTimestamp |  date: 'dd/MM/yyyy , hh:mm:ss'}} </td>
             </ng-container>
 
             <ng-container matColumnDef="mcrCode">
