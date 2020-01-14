@@ -10,6 +10,7 @@ import { AddServicePointComponent } from './add-service-point/add-service-point.
 import { MatDialogModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { NgxLoadingModule } from 'ngx-loading';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   {
@@ -23,7 +24,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     RtComponent,
-    HeaderComponent,
     RoomModuleTabComponent,
     AddServicePointComponent,
   ],
@@ -38,6 +38,7 @@ const routes: Routes = [
     MatDialogModule,
     FormsModule,
     NgxLoadingModule,
+    SharedModule
   ],
   exports: [
     RouterModule,

@@ -11,6 +11,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { AppointmentListComponent } from './appointment-list/appointment-list.component';
 import { CRtService } from './crt.service';
 import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   {
@@ -22,7 +23,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     PaymentTabComponent,
-    HeaderComponent,
     CrtComponent,
     RegistrationComponent,
     AppointmentListComponent
@@ -34,6 +34,7 @@ const routes: Routes = [
     FlexLayoutModule,
     MatDialogModule,
     FormsModule,
+    SharedModule
   ],
   exports: [
     RouterModule,

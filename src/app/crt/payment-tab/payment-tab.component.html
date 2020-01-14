@@ -4,7 +4,7 @@
     <!-- All Q Table -->
     <div class="header-plus-table-container">
       <div class="header-bar">
-        [Total Q = ], [Fresh Q = ], [Revert Q = ], [Missed Back = ]
+        [Total Q =  {{allQTableHeader.total}}], [Fresh Q = {{allQTableHeader.waiting}}], [Revert Q = {{allQTableHeader.revert}}], [Missed Back = {{allQTableHeader.missback}}]
       </div>
       <div class="table-container">
         <mat-table [dataSource]="allQDS">
@@ -69,7 +69,7 @@
     <!-- Hold Q -->
     <div class="header-plus-table-container">
       <div class="header-bar">
-        [Hold Q = ]
+        [Hold Q = {{holdQDS.data.length}}]
       </div>
       <div class="table-container">
         <mat-table [dataSource]="holdQDS">
@@ -134,7 +134,7 @@
     <!-- Miss Q -->
     <div class="header-plus-table-container">
       <div class="header-bar">
-        [Missed Q = ]
+        [Missed Q = {{missQDS.data.length}}]
       </div>
       <div class="table-container">
         <mat-table [dataSource]="missQDS">
@@ -215,11 +215,11 @@
             <button mat-flat-button>Silent Ring</button>
           </mat-grid-tile>
           <mat-grid-tile>
-            <button mat-flat-button>No Response</button>
+            <button mat-flat-button (click)="onClickNoResp()">No Response</button>
           </mat-grid-tile>
           <mat-grid-tile></mat-grid-tile>
           <mat-grid-tile></mat-grid-tile>
-          <mat-grid-tile colspan="2">
+          <mat-grid-tile colspan="2" (click)="serveAndTransfer()">
             <button mat-flat-button>Serve & Transfer</button>
           </mat-grid-tile>
           <mat-grid-tile>

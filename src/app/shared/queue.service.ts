@@ -39,6 +39,21 @@ export class QueueService {
     }))
   }
 
+  get crtAllQs() {
+    return this._rtAllQs.asObservable().pipe(map(allQs => {
+      // In case there is serving Q
+      if (allQs[0] && allQs[0].queueStatusId == QueueStatus.SERVING) {
+        allQs[0].planList = this.sortLocByOrderId(allQs[0].planList);
+        console.log('serving Q passed');
+        console.log(allQs[0]);
+        this._crtServingQ.next(allQs[0]);
+      } else if (allQs[0]) {
+        this._crtServingQ.next(null);
+      }
+      return allQs;
+    }))
+  }
+
   constructor(
     private api: ApiService,
     private socketClient: SocketClientService,
@@ -165,8 +180,14 @@ export class QueueService {
     }));
   }
 
+  crtServeAndTransfer(queue: any) {
+    return this.api.serveAndTransfer(queue).pipe(tap(resp => {
+      this.removeFromQueueList(this._crtAllQs, queue);
+    }));
+  }
+
   addRespToQueueList(_queues: BehaviorSubject<any[]>, response, place?: string) {
-    if (place && place == 'bottom') {
+    if (place && place == 'b') {
       let newQs = [response, ..._queues.getValue(),];
       _queues.next(newQs);
     } else {
@@ -178,7 +199,7 @@ export class QueueService {
     return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
       let newQ = this.returnQModifiedWithCallTime(queue, resp)
       this.removeFromQueueList(this._rtHoldQs, queue);
-      this.addRespToQueueList(this._crtAllQs, newQ);
+      this.addRespToQueueList(this._crtAllQs, newQ , 'b');
     }));
   }
 
@@ -186,7 +207,7 @@ export class QueueService {
     return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
       let newQ = this.returnQModifiedWithCallTime(queue, resp)
       this.removeFromQueueList(this._crtMissQs, queue);
-      this.addRespToQueueList(this._crtAllQs, newQ);
+      this.addRespToQueueList(this._crtAllQs, newQ , 'b');
     }));
   }
 
@@ -198,6 +219,7 @@ export class QueueService {
   }
 
   crtHoldQ(queue: any) {
+    console.log(queue)
     return this.api.changeQ(queue.id, 'h').pipe(tap(resp => {
       this.removeFromQueueList(this._crtAllQs, resp);
       this.addRespToQueueList(this._crtHoldQs, resp);
@@ -240,6 +262,12 @@ export class QueueService {
   addServicePoint(payload) {
     return this.api.addServicePoint(payload).pipe(tap(queue => {
       this.replaceCurrentQWithResp(this._rtAllQs, { ...this._servingQ.value, planList: this.sortLocByOrderId([...this._servingQ.value.planList, ...queue.planList]) });
+    }));
+  }
+
+  crtAddServicePoint(payload) {
+    return this.api.addServicePoint(payload).pipe(tap(queue => {
+      this.replaceCurrentQWithResp(this._crtAllQs, { ...this._crtServingQ.value, planList: this.sortLocByOrderId([...this._crtServingQ.value.planList, ...queue.planList]) });
     }));
   }
 
