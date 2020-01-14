@@ -1,30 +1,117 @@
 <div mat-dialog-content>
     <div fxFlex fxLayout="row" fxLayoutAlign="start stretch">
         <!-- left table-->
-        <div fxFlex="40">
-            <div class="first-header-bar"fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="start center">
+        <div fxFlex="50">
+            <div class="first-header-bar" fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="start center">
                 <span>New Service Locations</span>
             </div>
             <div class="second-header-bar" fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="start center">
-                <span>Clinic: </span>
-                <select class="select-css" (change)="onChangeDepartment($event)">
-                    <option *ngFor="let dpt of departments" [value]="dpt"> {{dpt.departmentName}}</option>
+                <span fxFlex="40px">Clinic: </span>
+
+                <select fxFlex="85" class="select-css" (change)="onChangeDepartment($event)">
+                    <option *ngFor="let dpt of departments" [value]="dpt.id"> {{dpt.departmentName}}</option>
                 </select>
+
+            </div>
+            <div class="src-table-container">
+                <mat-table [dataSource]="srcLocationDS">
+                    <!-- Location Column -->
+                    <ng-container matColumnDef="location">
+                        <mat-header-cell *matHeaderCellDef> Location </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.workgroupName}} </mat-cell>
+                    </ng-container>
+
+                    <!-- InQ Column -->
+                    <ng-container matColumnDef="inQ">
+                        <mat-header-cell *matHeaderCellDef> In Q </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> </mat-cell>
+                    </ng-container>
+
+                    <!-- Select Column -->
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef> Select </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <mat-checkbox (change)="onToggleSrcLoc(element)" [(ngModel)]="element.isSelected">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Orderid Column -->
+                    <ng-container matColumnDef="orderId">
+                        <mat-header-cell *matHeaderCellDef> Order </mat-header-cell>
+                        <mat-cell *matCellDef="let element"><input type="number" [(ngModel)]="element.orderId" [disabled]="!element.isSelected">
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="srcColumns; sticky: true"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: srcColumns;"></mat-row>
+                </mat-table>
             </div>
         </div>
 
         <!-- middle btns -->
-        <div fxFlex>
+        <div fxFlex="120px" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="10px"
+            class="middle-btn-container">
+
+            <button mat-raised-button (click)="addToFirst()">Add to First</button>
+            <button mat-raised-button (click)="addToLast()">Add to Last</button>
+            <button mat-raised-button (click)="onRevert()">Revert</button>
+            <button mat-raised-button (click)="onRemove()">Remove</button>
 
         </div>
 
         <!-- right table -->
-        <div fxFlex="40">
+        <div fxFlex="50">
+            <div class="first-header-bar" fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="start center">
+                <span>Current Journey List</span>
+            </div>
+            <div class="second-header-bar" fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="start center">
 
+            </div>
+
+            <div class="src-table-container">
+                <mat-table [dataSource]="destLocationDS">
+                    <!-- Clinic Column -->
+                    <ng-container matColumnDef="clinic">
+                        <mat-header-cell *matHeaderCellDef> Clinic </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.departmentName}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Location Column -->
+                    <ng-container matColumnDef="location">
+                        <mat-header-cell *matHeaderCellDef> Location </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.workgroupName}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Appt Time Column -->
+                    <ng-container matColumnDef="apptTime">
+                        <mat-header-cell *matHeaderCellDef>Appt. Time </mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.appointmentTime | date: 'shortTime'}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Status Column -->
+                    <ng-container matColumnDef="status">
+                        <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.destStatus }} </mat-cell>
+                    </ng-container>
+
+                    <!-- Select Column -->
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef> Select </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <mat-checkbox *ngIf="element.destStatus == destStatus.WAITING" [(ngModel)]="element.isSelected"></mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="destColumns; sticky: true"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: destColumns;"></mat-row>
+                </mat-table>
+            </div>
         </div>
     </div>
 </div>
 
-<div mat-dialog-actions fxLayout="row" fxLayoutAlign="end">
-    <button mat-button (click)="onConfirm()">Confirm</button>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between end">
+    <button mat-stroked-button (click)="onDeselectAll()">Deselect all serice locations</button>
+    <button mat-raised-button (click)="onConfirm()">Confirm</button>
 </div>

@@ -7,10 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TestComponent implements OnInit {
 
+  value: any
   constructor(
   ) { }
 
   ngOnInit() {
+  }
+
+  onChange(ev){
+    console.log(ev);
+    console.log(this.value);
   }
 
 }

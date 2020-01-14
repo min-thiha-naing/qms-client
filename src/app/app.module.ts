@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuthComponent } from './auth/auth.component';
 import { MaterialModule } from './material.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { FakeDbService } from './fake-db/fake-db.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -29,6 +29,7 @@ import { MatDialog } from '@angular/material';
     FlexLayoutModule,
     MaterialModule,
     ReactiveFormsModule,
+    FormsModule,
     HttpClientModule,
     InMemoryWebApiModule.forRoot(
       FakeDbService,

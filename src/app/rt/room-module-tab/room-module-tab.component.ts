@@ -32,7 +32,7 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
   // Journey list
   journeyListColumns = ['location', 'tick', 'cross']
   journeyListDS = new MatTableDataSource<any>([]);
-  jCrossSelection = new SelectionModel<any>(true,[]);
+  jCrossSelection = new SelectionModel<any>(true, []);
 
   qServingStatus = QueueStatus.SERVING;
   subs = new SubSink();
@@ -57,13 +57,15 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
     switch (this.selectedRowData.fromPanel) {
       case 'all': {
         if (this.servingQ.queueNo) {
-          this.qS.serveQ(this.servingQ).subscribe(
+          //  all Q highlighted , serving Q exist -> serve serving Q AGAIN
+          this.qS.ringAllQ(this.servingQ).subscribe(
             res => {
               console.log(res);
             }
           );
         } else {
-          this.qS.serveQ(this.selectedRowData.queue).subscribe(
+          // all Q highlighted , No serving Q -> serve selected Q
+          this.qS.ringAllQ(this.selectedRowData.queue).subscribe(
             res => {
               console.log(res);
             }
@@ -72,21 +74,36 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
         break;
       }
       case 'hold': {
+        if (this.servingQ.queueNo) {
+          //  hold Q hightlighted , serving Q exist -> do nothing
+          return;
+        } else {
+          //  hold Q hightlighted , No serving Q -> serve selected hold Q 
+
+        }
         break;
       }
       case 'miss': {
+        if (this.servingQ.queueNo) {
+          //  miss Q hightlighted , serving Q exist -> do nothing
+          return;
+        } else {
+          //  miss Q hightlighted , No serving Q -> serve selected miss Q 
+
+        }
         break;
       }
     }
   }
 
-  onClickHold(){
+  onClickHold() {
     console.log(this.jCrossSelection);
   }
 
   onClickAddServicePoint() {
-    this.dialog.open(AddServicePointComponent,{
-      width: '70vw'
+    this.dialog.open(AddServicePointComponent, {
+      width: '80vw',
+      data: this.servingQ,
     });
   }
 

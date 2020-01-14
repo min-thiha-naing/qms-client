@@ -49,7 +49,7 @@
                     <!-- Call Time Column -->
                     <ng-container matColumnDef="callTime">
                         <mat-header-cell *matHeaderCellDef> Call Time </mat-header-cell>
-                        <mat-cell *matCellDef="let element"> {{'check'}} </mat-cell>
+                        <mat-cell *matCellDef="let element"> <span *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span>  </mat-cell>
                     </ng-container>
                     <!-- Remark Column -->
                     <ng-container matColumnDef="remark">
@@ -113,7 +113,7 @@
                     <!-- Call Time Column -->
                     <ng-container matColumnDef="callTime">
                         <mat-header-cell *matHeaderCellDef> Call Time </mat-header-cell>
-                        <mat-cell *matCellDef="let element"> {{'check'}} </mat-cell>
+                        <mat-cell *matCellDef="let element"> <span *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span> </mat-cell>
                     </ng-container>
                     <!-- Remark Column -->
                     <ng-container matColumnDef="remark">
@@ -176,7 +176,7 @@
                     <!-- Call Time Column -->
                     <ng-container matColumnDef="callTime">
                         <mat-header-cell *matHeaderCellDef> Call Time </mat-header-cell>
-                        <mat-cell *matCellDef="let element"> {{'check'}} </mat-cell>
+                        <mat-cell *matCellDef="let element"> <span *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span> </mat-cell>
                     </ng-container>
                     <!-- Remark Column -->
                     <ng-container matColumnDef="remark">

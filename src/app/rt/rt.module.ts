@@ -8,6 +8,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { RoomModuleTabComponent } from './room-module-tab/room-module-tab.component';
 import { AddServicePointComponent } from './add-service-point/add-service-point.component';
 import { MatDialogModule } from '@angular/material';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -33,7 +34,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     MaterialModule,
     FlexLayoutModule,
-    MatDialogModule
+    MatDialogModule,
+    FormsModule,
   ],
   exports: [
     RouterModule,
