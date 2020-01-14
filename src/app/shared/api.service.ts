@@ -25,17 +25,26 @@ export class ApiService {
     return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatus/miss/${sessionStorage.getItem('terminalId')}`);
   }
 
-  ringQ(id, status) {
-    return this.http.put<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/${id}/${status}/${sessionStorage.getItem('terminalId')}`,{});
+  changeQ(id, status) {
+    return this.http.put<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/${id}/${status}/${sessionStorage.getItem('terminalId')}`, {});
   }
 
 
-  getDepartments(){
+  getDepartments() {
     return this.http.get<any[]>(`${environment.baseUrl}/departments/department`);
   }
 
-  getWorkgroupsByDpt(dptId){
+  getWorkgroupsByDpt(dptId) {
     return this.http.get<any[]>(`${environment.baseUrl}/workgroups/listWorkgroupByDepartmentId/${dptId}`);
+  }
+
+  //  return Q
+  addServicePoint(payload) {
+    return this.http.put<any>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/addServicePoint`, payload);
+  }
+
+  serveAndTransfer(queue) {
+    return this.http.put<any>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/serve`, queue);
   }
 
 }

@@ -14,7 +14,7 @@
     <div class="right-section" fxLayout="column" fxLayoutAlign="space-between end">
         <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="2px">
             <span>Queue No:</span>
-            <span class="queue-no">780</span>
+            <span class="queue-no"><span *ngIf="servingQ">{{servingQ.queueNo}}</span></span>
             <button mat-icon-button>
                 <mat-icon>volume_up</mat-icon>
             </button>

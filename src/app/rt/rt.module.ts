@@ -9,6 +9,7 @@ import { RoomModuleTabComponent } from './room-module-tab/room-module-tab.compon
 import { AddServicePointComponent } from './add-service-point/add-service-point.component';
 import { MatDialogModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
+import { NgxLoadingModule } from 'ngx-loading';
 
 const routes: Routes = [
   {
@@ -36,6 +37,7 @@ const routes: Routes = [
     FlexLayoutModule,
     MatDialogModule,
     FormsModule,
+    NgxLoadingModule,
   ],
   exports: [
     RouterModule,

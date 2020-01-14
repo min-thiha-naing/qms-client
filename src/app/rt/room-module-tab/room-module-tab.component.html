@@ -1,10 +1,11 @@
 <div fxLayout="row" fxLayoutGap="1vw" style="padding: 1vh 0">
+    <ngx-loading [show]="loading"></ngx-loading>
     <!-- Left section -->
     <div fxFlex="70%" fxLayout="column" fxLayoutGap="1vh">
         <!-- All Q Table -->
         <div class="header-plus-table-container">
             <div class="header-bar">
-                [Total Q = ], [Fresh Q = ], [Revert Q = ], [Missed Back = ]
+                [Total Q =  {{allQTableHeader.total}}], [Fresh Q = {{allQTableHeader.waiting}}], [Revert Q = {{allQTableHeader.revert}}], [Missed Back = {{allQTableHeader.missback}}]
             </div>
             <div class="table-container">
                 <mat-table [dataSource]="allQDS">
@@ -49,7 +50,9 @@
                     <!-- Call Time Column -->
                     <ng-container matColumnDef="callTime">
                         <mat-header-cell *matHeaderCellDef> Call Time </mat-header-cell>
-                        <mat-cell *matCellDef="let element"> <span *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span>  </mat-cell>
+                        <mat-cell *matCellDef="let element"> <span
+                                *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span>
+                        </mat-cell>
                     </ng-container>
                     <!-- Remark Column -->
                     <ng-container matColumnDef="remark">
@@ -57,7 +60,7 @@
                         <mat-cell *matCellDef="let element"> {{element.remark}} </mat-cell>
                     </ng-container>
 
-                    <mat-header-row *matHeaderRowDef="qTableColumns"></mat-header-row>
+                    <mat-header-row *matHeaderRowDef="qTableColumns; sticky: true"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: qTableColumns;" (click)="onClickRow(allQDS.data[0], 'all')"
                         [ngClass]="{'selected': row.queueNo == selectedRowData.queue.queueNo,                                
                     'serving': row.queueStatusId == qServingStatus}"></mat-row>
@@ -68,7 +71,7 @@
         <!-- Hold Q -->
         <div class="header-plus-table-container">
             <div class="header-bar">
-                [Hold Q = ]
+                [Hold Q = {{holdQDS.data.length}}]
             </div>
             <div class="table-container">
                 <mat-table [dataSource]="holdQDS">
@@ -113,7 +116,9 @@
                     <!-- Call Time Column -->
                     <ng-container matColumnDef="callTime">
                         <mat-header-cell *matHeaderCellDef> Call Time </mat-header-cell>
-                        <mat-cell *matCellDef="let element"> <span *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span> </mat-cell>
+                        <mat-cell *matCellDef="let element"> <span
+                                *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span>
+                        </mat-cell>
                     </ng-container>
                     <!-- Remark Column -->
                     <ng-container matColumnDef="remark">
@@ -121,7 +126,7 @@
                         <mat-cell *matCellDef="let element"> {{element.remark}} </mat-cell>
                     </ng-container>
 
-                    <mat-header-row *matHeaderRowDef="qTableColumns"></mat-header-row>
+                    <mat-header-row *matHeaderRowDef="qTableColumns; sticky: true"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: qTableColumns;" (click)="onClickRow(row, 'hold')"
                         [ngClass]="{'selected': row.queueNo == selectedRowData.queue.queueNo}"></mat-row>
                 </mat-table>
@@ -131,7 +136,7 @@
         <!-- Miss Q -->
         <div class="header-plus-table-container">
             <div class="header-bar">
-                [Missed Q = ]
+                [Missed Q = {{missQDS.data.length}}]
             </div>
             <div class="table-container">
                 <mat-table [dataSource]="missQDS">
@@ -176,7 +181,9 @@
                     <!-- Call Time Column -->
                     <ng-container matColumnDef="callTime">
                         <mat-header-cell *matHeaderCellDef> Call Time </mat-header-cell>
-                        <mat-cell *matCellDef="let element"> <span *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span> </mat-cell>
+                        <mat-cell *matCellDef="let element"> <span
+                                *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span>
+                        </mat-cell>
                     </ng-container>
                     <!-- Remark Column -->
                     <ng-container matColumnDef="remark">
@@ -184,7 +191,7 @@
                         <mat-cell *matCellDef="let element"> {{element.remark}} </mat-cell>
                     </ng-container>
 
-                    <mat-header-row *matHeaderRowDef="qTableColumns"></mat-header-row>
+                    <mat-header-row *matHeaderRowDef="qTableColumns; sticky: true"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: qTableColumns;" (click)="onClickRow(row, 'miss')"
                         [ngClass]="{'selected': row.queueNo == selectedRowData.queue.queueNo}"></mat-row>
                 </mat-table>
@@ -207,15 +214,15 @@
                         <button mat-flat-button (click)="onClickRing()">Ring</button>
                     </mat-grid-tile>
                     <mat-grid-tile>
-                        <button mat-flat-button>Silent Ring</button>
+                        <button mat-flat-button (click)="onClinkRing()">Silent Ring</button>
                     </mat-grid-tile>
                     <mat-grid-tile>
-                        <button mat-flat-button>No Response</button>
+                        <button mat-flat-button (click)="onClickNoResp()">No Response</button>
                     </mat-grid-tile>
                     <mat-grid-tile></mat-grid-tile>
                     <mat-grid-tile></mat-grid-tile>
                     <mat-grid-tile colspan="2">
-                        <button mat-flat-button>Serve & Transfer</button>
+                        <button mat-flat-button (click)="serveAndTransfer()">Serve & Transfer</button>
                     </mat-grid-tile>
                     <mat-grid-tile>
                         <button mat-flat-button>Cancel Ring</button>
@@ -237,7 +244,8 @@
                         <button mat-flat-button style="white-space: pre-wrap;">For Lab Staff only</button>
                     </mat-grid-tile>
                     <mat-grid-tile rowspan="2">
-                        <button (click)="onClickAddServicePoint()" mat-flat-button style="white-space: pre-wrap;">Add Service Point</button>
+                        <button (click)="onClickAddServicePoint()" mat-flat-button style="white-space: pre-wrap;">Add
+                            Service Point</button>
                     </mat-grid-tile>
                     <mat-grid-tile></mat-grid-tile>
                     <mat-grid-tile colspan="2" rowspan="2" class="red-grid-area"></mat-grid-tile>
@@ -260,25 +268,29 @@
 
                             <!-- tick Column -->
                             <ng-container matColumnDef="tick">
-                                <mat-header-cell *matHeaderCellDef><mat-icon>done</mat-icon></mat-header-cell>
+                                <mat-header-cell *matHeaderCellDef>
+                                    <mat-icon>done</mat-icon>
+                                </mat-header-cell>
                                 <mat-cell *matCellDef="let element">
-                                    <mat-checkbox disabled [checked]="element.flag">
+                                    <mat-checkbox disabled [checked]="element.destStatus==destStatus.CLOSED"
+                                        [indeterminate]="element.destStatus === destStatus.SERVING">
                                     </mat-checkbox>
                                 </mat-cell>
                             </ng-container>
 
                             <!-- cross Column -->
                             <ng-container matColumnDef="cross">
-                                <mat-header-cell *matHeaderCellDef><mat-icon>close</mat-icon></mat-header-cell>
+                                <mat-header-cell *matHeaderCellDef>
+                                    <mat-icon>close</mat-icon>
+                                </mat-header-cell>
                                 <mat-cell *matCellDef="let row">
-                                    <mat-checkbox (click)="$event.stopPropagation()"
-                                                    (change)="$event ? jCrossSelection.toggle(row) : null"
-                                                    [checked]="jCrossSelection.isSelected(row)"></mat-checkbox>
+                                    <mat-checkbox [disabled]="element && element.destStatus != destStatus.WAITING">
+                                    </mat-checkbox>
                                 </mat-cell>
                             </ng-container>
 
-                            <mat-header-row *matHeaderRowDef="journeyListColumns"></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: journeyListColumns;" ></mat-row>
+                            <mat-header-row *matHeaderRowDef="journeyListColumns; sticky: true"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: journeyListColumns;"></mat-row>
                         </mat-table>
                     </div>
                 </mat-tab>

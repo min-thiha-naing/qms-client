@@ -14,7 +14,7 @@ import { FakeDbService } from './fake-db/fake-db.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { TestComponent } from './test/test.component';
-import { MatDialog } from '@angular/material';
+import { NgxLoadingModule } from 'ngx-loading';
 
 @NgModule({
   declarations: [
@@ -34,7 +34,8 @@ import { MatDialog } from '@angular/material';
     InMemoryWebApiModule.forRoot(
       FakeDbService,
       { delay: 0, passThruUnknownUrl: true }
-    )
+    ),
+    NgxLoadingModule.forRoot({}),
   ],
   providers: [
     {

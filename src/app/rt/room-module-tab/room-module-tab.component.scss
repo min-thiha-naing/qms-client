@@ -13,7 +13,7 @@
   border: 0.5px solid grey;
 
   .table-container {
-    max-height: 30vh;
+    max-height: 40vh;
     overflow: auto;
 
     mat-table {
@@ -63,6 +63,9 @@
 }
 
 .right-bottom-tabs {
+  height: 40vh;
+  overflow: auto;
+  padding: 0px 2px;
   border: 0.5px solid grey;
   ::ng-deep {
     .mat-tab-label,
@@ -78,6 +81,7 @@
 
 .journey-list-container {
   width: 100%;
+
   mat-table {
     width: 100%;
 

@@ -8,3 +8,9 @@ export const QueueStatus = {
     REVERT: 6,
     MISSBACK: 8,
 }
+
+export const DestinationStatus = {
+    CLOSED: 'Closed',
+    SERVING: 'Serving',
+    WAITING: 'Waiting',
+}
