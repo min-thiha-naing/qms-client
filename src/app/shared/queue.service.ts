@@ -166,7 +166,7 @@ export class QueueService {
   }
 
   addRespToQueueList(_queues: BehaviorSubject<any[]>, response, place?: string) {
-    if (place && place == 'bottom') {
+    if (place && place == 'b') {
       let newQs = [response, ..._queues.getValue(),];
       _queues.next(newQs);
     } else {

@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   // baseUrl: 'http://192.168.200.10:8080/api/',
   // rootUrl: 'http://192.168.200.10:8080/',
-  baseUrl: 'http://192.168.1.5:8081',
-  rootUrl: 'http://192.168.1.5:8081',
+  baseUrl: 'http://192.168.110.33:8081',
+  rootUrl: 'http://192.168.110.33:8081',
   // baseUrl: 'http://localhost:8081/',
   // rootUrl: 'http://localhost:8081/',
   oauth2ClientID: 'client',
@@ -15,7 +15,7 @@ export const environment = {
   // oauth2ClientID: 'easy-note-api-client-id',
   // oauth2ClientPassword: 'easy-note-api-client-password'
 
-  terminalId: '3555',
+  terminalId: '3227',
 };
 
 /*
