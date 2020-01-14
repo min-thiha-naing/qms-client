@@ -15,6 +15,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { TestComponent } from './test/test.component';
 import { MatDialog } from '@angular/material';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { MatDialog } from '@angular/material';
       multi: true,
     },
   ],
+  entryComponent: [ConfirmDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

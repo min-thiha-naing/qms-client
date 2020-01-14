@@ -5,6 +5,7 @@ import { MaterialModule } from '../material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDialogModule } from '@angular/material';
 import { CrtComponent } from './crt.component';
+import { PaymentTabComponent } from './payment-tab/payment-tab.component';
 
 const routes: Routes = [
   {
@@ -14,7 +15,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [],
+  declarations: [PaymentTabComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

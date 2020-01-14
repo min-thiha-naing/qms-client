@@ -1,0 +1,302 @@
+<div fxLayout="row" fxLayoutGap="1vw" style="padding: 1vh 0">
+  <!-- Left section -->
+  <div fxFlex="70%" fxLayout="column" fxLayoutGap="1vh">
+    <!-- All Q Table -->
+    <div class="header-plus-table-container">
+      <div class="header-bar">
+        [Total Q = ], [Fresh Q = ], [Revert Q = ], [Missed Back = ]
+      </div>
+      <div class="table-container">
+        <mat-table [dataSource]="allQDS">
+          <!-- Q.No Column -->
+          <ng-container matColumnDef="qNo">
+            <mat-header-cell *matHeaderCellDef> Q.No </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.queueNo}} </mat-cell>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.customerName}} </mat-cell>
+          </ng-container>
+
+          <!-- MRN Column -->
+          <ng-container matColumnDef="mrn">
+            <mat-header-cell *matHeaderCellDef> MRN </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.mrn}} </mat-cell>
+          </ng-container>
+
+          <!-- Visit Type Column -->
+          <ng-container matColumnDef="visitType">
+            <mat-header-cell *matHeaderCellDef> Visit Type </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.visitType}} </mat-cell>
+          </ng-container>
+          <!-- Appt. Time Column -->
+          <ng-container matColumnDef="apptTime">
+            <mat-header-cell *matHeaderCellDef> Appt. Time </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.appointmentTime | date: 'shortTime'}} </mat-cell>
+          </ng-container>
+          <!-- Wait Time Column -->
+          <ng-container matColumnDef="waitTime">
+            <mat-header-cell *matHeaderCellDef> Wait Time </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{'check'}} </mat-cell>
+          </ng-container>
+          <!-- T.Wait Time Column -->
+          <ng-container matColumnDef="tWaitTime">
+            <mat-header-cell *matHeaderCellDef> T.Wait Time </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{'check'}} </mat-cell>
+          </ng-container>
+          <!-- Call Time Column -->
+          <ng-container matColumnDef="callTime">
+            <mat-header-cell *matHeaderCellDef> Call Time </mat-header-cell>
+            <mat-cell *matCellDef="let element"> <span
+                *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span>
+            </mat-cell>
+          </ng-container>
+          <!-- Remark Column -->
+          <ng-container matColumnDef="remark">
+            <mat-header-cell *matHeaderCellDef> Remark </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.remark}} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="qTableColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: qTableColumns;" (click)="onClickRow(allQDS.data[0], 'all')" [ngClass]="{'selected': row.queueNo == selectedRowData.queue.queueNo,                                
+                  'serving': row.queueStatusId == qServingStatus}"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+
+    <!-- Hold Q -->
+    <div class="header-plus-table-container">
+      <div class="header-bar">
+        [Hold Q = ]
+      </div>
+      <div class="table-container">
+        <mat-table [dataSource]="holdQDS">
+          <!-- Q.No Column -->
+          <ng-container matColumnDef="qNo">
+            <mat-header-cell *matHeaderCellDef> Q.No </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.queueNo}} </mat-cell>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.customerName}} </mat-cell>
+          </ng-container>
+
+          <!-- MRN Column -->
+          <ng-container matColumnDef="mrn">
+            <mat-header-cell *matHeaderCellDef> MRN </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.mrn}} </mat-cell>
+          </ng-container>
+
+          <!-- Visit Type Column -->
+          <ng-container matColumnDef="visitType">
+            <mat-header-cell *matHeaderCellDef> Visit Type </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.visitType}} </mat-cell>
+          </ng-container>
+          <!-- Appt. Time Column -->
+          <ng-container matColumnDef="apptTime">
+            <mat-header-cell *matHeaderCellDef> Appt. Time </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.appointmentTime | date: 'shortTime'}} </mat-cell>
+          </ng-container>
+          <!-- Wait Time Column -->
+          <ng-container matColumnDef="waitTime">
+            <mat-header-cell *matHeaderCellDef> Wait Time </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{'check'}} </mat-cell>
+          </ng-container>
+          <!-- T.Wait Time Column -->
+          <ng-container matColumnDef="tWaitTime">
+            <mat-header-cell *matHeaderCellDef> T.Wait Time </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{'check'}} </mat-cell>
+          </ng-container>
+          <!-- Call Time Column -->
+          <ng-container matColumnDef="callTime">
+            <mat-header-cell *matHeaderCellDef> Call Time </mat-header-cell>
+            <mat-cell *matCellDef="let element"> <span
+                *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span>
+            </mat-cell>
+          </ng-container>
+          <!-- Remark Column -->
+          <ng-container matColumnDef="remark">
+            <mat-header-cell *matHeaderCellDef> Remark </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.remark}} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="qTableColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: qTableColumns;" (click)="onClickRow(row, 'hold')"
+            [ngClass]="{'selected': row.queueNo == selectedRowData.queue.queueNo}"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+
+    <!-- Miss Q -->
+    <div class="header-plus-table-container">
+      <div class="header-bar">
+        [Missed Q = ]
+      </div>
+      <div class="table-container">
+        <mat-table [dataSource]="missQDS">
+          <!-- Q.No Column -->
+          <ng-container matColumnDef="qNo">
+            <mat-header-cell *matHeaderCellDef> Q.No </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.queueNo}} </mat-cell>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.customerName}} </mat-cell>
+          </ng-container>
+
+          <!-- MRN Column -->
+          <ng-container matColumnDef="mrn">
+            <mat-header-cell *matHeaderCellDef> MRN </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.mrn}} </mat-cell>
+          </ng-container>
+
+          <!-- Visit Type Column -->
+          <ng-container matColumnDef="visitType">
+            <mat-header-cell *matHeaderCellDef> Visit Type </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.visitType}} </mat-cell>
+          </ng-container>
+          <!-- Appt. Time Column -->
+          <ng-container matColumnDef="apptTime">
+            <mat-header-cell *matHeaderCellDef> Appt. Time </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.appointmentTime | date: 'shortTime'}} </mat-cell>
+          </ng-container>
+          <!-- Wait Time Column -->
+          <ng-container matColumnDef="waitTime">
+            <mat-header-cell *matHeaderCellDef> Wait Time </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{'check'}} </mat-cell>
+          </ng-container>
+          <!-- T.Wait Time Column -->
+          <ng-container matColumnDef="tWaitTime">
+            <mat-header-cell *matHeaderCellDef> T.Wait Time </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{'check'}} </mat-cell>
+          </ng-container>
+          <!-- Call Time Column -->
+          <ng-container matColumnDef="callTime">
+            <mat-header-cell *matHeaderCellDef> Call Time </mat-header-cell>
+            <mat-cell *matCellDef="let element"> <span
+                *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span>
+            </mat-cell>
+          </ng-container>
+          <!-- Remark Column -->
+          <ng-container matColumnDef="remark">
+            <mat-header-cell *matHeaderCellDef> Remark </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.remark}} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="qTableColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: qTableColumns;" (click)="onClickRow(row, 'miss')"
+            [ngClass]="{'selected': row.queueNo == selectedRowData.queue.queueNo}"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right section -->
+  <div style="width: 400px;" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="1vh">
+    <div>
+      <div class="header-bar">
+        STANDARD Action
+      </div>
+      <div class="btn-grid">
+        <mat-grid-list cols="3" rowHeight="3em">
+          <mat-grid-tile>
+            <button mat-flat-button>Preview</button>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <button mat-flat-button (click)="onClickRing()">Ring</button>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <button mat-flat-button>Silent Ring</button>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <button mat-flat-button>No Response</button>
+          </mat-grid-tile>
+          <mat-grid-tile></mat-grid-tile>
+          <mat-grid-tile></mat-grid-tile>
+          <mat-grid-tile colspan="2">
+            <button mat-flat-button>Serve & Transfer</button>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <button mat-flat-button>Cancel Ring</button>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+    </div>
+    <div>
+      <div class="header-bar">
+        SPECIAL Action
+      </div>
+      <div class="btn-grid">
+        <mat-grid-list cols="3" rowHeight="3em">
+          <mat-grid-tile>
+            <button mat-flat-button (click)="onClickHold()">Hold</button>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <button mat-flat-button (click)="onClickExit()">Exit Q</button>
+          </mat-grid-tile>
+          <mat-grid-tile rowspan="2" class="red-grid-area">
+            <button mat-flat-button style="white-space: pre-wrap;">For Lab Staff only</button>
+          </mat-grid-tile>
+          <mat-grid-tile rowspan="2">
+            <button (click)="onClickAddServicePoint()" mat-flat-button style="white-space: pre-wrap;">Add Service
+              Point</button>
+          </mat-grid-tile>
+          <mat-grid-tile></mat-grid-tile>
+          <mat-grid-tile colspan="2" rowspan="2" class="red-grid-area"></mat-grid-tile>
+          <mat-grid-tile>
+            <button mat-flat-button>Print Q</button>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+    </div>
+    <div class="right-bottom-tabs">
+      <mat-tab-group>
+        <mat-tab label="Journey List">
+          <div class="journey-list-container">
+            <mat-table [dataSource]="journeyListDS">
+              <!-- Location Column -->
+              <ng-container matColumnDef="location">
+                <mat-header-cell *matHeaderCellDef>Location</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.workgroupName}}</mat-cell>
+              </ng-container>
+
+              <!-- tick Column -->
+              <ng-container matColumnDef="tick">
+                <mat-header-cell *matHeaderCellDef>
+                  <mat-icon>done</mat-icon>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <mat-checkbox disabled [checked]="element.flag">
+                  </mat-checkbox>
+                </mat-cell>
+              </ng-container>
+
+              <!-- cross Column -->
+              <ng-container matColumnDef="cross">
+                <mat-header-cell *matHeaderCellDef>
+                  <mat-icon>close</mat-icon>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  <mat-checkbox (click)="$event.stopPropagation()"
+                    (change)="$event ? jCrossSelection.toggle(row) : null" [checked]="jCrossSelection.isSelected(row)">
+                  </mat-checkbox>
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="journeyListColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: journeyListColumns;"></mat-row>
+            </mat-table>
+          </div>
+        </mat-tab>
+        <mat-tab label="Remark"></mat-tab>
+        <mat-tab label="Revert"></mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>
