@@ -19,14 +19,18 @@
                         <span class="label">4. Category*</span>
                     </td>
                     <td>
-                        :
-                        <select required>
+                        :<input #category name="category" autocomplete="off">         
+                        <!-- <select required>
                             <option *ngFor="let category of categories" [value]="category.id">
                                 {{category.categoryName}}</option>
-                        </select>
+                        </select> -->
                     </td>
-                    <td>
-                        <span class="label">6. Change Category</span>
+                    <td rowspan="3">
+                        <span class="label">6. Change Category</span><br>
+                        <select required style="width:90%;margin-left: 5%;">
+                            <option *ngFor="let category of categories" [value]="category.id" >
+                                {{category.categoryName}}</option>
+                        </select>
                     </td>
                     <td rowspan="3" style="height: 50px; text-align: center;">
                         <button mat-raised-button color="primary" style="height: 50px;">
@@ -47,19 +51,20 @@
                     <td>
                         : Y | N | Y | X | X X | 8
                     </td>
-                    <td>
+                    <!-- <td>
                         <span class="label">6. Change Category</span>
-                    </td>
+                    </td> -->
                 </tr>
                 <tr>
                     <td>
                         <span class="label">3. Vasit Type</span>
                     </td>
                     <td>
-                        :<select required>
+                        :<input #visitType name="visitType" autocomplete="off">    
+                        <!-- :<select required>
                             <option *ngFor="let visitType of visitTypes" [value]="visitType.id">
                                 {{visitType.name}}</option>
-                        </select>
+                        </select> -->
                     </td>
                     <td>
                         <span class="label">6. EPIC Failure</span>
@@ -67,9 +72,9 @@
                     <td>
                         : Outstanding Payment
                     </td>
-                    <td>
+                    <!-- <td>
                         <span class="label">6. Change Category</span>
-                    </td>
+                    </td> -->
                 </tr>
             </table>
         </form>
@@ -143,7 +148,7 @@
         </div>
     </div>
     <div class="standard" fxFlex="25">
-        <div class="header" fxLayout="row" fxLayoutAlign="space-between center" z>
+        <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
             <div>
                 Standard Actions
             </div>

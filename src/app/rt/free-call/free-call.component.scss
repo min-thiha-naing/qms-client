@@ -1,0 +1,54 @@
+@import "src/themes/starter-variables.scss";
+.freecall{
+    background: #fff;
+    .box{
+      width: 400px;
+      background: #5ae8e8;
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 25pt;
+      margin: 10px 0px;
+    }
+
+    .note{
+      color: red;
+    }
+
+    .special {
+      background: #5ae8e8;
+
+      .header {
+        padding: 10px;
+        background: #3f51b5;
+        color: #fff;
+      }
+
+      .actions {
+        border: 1px solid rgba(0, 0, 0, 0.12);
+
+        table,
+        td {
+          border: 1px solid rgba(0, 0, 0, 0.12);
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+
+          td {
+            text-align: center;
+            padding: 8px 10px;
+          }
+
+          button {
+            width: 50%;
+            .mat-button-wrapper {
+              flex-direction: column;
+              display: flex;
+              align-items: center;
+            }
+          }
+        }
+      }
+    }
+  }

@@ -7,10 +7,12 @@ import { HeaderComponent } from '../shared/layout/header/header.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RoomModuleTabComponent } from './room-module-tab/room-module-tab.component';
 import { AddServicePointComponent } from './add-service-point/add-service-point.component';
-import { MatDialogModule } from '@angular/material';
-import { FormsModule } from '@angular/forms';
+import { MatDialogModule, MatAutocompleteModule, MatSelectModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxLoadingModule } from 'ngx-loading';
 import { SharedModule } from '../shared/shared.module';
+import { AppointmentModuleTabComponent } from './appointment-module-tab/appointment-module-tab.component';
+import { FreeCallComponent } from './free-call/free-call.component';
 
 const routes: Routes = [
   {
@@ -26,6 +28,8 @@ const routes: Routes = [
     RtComponent,
     RoomModuleTabComponent,
     AddServicePointComponent,
+    AppointmentModuleTabComponent,
+    FreeCallComponent,
   ],
   entryComponents: [
     AddServicePointComponent,
@@ -38,6 +42,9 @@ const routes: Routes = [
     MatDialogModule,
     FormsModule,
     NgxLoadingModule,
+    MatAutocompleteModule,
+    MatSelectModule,
+    ReactiveFormsModule,
     SharedModule
   ],
   exports: [
