@@ -17,11 +17,13 @@ export class QueueService {
 
   private _servingQ = new BehaviorSubject<any>(null);
   /////crt
-  _crtAllQs = new BehaviorSubject<any[]>([]);
+  private _crtAllQs = new BehaviorSubject<any[]>([]);
+  private _regAllQs = new BehaviorSubject<any[]>([]);
   _crtHoldQs = new BehaviorSubject<any[]>([]);
   _crtMissQs = new BehaviorSubject<any[]>([]);
 
   _crtServingQ = new BehaviorSubject<any>({ queueNo: null });
+  _regServingQ = new BehaviorSubject<any>({ queueNo: null });
 
   get rtAllQs() {
     return this._rtAllQs.asObservable().pipe(map(allQs => {
@@ -55,6 +57,20 @@ export class QueueService {
     }))
   }
 
+  get CrtRegAllQs(){
+    return this._regAllQs.asObservable().pipe(map(allQs=>{
+      if (allQs[0] && allQs[0].queueStatusId == QueueStatus.SERVING) {
+        allQs[0].planList = Helper.sortLocByOrderId(allQs[0].planList);
+        console.log('serving Q passed');
+        console.log(allQs[0]);
+        this._regServingQ.next(allQs[0]);
+      } else if (allQs[0]) {
+        this._regServingQ.next(null);
+      }
+      return allQs;
+    }))
+  }
+
   get servingQ() {
     return this._servingQ.asObservable().pipe(map(sq => {
       if (sq && sq.planList)
@@ -74,6 +90,14 @@ export class QueueService {
       }
 
     })
+  }
+
+  getRegAllQ(){
+    this.api.getAllReg().subscribe(
+      resp=>{
+        this._regAllQs.next(resp)
+      }
+    )
   }
 
   getRtAllQ() {
@@ -206,6 +230,7 @@ export class QueueService {
   }
 
   ringCrtMissQ(queue: any) {
+    console.log(queue)
     return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
       let newQ = this.returnQModifiedWithCallTime(queue, resp)
       this.removeFromQueueList(this._crtMissQs, queue);

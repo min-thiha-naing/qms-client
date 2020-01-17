@@ -12,6 +12,7 @@ import { AppointmentListComponent } from './appointment-list/appointment-list.co
 import { CRtService } from './crt.service';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { ServicePointComponent } from './service-point/service-point.component';
 import { NgxLoadingModule } from 'ngx-loading';
 
 const routes: Routes = [
@@ -26,7 +27,8 @@ const routes: Routes = [
     PaymentTabComponent,
     CrtComponent,
     RegistrationComponent,
-    AppointmentListComponent
+    AppointmentListComponent,
+    ServicePointComponent
   ],
   imports: [
     CommonModule,
@@ -40,6 +42,7 @@ const routes: Routes = [
   ],
   exports: [
     RouterModule,
-  ]
+  ],
+  entryComponents:[ServicePointComponent]
 })
 export class CrtModule { }

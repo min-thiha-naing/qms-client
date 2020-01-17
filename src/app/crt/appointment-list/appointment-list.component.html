@@ -13,7 +13,7 @@
 
             <ng-container matColumnDef="salut">
                 <th mat-header-cell *matHeaderCellDef> Salut </th>
-                <td mat-cell *matCellDef="let element"> {{element.salut}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.patientTitle}} </td>
             </ng-container>
 
             <ng-container matColumnDef="name">
@@ -33,7 +33,7 @@
 
             <ng-container matColumnDef="mcrCode">
                 <th mat-header-cell *matHeaderCellDef> MCR Code </th>
-                <td mat-cell *matCellDef="let element"> {{element.mcrCode}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.tagQueue}} </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="appointmentDisplayedColumns; sticky: true"></tr>

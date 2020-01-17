@@ -36,20 +36,23 @@ export class ApiService {
   }
 
   getCRTAllQ() {
-    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/ALL/3555`)
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/all/${sessionStorage.getItem('terminalId')}`)
     .pipe(map(resp => {return resp.map(el => Helper.addPropToRawQ(el))}));
   }
 
   getCRTHoldQ() {
-    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/HOLD/3555`)
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/hold/${sessionStorage.getItem('terminalId')}`)
     .pipe(map(resp => {return resp.map(el => Helper.addPropToRawQ(el))}));
   }
 
   getCRTMissQ() {
-    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/MISS/3555`)
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/miss/${sessionStorage.getItem('terminalId')}`)
     .pipe(map(resp => {return resp.map(el => Helper.addPropToRawQ(el))}));
   }
 
+  getCRTClose() {
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/close/${sessionStorage.getItem('terminalId')}`);
+  }
 
   getDepartments() {
     return this.http.get<any[]>(`${environment.baseUrl}/departments/department`);
@@ -71,6 +74,18 @@ export class ApiService {
     return this.http.get<Appointment[]>(`${environment.baseUrl}/liveAppointmentPatients/liveAppointmentPatient`)
   }
 
+  getAllReg(){
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/listLiveTransactionQueueForRegistration/all/${sessionStorage.getItem('terminalId')}`);
+  }
+
+  getMissReg(){
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/listLiveTransactionQueueForRegistration/miss/${sessionStorage.getItem('terminalId')}`);
+  }
+
+  getWaitReg(){
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/listLiveTransactionQueueForRegistration/wait/${sessionStorage.getItem('terminalId')}`);
+  }
+  
   deletePlanList(visitId: number, orderIdList: number[]){
     return this.http.delete(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/removeplanListByVisitId/${visitId}/${orderIdList.toString()}`)
   }
