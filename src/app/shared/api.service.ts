@@ -3,6 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Appointment } from '../model/appointment';
+import { map } from 'rxjs/operators';
+import { Helper } from './helper.class';
 
 @Injectable({
   providedIn: 'root'
@@ -15,31 +17,37 @@ export class ApiService {
   ) { }
 
   getRTAllQ() {
-    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatus/all/${sessionStorage.getItem('terminalId')}`);
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatus/all/${sessionStorage.getItem('terminalId')}`)
+    .pipe(map(resp => {return resp.map(el => Helper.addPropToRawQ(el))}));
   }
 
   getRTHoldQ() {
-    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatus/hold/${sessionStorage.getItem('terminalId')}`);
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatus/hold/${sessionStorage.getItem('terminalId')}`)
+    .pipe(map(resp => {return resp.map(el => Helper.addPropToRawQ(el))}));
   }
 
   getRTMissQ() {
-    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatus/miss/${sessionStorage.getItem('terminalId')}`);
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatus/miss/${sessionStorage.getItem('terminalId')}`)
+    .pipe(map(resp => {return resp.map(el => Helper.addPropToRawQ(el))}));
   }
 
   changeQ(id, status) {
-    return this.http.put<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/${id}/${status}/${sessionStorage.getItem('terminalId')}`, {});
+    return this.http.put<any>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/${id}/${status}/${sessionStorage.getItem('terminalId')}`, {});
   }
 
   getCRTAllQ() {
-    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/ALL/3555`);
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/ALL/3555`)
+    .pipe(map(resp => {return resp.map(el => Helper.addPropToRawQ(el))}));
   }
 
   getCRTHoldQ() {
-    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/HOLD/3555`);
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/HOLD/3555`)
+    .pipe(map(resp => {return resp.map(el => Helper.addPropToRawQ(el))}));
   }
 
   getCRTMissQ() {
-    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/MISS/3555`);
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/liveTransactionByStatusPayment/MISS/3555`)
+    .pipe(map(resp => {return resp.map(el => Helper.addPropToRawQ(el))}));
   }
 
 
@@ -61,6 +69,10 @@ export class ApiService {
   }
   getAppointments() {
     return this.http.get<Appointment[]>(`${environment.baseUrl}/liveAppointmentPatients/liveAppointmentPatient`)
+  }
+
+  deletePlanList(visitId: number, orderIdList: number[]){
+    return this.http.delete(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/removeplanListByVisitId/${visitId}/${orderIdList.toString()}`)
   }
 
 }

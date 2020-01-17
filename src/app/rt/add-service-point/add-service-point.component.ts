@@ -2,9 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { ApiService } from 'src/app/shared/api.service';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { SelectionModel } from '@angular/cdk/collections';
 import { map } from 'rxjs/operators';
-import { TransformerService } from 'src/app/shared/transformer.service';
+import { DestinationStatus } from 'src/app/model/queue-status';
 
 
 
@@ -27,24 +26,18 @@ export class AddServicePointComponent implements OnInit {
   upcomingDests = new BehaviorSubject<any[]>([]);
   destColumns = ['clinic', 'location', 'apptTime', 'status', 'select']
 
-  destStatus = {
-    CLOSED: 'Closed',
-    SERVING: 'Serving',
-    WAITING: 'Waiting',
-  };
+  destStatus = DestinationStatus;
 
   constructor(
     private dialogRef: MatDialogRef<AddServicePointComponent>,
-    @Inject(MAT_DIALOG_DATA) public servingQ: { planList: any[] },
+    @Inject(MAT_DIALOG_DATA) public servingQ: any,
     private api: ApiService,
-    private transform: TransformerService,
   ) { }
 
   ngOnInit() {
-    console.log(this.servingQ)
     this.api.getDepartments().subscribe(resp => this.departments = resp);
 
-    this.destLocationDS = new MatTableDataSource<any>(this.transform.planListToDestLocList(this.servingQ.planList));
+    this.destLocationDS = new MatTableDataSource<any>(this.transformPlanListToDestLocList(this.servingQ.planList));
     console.log('DEST');
     console.log(this.destLocationDS.data);
   }
@@ -66,6 +59,15 @@ export class AddServicePointComponent implements OnInit {
     }
   }
 
+  transformPlanListToDestLocList(planList) {
+    return planList.map((element, index) => {
+      return {
+        ...element,
+        isSelected: false,
+      }
+    });
+  }
+
   transformWGtoSrcLoc(wg: any) {
     return {
       ...wg,
@@ -75,40 +77,18 @@ export class AddServicePointComponent implements OnInit {
     };
   }
 
-  // transformPlanListToDestLocList(planlist: any[]) {
-  //   return planlist.map((element, index) => {
-  //     let destStatus;
-  //     if (element.flag == 1) {
-  //       destStatus = this.destStatus.CLOSED;
-  //     } else if (element.flag == 0) {
-  //       if (planlist[index - 1].flag == 1) {
-  //         destStatus = this.destStatus.SERVING;
-  //       } else {
-  //         destStatus = this.destStatus.WAITING;
-  //       }
-  //     }
-
-  //     return {
-  //       ...element,
-  //       destStatus: destStatus,
-  //       isSelected: false,
-  //     }
-  //   })
-  // }
-
-  transformSrcToDestLoc(srcLocs: any[], startingOrderId: number) {
+  transformSrcToDestLoc(srcLocs: any[]) {
     // make sure src is already sorted
     return srcLocs.map(el => {
       return {
         ...el,
-        orderId: startingOrderId++,
-        destStatus: this.destStatus.WAITING,
+        actFlag: this.destStatus.WAITING,
         isSelected: false,
       }
     })
   }
 
-  sortSrcLocsByOrder(srcLocs: any[]) {
+  sortChosenSrcLocsByOrder(srcLocs: any[]) {
     return srcLocs
       .filter(el => el.isSelected == true)
       .sort((a, b) => {
@@ -117,28 +97,33 @@ export class AddServicePointComponent implements OnInit {
   }
 
   addToFirst() {
-    let newDestLs = this.transformSrcToDestLoc(this.sortSrcLocsByOrder(this.srcLocationDS.data), this.findoutStartingOrderId(this.destLocationDS.data));
-    let startOrderId = Math.max(...newDestLs.map(el => el.orderId)) + 1;
-    let belowDests = this.destLocationDS.data.filter(el => el.destStatus == this.destStatus.WAITING)
-      .map(el => {
-        return {
-          ...el,
-          orderId: startOrderId++,
-        }
-      });
+    let upperDestLs = this.destLocationDS.data.filter(el => el.actFlag != this.destStatus.WAITING);
+
+    let newDestLs = this.sortChosenSrcLocsByOrder(this.srcLocationDS.data);
+    newDestLs = this.transformSrcToDestLoc(newDestLs);
+    newDestLs = this.incrementOrderId(newDestLs, this.computeLargestOrderId(upperDestLs) + 1);
+
+    let belowDestLs = this.destLocationDS.data.filter(el => el.actFlag == this.destStatus.WAITING);
+    belowDestLs = this.incrementOrderId(belowDestLs, this.computeLargestOrderId(newDestLs) + 1);
+
     this.destLocationDS = new MatTableDataSource<any>([
-      ...this.getDestLocsByDestStatus(this.destLocationDS.data, this.destStatus.CLOSED),
-      ...this.getDestLocsByDestStatus(this.destLocationDS.data, this.destStatus.SERVING),
+      ...upperDestLs,
       ...newDestLs,
-      ...belowDests].sort((a, b) => { return a.orderId - b.orderId }));
+      ...belowDestLs].sort((a, b) => { return a.orderId - b.orderId }));
     console.log('DEST');
     console.log(this.destLocationDS.data);
   }
 
   addToLast() {
-    let startOrderId = Math.max(...this.destLocationDS.data.map(el => el.orderId)) + 1;
-    let newDestLs = this.transformSrcToDestLoc(this.sortSrcLocsByOrder(this.srcLocationDS.data), startOrderId);
-    this.destLocationDS = new MatTableDataSource<any>([...this.destLocationDS.data, ...newDestLs].sort((a, b) => { return a.orderId - b.orderId }));
+    let upperDestLs = this.destLocationDS.data;
+
+    let newDestLs = this.sortChosenSrcLocsByOrder(this.srcLocationDS.data);
+    newDestLs = this.transformSrcToDestLoc(newDestLs);
+    newDestLs = this.incrementOrderId(newDestLs, this.computeLargestOrderId(upperDestLs) + 1);
+
+    this.destLocationDS = new MatTableDataSource<any>([
+      ...upperDestLs,
+      ...newDestLs].sort((a, b) => { return a.orderId - b.orderId }));
     console.log('DEST');
     console.log(this.destLocationDS.data);
   }
@@ -148,21 +133,18 @@ export class AddServicePointComponent implements OnInit {
   }
 
   onRevert() {
-    var currDestClone = {...this.destLocationDS.data.find(el => el.destStatus == this.destStatus.SERVING)};
-    currDestClone.orderId = Math.max(...this.destLocationDS.data.map(el => el.orderId))+1;
-    currDestClone.destStatus = this.destStatus.WAITING;
+    var currDestClone = { ...this.destLocationDS.data.find(el => el.actFlag == this.destStatus.SERVING), id: null };
+    currDestClone.orderId = Math.max(...this.destLocationDS.data.map(el => el.orderId)) + 1;
+    currDestClone.actFlag = this.destStatus.WAITING;
     this.destLocationDS = new MatTableDataSource<any>([...this.destLocationDS.data, currDestClone]);
   }
 
-  findoutStartingOrderId(destLocs: any[]): number {
-    var num = 0;
-    var oL = destLocs.filter(el => el.destStatus == this.destStatus.SERVING || el.destStatus == this.destStatus.CLOSED)
-      .map(el => el.orderId);
-    if (oL)
-      num = Math.max(...oL);
-    else
-      num = 2;
-    return num
+  computeLargestOrderId(list: any[]): number {
+    return Math.max(...list.map(el => el.orderId));
+  }
+
+  incrementOrderId(list: any[], startingOrderId: number) {
+    return list.map(el => { return { ...el, orderId: startingOrderId++ } });
   }
 
 
@@ -178,21 +160,25 @@ export class AddServicePointComponent implements OnInit {
       });
   }
 
-  getDestLocsByDestStatus(destLocs: any[], status: any) {
-    return destLocs.filter(el => el.destStatus == status);
+  getDestLocsByActFlag(destLocs: any[], status: any) {
+    return destLocs.filter(el => el.actFlag == status);
   }
 
   onConfirm() {
     this.dialogRef.close({
-      data: this.destLocationDS.data.filter(loc => loc.destStatus != this.destStatus.CLOSED)
-        .map(loc => {
-          return {
-            ...loc,
-            id: null,
-            isSelected: false,
-            flag: 0,    // NOTE important to include
-          }
-        }),
+      data: {
+        id: this.servingQ.id,
+        visitId: this.servingQ.visitId,
+        planList: [...this.destLocationDS.data.filter(loc => loc.actFlag == this.destStatus.WAITING)
+          .map(loc => {
+            return {
+              ...loc,
+              id: null,
+              visitId: this.servingQ.visitId,
+              isSelected: false,
+            }
+          })]
+      },
       role: 'confirm',
     }
     );

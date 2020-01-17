@@ -5,7 +5,8 @@
         <!-- All Q Table -->
         <div class="header-plus-table-container">
             <div class="header-bar">
-                [Total Q =  {{allQTableHeader.total}}], [Fresh Q = {{allQTableHeader.waiting}}], [Revert Q = {{allQTableHeader.revert}}], [Missed Back = {{allQTableHeader.missback}}]
+                [Total Q = {{allQTableHeader.total}}], [Fresh Q = {{allQTableHeader.waiting}}], [Revert Q =
+                {{allQTableHeader.revert}}], [Missed Back = {{allQTableHeader.missback}}]
             </div>
             <div class="table-container">
                 <mat-table [dataSource]="allQDS">
@@ -272,8 +273,8 @@
                                     <mat-icon>done</mat-icon>
                                 </mat-header-cell>
                                 <mat-cell *matCellDef="let element">
-                                    <mat-checkbox disabled [checked]="element.destStatus==destStatus.CLOSED"
-                                        [indeterminate]="element.destStatus === destStatus.SERVING">
+                                    <mat-checkbox disabled [checked]="element.actFlag==destStatus.CLOSED"
+                                        [indeterminate]="element.actFlag === destStatus.SERVING">
                                     </mat-checkbox>
                                 </mat-cell>
                             </ng-container>
@@ -281,10 +282,13 @@
                             <!-- cross Column -->
                             <ng-container matColumnDef="cross">
                                 <mat-header-cell *matHeaderCellDef>
-                                    <mat-icon>close</mat-icon>
+                                    <button mat-icon-button (click)="onRemoveJourneyList()">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
                                 </mat-header-cell>
-                                <mat-cell *matCellDef="let row">
-                                    <mat-checkbox [disabled]="element && element.destStatus != destStatus.WAITING">
+                                <mat-cell *matCellDef="let element">
+                                    <mat-checkbox [(ngModel)]="element.isSelected"
+                                        [disabled]="element && element.actFlag != destStatus.WAITING">
                                     </mat-checkbox>
                                 </mat-cell>
                             </ng-container>

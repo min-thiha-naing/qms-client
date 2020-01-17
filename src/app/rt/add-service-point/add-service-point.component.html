@@ -92,14 +92,14 @@
                     <!-- Status Column -->
                     <ng-container matColumnDef="status">
                         <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{ element.destStatus }} </mat-cell>
+                        <mat-cell *matCellDef="let element">{{ element.actFlag }} </mat-cell>
                     </ng-container>
 
                     <!-- Select Column -->
                     <ng-container matColumnDef="select">
                         <mat-header-cell *matHeaderCellDef> Select </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <mat-checkbox *ngIf="element.destStatus == destStatus.WAITING" [(ngModel)]="element.isSelected"></mat-checkbox>
+                            <mat-checkbox *ngIf="element.actFlag == destStatus.WAITING" [(ngModel)]="element.isSelected"></mat-checkbox>
                         </mat-cell>
                     </ng-container>
 
