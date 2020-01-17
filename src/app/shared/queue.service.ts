@@ -4,6 +4,7 @@ import { ApiService } from './api.service';
 import { tap, map } from 'rxjs/operators';
 import { QueueStatus } from '../model/queue-status';
 import { SocketClientService } from '../socket-client.service';
+import { Helper } from './helper.class';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class QueueService {
   _rtHoldQs = new BehaviorSubject<any[]>([]);
   _rtMissQs = new BehaviorSubject<any[]>([]);
 
-  _servingQ = new BehaviorSubject<any>({ queueNo: null });
+  private _servingQ = new BehaviorSubject<any>(null);
   /////crt
   private _crtAllQs = new BehaviorSubject<any[]>([]);
   private _regAllQs = new BehaviorSubject<any[]>([]);
@@ -29,7 +30,7 @@ export class QueueService {
 
       // In case there is serving Q
       if (allQs[0] && allQs[0].queueStatusId == QueueStatus.SERVING) {
-        allQs[0].planList = this.sortLocByOrderId(allQs[0].planList);
+        allQs[0].planList = Helper.sortLocByOrderId(allQs[0].planList);
         console.log('serving Q passed');
         console.log(allQs[0]);
         this._servingQ.next(allQs[0]);
@@ -45,7 +46,7 @@ export class QueueService {
     return this._crtAllQs.asObservable().pipe(map(allQs => {
       // In case there is serving Q
       if (allQs[0] && allQs[0].queueStatusId == QueueStatus.SERVING) {
-        allQs[0].planList = this.sortLocByOrderId(allQs[0].planList);
+        allQs[0].planList = Helper.sortLocByOrderId(allQs[0].planList);
         console.log('serving Q passed');
         console.log(allQs[0]);
         this._crtServingQ.next(allQs[0]);
@@ -59,7 +60,7 @@ export class QueueService {
   get CrtRegAllQs(){
     return this._regAllQs.asObservable().pipe(map(allQs=>{
       if (allQs[0] && allQs[0].queueStatusId == QueueStatus.SERVING) {
-        allQs[0].planList = this.sortLocByOrderId(allQs[0].planList);
+        allQs[0].planList = Helper.sortLocByOrderId(allQs[0].planList);
         console.log('serving Q passed');
         console.log(allQs[0]);
         this._regServingQ.next(allQs[0]);
@@ -68,6 +69,15 @@ export class QueueService {
       }
       return allQs;
     }))
+  }
+
+  get servingQ() {
+    return this._servingQ.asObservable().pipe(map(sq => {
+      if (sq && sq.planList)
+        return { ...sq, planList: Helper.sortLocByOrderId(sq.planList) }
+      else
+        return sq;
+    }));
   }
 
   constructor(
@@ -125,12 +135,6 @@ export class QueueService {
     this.api.getCRTAllQ().subscribe(
       resp => {
         this._crtAllQs.next(resp);
-        // In case there is serving Q
-        if (resp[0].queueStatusId == QueueStatus.SERVING) {
-          console.log('serving Q passed');
-          console.log(resp[0]);
-          this._crtServingQ.next(resp[0]);
-        }
       }
     );
   }
@@ -155,14 +159,15 @@ export class QueueService {
     return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
       // especially for serving Q which will be returned
       let newQ = this.returnQModifiedWithCallTime(queue, resp)
-      console.log(newQ);
+      newQ.planList = queue.planList; //  since response doesnt include planList
       this.replaceCurrentQWithResp(this._rtAllQs, newQ);
     }));
   }
 
   ringHoldQ(queue: any) {
     return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
-      let newQ = this.returnQModifiedWithCallTime(queue, resp)
+      let newQ = this.returnQModifiedWithCallTime(queue, resp);
+      newQ.planList = queue.planList;
       this.removeFromQueueList(this._rtHoldQs, queue);
       this.addRespToQueueList(this._rtAllQs, newQ, 'b');
     }));
@@ -171,6 +176,7 @@ export class QueueService {
   ringMissQ(queue: any) {
     return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
       let newQ = this.returnQModifiedWithCallTime(queue, resp);
+      newQ.planList = queue.planList;
       this.removeFromQueueList(this._rtMissQs, queue);
       this.addRespToQueueList(this._rtAllQs, newQ, 'b');
     }));
@@ -226,7 +232,7 @@ export class QueueService {
     return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
       let newQ = this.returnQModifiedWithCallTime(queue, resp)
       this.removeFromQueueList(this._rtHoldQs, queue);
-      this.addRespToQueueList(this._crtAllQs, newQ , 'b');
+      this.addRespToQueueList(this._crtAllQs, newQ, 'b');
     }));
   }
 
@@ -235,7 +241,7 @@ export class QueueService {
     return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
       let newQ = this.returnQModifiedWithCallTime(queue, resp)
       this.removeFromQueueList(this._crtMissQs, queue);
-      this.addRespToQueueList(this._crtAllQs, newQ , 'b');
+      this.addRespToQueueList(this._crtAllQs, newQ, 'b');
     }));
   }
 
@@ -272,36 +278,35 @@ export class QueueService {
   }
 
   returnQModifiedWithCallTime(existingQ, responseQ) {
-    let callCount, lastCallTime;
-    if (existingQ.callCount) {
-      callCount = existingQ.callCount + 1;
-      lastCallTime = new Date().toISOString();
-    } else {
-      callCount = 1;
-      lastCallTime = new Date().toISOString();
-    }
     return {
       ...responseQ,
-      callCount: callCount,
-      lastCallTime: lastCallTime,
+      callCount: existingQ.callCount + 1,
+      lastCallTime: new Date().toISOString(),
     }
   }
 
   //  return all plan list of serving Q
   addServicePoint(payload) {
     return this.api.addServicePoint(payload).pipe(tap(queue => {
-      this.replaceCurrentQWithResp(this._rtAllQs, { ...this._servingQ.value, planList: this.sortLocByOrderId([...this._servingQ.value.planList, ...queue.planList]) });
+      this.replaceCurrentQWithResp(this._rtAllQs, { ...this._servingQ.value, planList: [...queue.planList] });
     }));
   }
 
   crtAddServicePoint(payload) {
     return this.api.addServicePoint(payload).pipe(tap(queue => {
-      this.replaceCurrentQWithResp(this._crtAllQs, { ...this._crtServingQ.value, planList: this.sortLocByOrderId([...this._crtServingQ.value.planList, ...queue.planList]) });
+      this.replaceCurrentQWithResp(this._crtAllQs, { ...this._crtServingQ.value, planList: [...queue.planList] });
     }));
   }
 
-  sortLocByOrderId(locList: any[]) {
-    return locList.sort((a, b) => a.orderId - b.orderId);
+  deletePlanList(queue: any, orderIdList: number[]) {
+    return this.api.deletePlanList(queue.visitId, orderIdList).pipe(tap(() => {
+      this.replaceCurrentQWithResp(this._rtAllQs, this.internalDeletePlanList(queue, orderIdList));
+    }))
+  }
+
+  internalDeletePlanList(queue: any, orderIdList: number[]) {
+    queue.planList = (<Array<any>>queue.planList).filter(pl => !orderIdList.includes(pl.orderId));
+    return queue;
   }
 
 }

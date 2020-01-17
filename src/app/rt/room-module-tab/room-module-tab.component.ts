@@ -8,6 +8,7 @@ import { QueueStatus, DestinationStatus } from 'src/app/model/queue-status';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AddServicePointComponent } from '../add-service-point/add-service-point.component';
 import { TransformerService } from 'src/app/shared/transformer.service';
+import { Helper } from 'src/app/shared/helper.class';
 
 @Component({
   selector: 'app-room-module-tab',
@@ -47,9 +48,7 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
   subs = new SubSink();
   loading = false;
   constructor(
-    private router: Router,
     private qS: QueueService,
-    private transform: TransformerService,
     private dialog: MatDialog,
   ) { }
 
@@ -57,33 +56,36 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
     this.subs.add(this.qS.rtAllQs.subscribe(Qs => {
       this.allQDS = new MatTableDataSource<any>(Qs);
 
-      this.allQTableHeader = {
-        total: Qs.length,
-        fresh: Qs.filter(el=>el.queueStatusId== QueueStatus.FRESH).length,
-        revert: Qs.filter(el=>el.queueStatusId== QueueStatus.REVERT).length,
-        missback: Qs.filter(el=>el.queueStatusId== QueueStatus.MISSBACK).length,
-        waiting: Qs.filter(el=>el.queueStatusId== QueueStatus.WAITING).length,
-      }
+      if (Qs) {
+        this.allQTableHeader = {
+          total: Qs.length,
+          fresh: Qs.filter(el => el.queueStatusId == QueueStatus.FRESH).length,
+          revert: Qs.filter(el => el.queueStatusId == QueueStatus.REVERT).length,
+          missback: Qs.filter(el => el.queueStatusId == QueueStatus.MISSBACK).length,
+          waiting: Qs.filter(el => el.queueStatusId == QueueStatus.WAITING).length,
+        };
 
-      if (this.allQDS.data[0]) {
-        this.selectedRowData = {
-          queue: {
-            queueNo: this.allQDS.data[0].queueNo,
-            ...this.allQDS.data[0],
-          },
-          fromPanel: 'all'
+        if (this.allQDS.data[0]) {
+          this.selectedRowData = {
+            queue: {
+              queueNo: this.allQDS.data[0].queueNo,
+              ...this.allQDS.data[0],
+            },
+            fromPanel: 'all'
+          }
         }
       }
     }));
     this.subs.add(this.qS._rtHoldQs.asObservable().subscribe(Qs => this.holdQDS = new MatTableDataSource<any>(Qs)));
     this.subs.add(this.qS._rtMissQs.asObservable().subscribe(Qs => this.missQDS = new MatTableDataSource<any>(Qs)));
 
-    this.subs.add(this.qS._servingQ.asObservable().subscribe(Q => {
+    this.subs.add(this.qS.servingQ.subscribe(Q => {
       this.servingQ = Q;
       if (this.servingQ) {
         if (this.servingQ.planList) {
-          console.log(this.transform.planListToDestLocList(this.servingQ.planList));
-          this.journeyListDS = new MatTableDataSource<any>(this.transform.planListToDestLocList(this.servingQ.planList));
+          this.journeyListDS = new MatTableDataSource<any>(Helper.transformPlanListToDestLocList(this.servingQ.planList));
+        } else {
+          this.journeyListDS = new MatTableDataSource<any>()
         }
         this.selectedRowData = {
           queue: {
@@ -195,16 +197,20 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
     });
 
     this.subs.add(dialogRef.afterClosed().subscribe(result => {
-      if (result && result.role == 'confirm' && result.data.length > 0) {
+      if (result && result.role == 'confirm' && result.data.planList.length > 0) {
         console.log('GOT');
         console.log(result.data);
-        this.qS.addServicePoint({
-          id: this.servingQ.id,
-          visitId: this.servingQ.visitId,
-          planList: result.data,
-        }).subscribe()
+        this.qS.addServicePoint(result.data).subscribe()
       }
     }));
+  }
+
+  onRemoveJourneyList() {
+    var orderIdListToDel = this.journeyListDS.data.filter(el => el.isSelected).map(el => el.orderId);
+    console.log(orderIdListToDel);
+    if (orderIdListToDel.length > 0) {
+      this.qS.deletePlanList(this.servingQ, orderIdListToDel).subscribe();
+    }
   }
 
   onClickRow(queue, fromPanel) {
