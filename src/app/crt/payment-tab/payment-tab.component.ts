@@ -54,11 +54,11 @@ export class PaymentTabComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-     
+
     this.qS.getCrtAllQ();
     this.qS.getCrtHoldQ();
     this.qS.getCrtMissQ();
-    
+
     this.subs.add(this.qS.rtAllQs.subscribe(Qs => {
       this.allQDS = new MatTableDataSource<any>(Qs);
 
@@ -228,7 +228,23 @@ export class PaymentTabComponent implements OnInit {
     };
   }
 
-  ngOnDestroy() {
-    this.subs.unsubscribe();
-  }
+  onClickExit() {
+    const message = `Are you sure you want to do this?`;
+
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: dialogData,
+      disableClose : true
+    });
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log(dialogResult);
+    });
+}
+
+ngOnDestroy() {
+  this.subs.unsubscribe();
+}
 }

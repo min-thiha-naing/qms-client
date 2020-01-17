@@ -49,7 +49,9 @@ export class RegistrationComponent implements OnInit {
     private dialog: MatDialog,
   ) { }
   ngOnInit() {
-    this.subs.add(this.qS.rtAllQs.subscribe(Qs => {
+    this.qS.getRegAllQ();
+    
+    this.subs.add(this.qS.CrtRegAllQs.subscribe(Qs => {
       this.allQDS = new MatTableDataSource<any>(Qs);
       console.log(this.allQDS)
       this.allQTableHeader = {
