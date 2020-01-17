@@ -53,6 +53,11 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+
+    this.qS.getRtAllQ();
+    this.qS.getRtHoldQ();
+    this.qS.getRtMissQ();
+    
     this.subs.add(this.qS.rtAllQs.subscribe(Qs => {
       this.allQDS = new MatTableDataSource<any>(Qs);
 

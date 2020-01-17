@@ -68,17 +68,10 @@ export class QueueService {
     private api: ApiService,
     private socketClient: SocketClientService,
   ) {
-    this.getRtAllQ();
-    this.getRtHoldQ();
-    this.getRtMissQ();
-    this.getCrtAllQ();
-    this.getCrtHoldQ();
-    this.getCrtMissQ();
     this.socketClient.onMessage('/user/queue/reply').subscribe(q => {
       if (q.queueStatusId === QueueStatus.MISS) {
         this.addRespToQueueList(this._rtMissQs, q);
       }
-
 
     })
   }
@@ -110,7 +103,7 @@ export class QueueService {
   getCrtAllQ() {
     this.api.getCRTAllQ().subscribe(
       resp => {
-        this._crtAllQs.next(resp);
+        this._rtAllQs.next(resp);
       }
     );
   }
@@ -118,7 +111,7 @@ export class QueueService {
   getCrtHoldQ() {
     this.api.getCRTHoldQ().subscribe(
       resp => {
-        this._crtHoldQs.next(resp);
+        this._rtHoldQs.next(resp);
       }
     );
   }
@@ -126,7 +119,7 @@ export class QueueService {
   getCrtMissQ() {
     this.api.getCRTMissQ().subscribe(
       resp => {
-        this._crtMissQs.next(resp);
+        this._rtMissQs.next(resp);
       }
     );
   }

@@ -12,6 +12,7 @@ import { AppointmentListComponent } from './appointment-list/appointment-list.co
 import { CRtService } from './crt.service';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { NgxLoadingModule } from 'ngx-loading';
 
 const routes: Routes = [
   {
@@ -34,6 +35,7 @@ const routes: Routes = [
     FlexLayoutModule,
     MatDialogModule,
     FormsModule,
+    NgxLoadingModule,
     SharedModule
   ],
   exports: [
