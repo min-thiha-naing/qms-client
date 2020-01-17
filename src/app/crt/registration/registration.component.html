@@ -19,7 +19,7 @@
                         <span class="label">4. Category*</span>
                     </td>
                     <td>
-                        :<input #category name="category" autocomplete="off">         
+                        :<input #category name="category" autocomplete="off">
                         <!-- <select required>
                             <option *ngFor="let category of categories" [value]="category.id">
                                 {{category.categoryName}}</option>
@@ -28,7 +28,7 @@
                     <td rowspan="3">
                         <span class="label">6. Change Category</span><br>
                         <select required style="width:90%;margin-left: 5%;">
-                            <option *ngFor="let category of categories" [value]="category.id" >
+                            <option *ngFor="let category of categories" [value]="category.id">
                                 {{category.categoryName}}</option>
                         </select>
                     </td>
@@ -60,7 +60,7 @@
                         <span class="label">3. Vasit Type</span>
                     </td>
                     <td>
-                        :<input #visitType name="visitType" autocomplete="off">    
+                        :<input #visitType name="visitType" autocomplete="off">
                         <!-- :<select required>
                             <option *ngFor="let visitType of visitTypes" [value]="visitType.id">
                                 {{visitType.name}}</option>
@@ -86,7 +86,8 @@
 
         <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
             <div class="info">
-                [Total Q= {{allQTableHeader.total}}], [Fresh Q={{allQTableHeader.waiting}}], [Miss Q= {{allQTableHeader.miss}}], [Missed Back={{allQTableHeader.missback}}]
+                [Total Q= {{allQTableHeader.total}}], [Fresh Q={{allQTableHeader.waiting}}], [Miss Q=
+                {{allQTableHeader.miss}}], [Missed Back={{allQTableHeader.missback}}]
             </div>
             <!-- <div class="status">
                 [ Server Status: <span>Online</span> ]
@@ -118,7 +119,8 @@
 
                 <ng-container matColumnDef="apptTime">
                     <th mat-header-cell *matHeaderCellDef> Appt Time </th>
-                    <td mat-cell *matCellDef="let element"> {{element.appointmentTime |  date: 'dd/MM/yyyy , hh:mm:ss'}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.appointmentTime |  date: 'dd/MM/yyyy , hh:mm:ss'}}
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="waitTime">
@@ -133,8 +135,9 @@
 
                 <ng-container matColumnDef="callTime">
                     <th mat-header-cell *matHeaderCellDef> Call Time </th>
-                    <td mat-cell *matCellDef="let element">  <span
-                        *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span> </td>
+                    <td mat-cell *matCellDef="let element"> <span
+                            *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span>
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="remarks">
@@ -143,8 +146,8 @@
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="queueDisplayedColumns; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: queueDisplayedColumns;" (click)="onClickRow(allQDS.data[0], 'all')"
-                [ngClass]="{'selected': row.queueNo == selectedRowData.queue.queueNo,                                
+                <tr mat-row *matRowDef="let row; columns: queueDisplayedColumns;"
+                    (click)="onClickRow(allQDS.data[0], 'all')" [ngClass]="{'selected': row.queueNo == selectedRowData.queue.queueNo,                                
             'serving': row.queueStatusId == qServingStatus}"></tr>
             </table>
 
@@ -176,7 +179,7 @@
                                 <span>SILENT CALL</span>
                                 <span fxLayout="row" fxLayoutAlign="space-around center">
                                     <mat-icon>volume_off</mat-icon>
-                                </span> 
+                                </span>
                             </button>
                         </td>
                     </tr>
@@ -245,81 +248,58 @@
     <div class="location" fxFlex="40">
         <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
             <span>New Service Locations</span>
-            <span>
-                Institution:
-                <select>
-                    <option value="volvo" selected>Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
-                </select>
-            </span>
         </div>
 
         <div class="info">
             <div class="clinic">
-                <span>
-                    Select Clinic:
-                </span>
-                <select>
-                    <option value="volvo" selected>Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
+                <span fxFlex="40px">Clinic: </span>
+
+                <select fxFlex="85" class="select-css" (change)="onChangeDepartment($event)">
+                    <option *ngFor="let dpt of departments" [value]="dpt.id"> {{dpt.departmentName}}</option>
                 </select>
             </div>
 
             <mat-divider></mat-divider>
 
             <div class="location-list">
-                <table mat-table [dataSource]="locationDataSource">
+                <table mat-table [dataSource]="srcLocationDS">
 
                     <!-- Checkbox Column -->
                     <ng-container matColumnDef="select">
                         <th mat-header-cell *matHeaderCellDef>
-                            <mat-checkbox></mat-checkbox>
-                            <!-- <mat-checkbox 
-                                (change)="$event ? masterLocationToggle() : null"
-                                [checked]="locationSelection.hasValue() && isAllLocationSelected()"
-                                [indeterminate]="locationSelection.hasValue() && !isAllLocationSelected()"
-                                [aria-label]="checkboxLocationLabel()"
-                                >
-                            </mat-checkbox> -->
+                            Select
                         </th>
-                        <td mat-cell *matCellDef="let row">
-                            <mat-checkbox></mat-checkbox>
-                            <!-- <mat-checkbox 
-                                (click)="$event.stopPropagation()"
-                                (change)="$event ? locationSelection.toggle(row) : null"
-                                [checked]="locationSelection.isSelected(row)" [aria-label]="checkboxLocationLabel(row)"
-                                >
-                            </mat-checkbox> -->
+                        <td mat-cell *matCellDef="let element">
+                            <mat-checkbox (change)="onToggleSrcLoc(element)" [(ngModel)]="element.isSelected">
+                            </mat-checkbox>
                         </td>
                     </ng-container>
 
                     <!-- Location Column -->
                     <ng-container matColumnDef="location">
                         <th mat-header-cell *matHeaderCellDef> Location </th>
-                        <td mat-cell *matCellDef="let element"> {{element.locationName}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.workgroupName}} </td>
                     </ng-container>
 
                     <!-- InQ Column -->
                     <ng-container matColumnDef="inQ">
                         <th mat-header-cell *matHeaderCellDef> In Q </th>
-                        <td mat-cell *matCellDef="let element"> InQ </td>
+                        <td mat-cell *matCellDef="let element"><input type="number"></td>
                     </ng-container>
+                    &nbsp;
 
                     <!-- Order Column -->
-                    <ng-container matColumnDef="order">
+                    <ng-container matColumnDef="orderId">
                         <th mat-header-cell *matHeaderCellDef> Order </th>
-                        <td mat-cell *matCellDef="let element"> Order </td>
+                        <td mat-cell *matCellDef="let element"><input type="number" [(ngModel)]="element.orderId"
+                                [disabled]="!element.isSelected"></td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="locationDisplayedColumns; sticky: true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: locationDisplayedColumns;"
-                        (click)="locationSelection.toggle(row)"></tr>
+                    <tr mat-row *matRowDef="let row; columns: locationDisplayedColumns;"></tr>
                 </table>
             </div>
+            <button mat-stroked-button (click)="onDeselectAll()" style="background-color: lightgray !important;margin-left: 5%;">Deselect all service locations</button>
         </div>
     </div>
 
@@ -328,7 +308,7 @@
             <span>ADD TO FIRST</span>
             <span fxLayout="row" fxLayoutAlign="space-around center">
                 <mat-icon>double_arrow</mat-icon>
-                1
+                F
             </span>
         </button>
         <button mat-raised-button (click)="addToLast()">
@@ -338,7 +318,7 @@
                 L
             </span>
         </button>
-        <button mat-raised-button (click)="removeJourneySelectedRows()">
+        <button mat-raised-button (click)="onRemove()">
             REMOVE
             <mat-icon>clear</mat-icon>
         </button>
@@ -350,43 +330,35 @@
         </div>
         <div class="info">
             <div class="journey-list">
-                <table #journeyTable mat-table [dataSource]="journeyDataSource">
+                <table #journeyTable mat-table [dataSource]="destLocationDS">
 
                     <!-- Checkbox Column -->
                     <ng-container matColumnDef="select">
                         <th mat-header-cell *matHeaderCellDef>
-                            <mat-checkbox></mat-checkbox>
-                            <!-- <mat-checkbox (change)="$event ? masterJourneyToggle() : null"
-                                [checked]="journeySelection.hasValue() && isAllJourneySelected()"
-                                [indeterminate]="journeySelection.hasValue() && !isAllJourneySelected()"
-                                [aria-label]="checkboxJourneyLabel()">
-                            </mat-checkbox> -->
+                            Select
                         </th>
-                        <td mat-cell *matCellDef="let row">
-                            <mat-checkbox></mat-checkbox>
-                            <!-- <mat-checkbox (click)="$event.stopPropagation()"
-                                (change)="$event ? journeySelection.toggle(row) : null"
-                                [checked]="journeySelection.isSelected(row)" [aria-label]="checkboxJourneyLabel(row)">
-                            </mat-checkbox> -->
+                        <td mat-cell *matCellDef="let element">
+                            <mat-checkbox *ngIf="element.actFlag == destStatus.WAITING"
+                                [(ngModel)]="element.isSelected"></mat-checkbox>
                         </td>
                     </ng-container>
 
                     <!-- Clinic Column -->
                     <ng-container matColumnDef="clinic">
                         <th mat-header-cell *matHeaderCellDef> Clinic </th>
-                        <td mat-cell *matCellDef="let element"> clinic </td>
+                        <td mat-cell *matCellDef="let element">{{element.departmentName}} </td>
                     </ng-container>
 
                     <!-- Location Column -->
                     <ng-container matColumnDef="location">
                         <th mat-header-cell *matHeaderCellDef> Location </th>
-                        <td mat-cell *matCellDef="let element"> {{element.locationName}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.workgroupName}} </td>
                     </ng-container>
 
                     <!-- ApptTime Column -->
                     <ng-container matColumnDef="apptTime">
                         <th mat-header-cell *matHeaderCellDef> ApptTime </th>
-                        <td mat-cell *matCellDef="let element"> ApptTime </td>
+                        <td mat-cell *matCellDef="let element">{{element.appointmentTime | date: 'shortTime'}}</td>
                     </ng-container>
 
                     <!-- CreatedBy Column -->
@@ -398,7 +370,7 @@
                     <!-- Status Column -->
                     <ng-container matColumnDef="status">
                         <th mat-header-cell *matHeaderCellDef> Status </th>
-                        <td mat-cell *matCellDef="let element"> status </td>
+                        <td mat-cell *matCellDef="let element"> {{ element.actFlag }} </td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="journeyDisplayedColumns; sticky: true"></tr>
@@ -408,3 +380,9 @@
             </div>
         </div>
     </div>
+</div>
+<!-- <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between end">
+    <button mat-stroked-button (click)="onDeselectAll()">Deselect all serice locations</button>
+    <button mat-raised-button (click)="onConfirm()">Confirm</button>
+</div>
+<div fxLayout="row"></div> -->
