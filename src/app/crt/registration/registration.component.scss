@@ -1,3 +1,4 @@
+@import "src/themes/starter-variables.scss";
 .patient {
     background: #fff;
     width: 100%;
@@ -56,6 +57,27 @@
 
       table {
         width: 100%;
+        tr {
+          cursor: pointer;
+  
+          &.selected {
+            background: mat-color($row-selected);
+            mat-cell {
+              color: white;
+            }
+          }
+  
+          &.serving {
+            background: mat-color($row-serving) !important;
+            mat-cell {
+              color: white;
+            }
+          }
+  
+          mat-cell {
+            font-size: 12px;
+          }
+        }
       }
     }
   }

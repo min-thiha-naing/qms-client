@@ -8,6 +8,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/confirm-dialog/confirm-dialog.component';
 import { TransformerService } from 'src/app/shared/transformer.service';
 import { AddServicePointComponent } from 'src/app/rt/add-service-point/add-service-point.component';
+import { ServicePointComponent } from '../service-point/service-point.component';
 
 @Component({
   selector: 'app-payment-tab',
@@ -99,6 +100,7 @@ export class PaymentTabComponent implements OnInit {
   }
 
   onClickRing() {
+    console.log(this.selectedRowData)
     switch (this.selectedRowData.fromPanel) {
       case 'all': {
         if (this.servingQ) {
@@ -139,6 +141,7 @@ export class PaymentTabComponent implements OnInit {
         break;
       }
       case 'miss': {
+        console.log(this.servingQ)
         if (this.servingQ) {
           //  miss Q hightlighted , serving Q exist -> do nothing
           return;
@@ -208,7 +211,7 @@ export class PaymentTabComponent implements OnInit {
   }
 
   onClickAddServicePoint() {
-    let dialogRef = this.dialog.open(AddServicePointComponent, {
+    let dialogRef = this.dialog.open(ServicePointComponent, {
       width: '80vw',
       data: this.servingQ,
     });
