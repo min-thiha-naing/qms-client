@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FreeCallComponent implements OnInit {
 
+  callText: String;
+
   constructor() { }
 
   ngOnInit() {

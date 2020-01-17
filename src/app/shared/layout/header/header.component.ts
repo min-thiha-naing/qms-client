@@ -10,7 +10,7 @@ import { SubSink } from 'subsink';
 })
 export class HeaderComponent implements OnInit {
 
-  servingQ: any = null;
+  servingQ: any = {queueNo: '23adaff'};
 
   subs = new SubSink();
   constructor(
@@ -19,8 +19,8 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.subs.add(this.qS.servingQ.subscribe(q=> this.servingQ = q));
-    this.subs.add(this.qS._crtServingQ.asObservable().subscribe(q=> this.servingQ = q));
+    //this.subs.add(this.qS.servingQ.subscribe(q=> this.servingQ = q));
+    //this.subs.add(this.qS._crtServingQ.asObservable().subscribe(q=> this.servingQ = q));
   }
 
   logout() {
