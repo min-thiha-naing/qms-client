@@ -1,0 +1,47 @@
+<div class="freecall" fxLayout="row" fxLayoutAlign="space-between">
+    <div fxFlex="70" style="border: 1px solid rgba(0, 0, 0, 0.12); padding: 10px;">
+        <div>
+            Key in the queue number in the blue box below to be called
+        </div>
+        <div class="box">
+            <!-- <div>{{this.allQueues[0].queueNo}}</div> --><div>A43802</div>
+        </div>
+        <div class="note">
+            Note: There shall be no log transactions for numbers called and transacted in this tab.
+        </div>
+    </div>
+    <div fxFlex="30" style="border: 1px solid rgba(0, 0, 0, 0.12)">
+        <div class="special">
+            <div class="header">
+                STANDARD Action
+            </div>
+            <div class="actions">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <button mat-raised-button (click)="ringClick()">
+                                    Ring
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button mat-raised-button (click)="noResponseClick()">
+                                    No Response
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button mat-raised-button (click)="cancelRingClick()">
+                                    Cancel Ring
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

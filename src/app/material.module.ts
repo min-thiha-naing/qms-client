@@ -40,7 +40,7 @@ import {DropdownModule} from 'primeng/dropdown';
     MatCheckboxModule,
     MatDialogModule,
     DropdownModule
-,
+
   ]
 })
 export class MaterialModule { }
