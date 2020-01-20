@@ -8,6 +8,8 @@ import { QueueService } from 'src/app/shared/queue.service';
 import { QueueStatus, DestinationStatus } from 'src/app/model/queue-status';
 import { TransformerService } from 'src/app/shared/transformer.service';
 import { ApiService } from 'src/app/shared/api.service';
+import { PopUpWindowComponent } from 'src/app/pop-up-window/pop-up-window.component';
+import { RegistartionService } from 'src/app/shared/registartion.service';
 
 @Component({
   selector: 'app-registration',
@@ -19,14 +21,13 @@ export class RegistrationComponent implements OnInit {
   queueDisplayedColumns: string[] = ['qNo', 'name', 'mrn', 'visitType', 'apptTime', 'waitTime', 'tWaitTime', 'callTime', 'remarks'];
   queueSelection = new SelectionModel<any>(true, []);
 
-  locationDisplayedColumns: string[] = ['location', 'inQ', 'orderId','select' ];
+  locationDisplayedColumns: string[] = ['location', 'inQ', 'orderId', 'select'];
   destLocationDS = new MatTableDataSource<any>([]);
   destStatus = DestinationStatus;
- 
+
   @ViewChild('journeyTable', { static: true }) journeyTable: MatTable<any>;
-  journeyDisplayedColumns: string[] = [ 'clinic', 'location', 'apptTime', 'createdBy', 'status','select'];
+  journeyDisplayedColumns: string[] = ['clinic', 'location', 'apptTime', 'createdBy', 'status', 'select'];
   journeyDataSource: MatTableDataSource<any>;
-  journeySelection = new SelectionModel<any>(true, []);
 
   allQDS: MatTableDataSource<any>;
   allQTableHeader = {
@@ -47,17 +48,21 @@ export class RegistrationComponent implements OnInit {
   subs = new SubSink();
   departments: any[] = [];
   srcLocationDS = new MatTableDataSource<any>([]);
-
+  loading = false;
+  fetch = false;
+  qServingStatus = QueueStatus.SERVING;
   constructor(
     private qS: QueueService,
+    private regQS: RegistartionService,
     private transform: TransformerService,
     private dialog: MatDialog,
     private api: ApiService
   ) { }
   ngOnInit() {
-    this.qS.getRegAllQ();
+
+    this.regQS.getRegAllQ();
     this.api.getDepartments().subscribe(resp => this.departments = resp);
-    this.subs.add(this.qS.CrtRegAllQs.subscribe(Qs => {
+    this.subs.add(this.regQS.CrtRegAllQs.subscribe(Qs => {
       this.allQDS = new MatTableDataSource<any>(Qs);
       console.log(this.allQDS)
       this.allQTableHeader = {
@@ -79,7 +84,7 @@ export class RegistrationComponent implements OnInit {
       }
     }));
 
-    this.subs.add(this.qS._regServingQ.asObservable().subscribe(Q => {
+    this.subs.add(this.regQS._regServingQ.asObservable().subscribe(Q => {
       this.servingQ = Q;
       console.log(this.servingQ)
       if (this.servingQ) {
@@ -166,39 +171,39 @@ export class RegistrationComponent implements OnInit {
   }
 
   addToFirst() {
-    let upperDestLs = this.destLocationDS.data.filter(el => el.actFlag != this.destStatus.WAITING);
+    let upperDestLs = this.journeyDataSource.data.filter(el => el.actFlag != this.destStatus.WAITING);
 
     let newDestLs = this.sortChosenSrcLocsByOrder(this.srcLocationDS.data);
     newDestLs = this.transformSrcToDestLoc(newDestLs);
     newDestLs = this.incrementOrderId(newDestLs, this.computeLargestOrderId(upperDestLs) + 1);
 
-    let belowDestLs = this.destLocationDS.data.filter(el => el.actFlag == this.destStatus.WAITING);
+    let belowDestLs = this.journeyDataSource.data.filter(el => el.actFlag == this.destStatus.WAITING);
     belowDestLs = this.incrementOrderId(belowDestLs, this.computeLargestOrderId(newDestLs) + 1);
 
-    this.destLocationDS = new MatTableDataSource<any>([
+    this.journeyDataSource = new MatTableDataSource<any>([
       ...upperDestLs,
       ...newDestLs,
       ...belowDestLs].sort((a, b) => { return a.orderId - b.orderId }));
     console.log('DEST');
-    console.log(this.destLocationDS.data);
+    console.log(this.journeyDataSource.data);
   }
 
   addToLast() {
-    let upperDestLs = this.destLocationDS.data;
+    let upperDestLs = this.journeyDataSource.data;
 
     let newDestLs = this.sortChosenSrcLocsByOrder(this.srcLocationDS.data);
     newDestLs = this.transformSrcToDestLoc(newDestLs);
     newDestLs = this.incrementOrderId(newDestLs, this.computeLargestOrderId(upperDestLs) + 1);
 
-    this.destLocationDS = new MatTableDataSource<any>([
+    this.journeyDataSource = new MatTableDataSource<any>([
       ...upperDestLs,
       ...newDestLs].sort((a, b) => { return a.orderId - b.orderId }));
     console.log('DEST');
-    console.log(this.destLocationDS.data);
+    console.log(this.journeyDataSource.data);
   }
 
   onRemove() {
-    this.destLocationDS = new MatTableDataSource(this.destLocationDS.data.filter(el => el.isSelected == false));
+    this.journeyDataSource = new MatTableDataSource(this.journeyDataSource.data.filter(el => el.isSelected == false));
   }
 
   onDeselectAll() {
@@ -211,10 +216,109 @@ export class RegistrationComponent implements OnInit {
   getDestLocsByActFlag(destLocs: any[], status: any) {
     return destLocs.filter(el => el.actFlag == status);
   }
-//////////////////////////////////////////////////////////////
-/////////STANDARE ACTION///////////////////
+  //////////////////////////////////////////////////////////////
+  /////////STANDARE ACTION///////////////////
+  onClickRing() {
+    if (this.servingQ) {
+      //  all Q highlighted , serving Q exist -> serve serving Q AGAIN
+      this.loading = true;
+      this.regQS.ringRegAllQ(this.servingQ).subscribe(
+        res => {
+          console.log(res);
+          this.loading = false;
+        }
+      );
+    } else {
+      // all Q highlighted , No serving Q -> serve selected Q
+      this.loading = true;
+      this.regQS.ringRegAllQ(this.selectedRowData.queue).subscribe(
+        res => {
+          console.log(res);
+          this.loading = false;
+        }
+      );
+    }
+  }
 
-///////////////////////////////////////////
+  onClickSilentRing() {
+    if (this.servingQ) {
+      //  all Q highlighted , serving Q exist -> serve serving Q AGAIN
+      this.loading = true;
+      this.regQS.ringRegAllQ(this.servingQ).subscribe(
+        res => {
+          console.log(res);
+          this.loading = false;
+        }
+      );
+    } else {
+      // all Q highlighted , No serving Q -> serve selected Q
+      this.loading = true;
+      this.regQS.ringRegAllQ(this.selectedRowData.queue).subscribe(
+        res => {
+          console.log(res);
+          this.loading = false;
+        }
+      );
+    }
+  }
+
+  onClickNext() {
+    if (this.servingQ) {
+      //  all Q highlighted , serving Q exist -> serve serving Q AGAIN
+      this.loading = true;
+      this.regQS.ringRegAllQ(this.servingQ).subscribe(
+        res => {
+          console.log(res);
+          this.loading = false;
+        }
+      );
+    } else {
+      // all Q highlighted , No serving Q -> serve selected Q
+      this.loading = true;
+      this.regQS.ringRegAllQ(this.selectedRowData.queue).subscribe(
+        res => {
+          console.log(res);
+          this.loading = false;
+        }
+      );
+    }
+  }
+
+  onClickServeAndTransfer() {
+
+  }
+
+  addRemark() {
+    const dialogRef = this.dialog.open(PopUpWindowComponent, {
+      width: '400px',
+      data: { queue: this.selectedRowData, remark: false }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+    });
+  }
+
+  onClickNoResponse() {
+    if (this.servingQ) {
+      this.loading = true;
+      this.regQS.regMissQ(this.servingQ).subscribe(
+        res => {
+          console.log(res);
+          this.loading = false;
+        }
+      )
+    } else {
+      this.loading = true;
+      this.regQS.regMissQ(this.selectedRowData.queue).subscribe(
+        res => {
+          console.log(res);
+          this.loading = false;
+        }
+      )
+    }
+  }
+  ///////////////////////////////////////////
   ngOnDestroy() {
     this.subs.unsubscribe();
   }

@@ -57,19 +57,19 @@
 
       table {
         width: 100%;
-        tr {
+       .color{
           cursor: pointer;
   
           &.selected {
             background: mat-color($row-selected);
-            mat-cell {
+            .row {
               color: white;
             }
           }
   
           &.serving {
             background: mat-color($row-serving) !important;
-            mat-cell {
+            .row {
               color: white;
             }
           }
