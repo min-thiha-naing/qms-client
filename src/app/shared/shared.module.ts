@@ -3,21 +3,25 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './layout/header/header.component';
 import { MaterialModule } from '../material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { NgxLoadingModule } from 'ngx-loading';
+import { FooterComponent } from './layout/footer/footer.component';
+import { FormsModule } from '@angular/forms';
 
 
 
 @NgModule({
   declarations: [
     HeaderComponent,
+    FooterComponent,
   ],
   imports: [
     CommonModule,
     MaterialModule,
     FlexLayoutModule,
+    FormsModule,
   ],
   exports: [
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent,
   ]
 })
 export class SharedModule { }
