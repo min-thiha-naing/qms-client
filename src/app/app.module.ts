@@ -17,6 +17,7 @@ import { TestComponent } from './test/test.component';
 import { NgxLoadingModule } from 'ngx-loading';
 import { MatDialog } from '@angular/material';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { PopUpWindowComponent } from './pop-up-window/pop-up-window.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     AuthComponent,
     TestComponent,
     ConfirmDialogComponent,
+    PopUpWindowComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +49,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
       multi: true,
     },
   ],
-  entryComponents:[ConfirmDialogComponent],
+  entryComponents:[ConfirmDialogComponent,PopUpWindowComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

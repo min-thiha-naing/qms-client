@@ -10,6 +10,7 @@ import { TransformerService } from 'src/app/shared/transformer.service';
 import { AddServicePointComponent } from 'src/app/rt/add-service-point/add-service-point.component';
 import { Helper } from 'src/app/shared/helper.class';
 import { ServicePointComponent } from '../service-point/service-point.component';
+import { CrtQueueService } from 'src/app/shared/crt-queue.service';
 
 @Component({
   selector: 'app-payment-tab',
@@ -50,16 +51,17 @@ export class PaymentTabComponent implements OnInit {
   loading = false;
   constructor(
     private qS: QueueService,
+    private crtQS: CrtQueueService,
     private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
 
-    this.qS.getCrtAllQ();
-    this.qS.getCrtHoldQ();
-    this.qS.getCrtMissQ();
+    this.crtQS.getCrtAllQ();
+    this.crtQS.getCrtHoldQ();
+    this.crtQS.getCrtMissQ();
 
-    this.subs.add(this.qS.rtAllQs.subscribe(Qs => {
+    this.subs.add(this.crtQS.crtAllQs.subscribe(Qs => {
       this.allQDS = new MatTableDataSource<any>(Qs);
 
       if (Qs) {
@@ -82,10 +84,10 @@ export class PaymentTabComponent implements OnInit {
         }
       }
     }));
-    this.subs.add(this.qS._rtHoldQs.asObservable().subscribe(Qs => this.holdQDS = new MatTableDataSource<any>(Qs)));
-    this.subs.add(this.qS._rtMissQs.asObservable().subscribe(Qs => this.missQDS = new MatTableDataSource<any>(Qs)));
+    this.subs.add(this.crtQS._crtHoldQs.asObservable().subscribe(Qs => this.holdQDS = new MatTableDataSource<any>(Qs)));
+    this.subs.add(this.crtQS._crtMissQs.asObservable().subscribe(Qs => this.missQDS = new MatTableDataSource<any>(Qs)));
 
-    this.subs.add(this.qS.servingQ.subscribe(Q => {
+    this.subs.add(this.crtQS._crtServingQ.subscribe(Q => {
       this.servingQ = Q;
       if (this.servingQ) {
         if (this.servingQ.planList) {
@@ -111,7 +113,7 @@ export class PaymentTabComponent implements OnInit {
         if (this.servingQ) {
           //  all Q highlighted , serving Q exist -> serve serving Q AGAIN
           this.loading = true;
-          this.qS.ringAllQ(this.servingQ).subscribe(
+          this.crtQS.ringCrtAllQ(this.servingQ).subscribe(
             res => {
               console.log(res);
               this.loading = false;
@@ -120,7 +122,7 @@ export class PaymentTabComponent implements OnInit {
         } else {
           // all Q highlighted , No serving Q -> serve selected Q
           this.loading = true;
-          this.qS.ringAllQ(this.selectedRowData.queue).subscribe(
+          this.crtQS.ringCrtAllQ(this.selectedRowData.queue).subscribe(
             res => {
               console.log(res);
               this.loading = false;
@@ -136,7 +138,7 @@ export class PaymentTabComponent implements OnInit {
         } else {
           //  hold Q hightlighted , No serving Q -> serve selected hold Q 
           this.loading = true;
-          this.qS.ringHoldQ(this.selectedRowData.queue).subscribe(
+          this.crtQS.ringCrtHoldQ(this.selectedRowData.queue).subscribe(
             res => {
               console.log(res);
               this.loading = false;
@@ -153,7 +155,7 @@ export class PaymentTabComponent implements OnInit {
         } else {
           //  miss Q hightlighted , No serving Q -> serve selected miss Q 
           this.loading = true;
-          this.qS.ringMissQ(this.selectedRowData.queue).subscribe(
+          this.crtQS.ringCrtMissQ(this.selectedRowData.queue).subscribe(
             res => {
               console.log(res);
               this.loading = false;
@@ -168,7 +170,7 @@ export class PaymentTabComponent implements OnInit {
   onClickNoResp() {
     if (this.servingQ) {
       this.loading = true;
-      this.qS.missQ(this.servingQ).subscribe(
+      this.crtQS.crtMissQ(this.servingQ).subscribe(
         res => {
           this.loading = false;
         }
@@ -179,7 +181,7 @@ export class PaymentTabComponent implements OnInit {
   onClickHold() {
     if (this.servingQ) {
       this.loading = true;
-      this.qS.holdQ(this.servingQ).subscribe(
+      this.crtQS.crtHoldQ(this.servingQ).subscribe(
         res => {
           this.loading = false;
         }
@@ -190,7 +192,7 @@ export class PaymentTabComponent implements OnInit {
   serveAndTransfer() {
     if (this.servingQ) {
       this.loading = true;
-      this.qS.serveAndTransfer(this.servingQ).subscribe(
+      this.crtQS.crtServeAndTransfer(this.servingQ).subscribe(
         res => {
           this.loading = false;
         }
@@ -208,7 +210,7 @@ export class PaymentTabComponent implements OnInit {
       if (result && result.role == 'confirm' && result.data.planList.length > 0) {
         console.log('GOT');
         console.log(result.data);
-        this.qS.addServicePoint(result.data).subscribe()
+        this.crtQS.crtAddServicePoint(result.data).subscribe()
       }
     }));
   }
@@ -217,7 +219,7 @@ export class PaymentTabComponent implements OnInit {
     var orderIdListToDel = this.journeyListDS.data.filter(el => el.isSelected).map(el => el.orderId);
     console.log(orderIdListToDel);
     if (orderIdListToDel.length > 0) {
-      this.qS.deletePlanList(this.servingQ, orderIdListToDel).subscribe();
+      this.crtQS.deletePlanList(this.servingQ, orderIdListToDel).subscribe();
     }
   }
 

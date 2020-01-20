@@ -1,4 +1,5 @@
 <div class="patient" style="margin-top: 8px !important;">
+    <ngx-loading [show]="loading"></ngx-loading>
     <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
         <span>Patient Information:</span>
         <button mat-raised-button>
@@ -82,6 +83,7 @@
 </div>
 <!-- <mat-divider style="margin: 20px 0px;"></mat-divider> -->
 <div class="registration" fxLayout="row" fxLayoutAlign="space-between">
+    <!-- <ngx-loading [show]="fetch"></ngx-loading> -->
     <div fxFlex="74" style="border: 1px solid rgba(0, 0, 0, 0.12)">
 
         <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
@@ -99,54 +101,54 @@
 
                 <ng-container matColumnDef="qNo">
                     <th mat-header-cell *matHeaderCellDef> Q.No </th>
-                    <td mat-cell *matCellDef="let element"> {{element.queueNo}} </td>
+                    <td class="row" mat-cell *matCellDef="let element"> {{element.queueNo}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef> Name </th>
-                    <td mat-cell *matCellDef="let element"> {{element.customerName}} </td>
+                    <td class="row" mat-cell *matCellDef="let element"> {{element.customerName}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="mrn">
                     <th mat-header-cell *matHeaderCellDef> MRN </th>
-                    <td mat-cell *matCellDef="let element"> {{element.mrn}} </td>
+                    <td class="row" mat-cell *matCellDef="let element"> {{element.mrn}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="visitType">
                     <th mat-header-cell *matHeaderCellDef> Visit Type </th>
-                    <td mat-cell *matCellDef="let element"> {{element.visitType}} </td>
+                    <td class="row" mat-cell *matCellDef="let element"> {{element.visitType}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="apptTime">
                     <th mat-header-cell *matHeaderCellDef> Appt Time </th>
-                    <td mat-cell *matCellDef="let element"> {{element.appointmentTime |  date: 'dd/MM/yyyy , hh:mm:ss'}}
+                    <td class="row" mat-cell *matCellDef="let element"> {{element.appointmentTime |  date: 'dd/MM/yyyy , hh:mm:ss'}}
                     </td>
                 </ng-container>
 
                 <ng-container matColumnDef="waitTime">
                     <th mat-header-cell *matHeaderCellDef> Wait Time </th>
-                    <td mat-cell *matCellDef="let element"> {{'check'}} </td>
+                    <td class="row" mat-cell *matCellDef="let element"> {{'check'}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="tWaitTime">
                     <th mat-header-cell *matHeaderCellDef> T.Wait Time </th>
-                    <td mat-cell *matCellDef="let element">{{'check'}} </td>
+                    <td class="row" mat-cell *matCellDef="let element">{{'check'}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="callTime">
                     <th mat-header-cell *matHeaderCellDef> Call Time </th>
-                    <td mat-cell *matCellDef="let element"> <span
+                    <td class="row" mat-cell *matCellDef="let element"> <span
                             *ngIf="element.callCount">{{element.callCount}}-{{element.lastCallTime | date: 'shortTime'}}</span>
                     </td>
                 </ng-container>
 
                 <ng-container matColumnDef="remarks">
                     <th mat-header-cell *matHeaderCellDef> Remarks </th>
-                    <td mat-cell *matCellDef="let element"> {{element.remark}} </td>
+                    <td class="row" mat-cell *matCellDef="let element"> {{element.remark}} </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="queueDisplayedColumns; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: queueDisplayedColumns;"
+                <tr class="color" mat-row *matRowDef="let row; columns: queueDisplayedColumns;"
                     (click)="onClickRow(allQDS.data[0], 'all')" [ngClass]="{'selected': row.queueNo == selectedRowData.queue.queueNo,                                
             'serving': row.queueStatusId == qServingStatus}"></tr>
             </table>
@@ -167,7 +169,7 @@
                 <tbody>
                     <tr>
                         <td fxFlex="50">
-                            <button mat-raised-button>
+                            <button mat-raised-button (click)="onClickNext()">
                                 <span>NEXT Q</span>
                                 <span fxLayout="row" fxLayoutAlign="space-around center">
                                     <mat-icon>double_arrow</mat-icon>
@@ -175,7 +177,7 @@
                             </button>
                         </td>
                         <td fxFlex="50">
-                            <button mat-raised-button>
+                            <button mat-raised-button (click)="onClickSilentRing()">
                                 <span>SILENT CALL</span>
                                 <span fxLayout="row" fxLayoutAlign="space-around center">
                                     <mat-icon>volume_off</mat-icon>
@@ -185,7 +187,7 @@
                     </tr>
                     <tr>
                         <td fxFlex="50">
-                            <button mat-raised-button>
+                            <button mat-raised-button (click)="onClickRing()">
                                 <span> CALL Q</span>
                                 <span fxLayout="row" fxLayoutAlign="space-around center">
                                     <mat-icon>volume_up</mat-icon>
@@ -203,7 +205,7 @@
                     </tr>
                     <tr>
                         <td fxFlex="50">
-                            <button mat-raised-button>
+                            <button mat-raised-button (click)="onClickNoResponse()">
                                 <span>MISS Q</span>
                                 <span fxLayout="row" fxLayoutAlign="space-around center">
                                     <mat-icon>report_problem</mat-icon>
@@ -211,7 +213,7 @@
                             </button>
                         </td>
                         <td fxFlex="50">
-                            <button mat-raised-button>
+                            <button mat-raised-button (click)="addRemark()">
                                 <span>ADD REMARKS</span>
                                 <span fxLayout="row" fxLayoutAlign="space-around center">
                                     <mat-icon>chat</mat-icon>
@@ -221,7 +223,7 @@
                     </tr>
                     <tr>
                         <td fxFlex="50">
-                            <button mat-raised-button>
+                            <button mat-raised-button (click)="onClickServeAndTransfer()">
                                 <span>TRANSFER</span>
                                 <span fxLayout="row" fxLayoutAlign="space-around center">
                                     <mat-icon>send</mat-icon>
@@ -330,7 +332,7 @@
         </div>
         <div class="info">
             <div class="journey-list">
-                <table #journeyTable mat-table [dataSource]="destLocationDS">
+                <table #journeyTable mat-table [dataSource]="journeyDataSource">
 
                     <!-- Checkbox Column -->
                     <ng-container matColumnDef="select">
@@ -375,7 +377,7 @@
 
                     <tr mat-header-row *matHeaderRowDef="journeyDisplayedColumns; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: journeyDisplayedColumns;"
-                        (click)="journeySelection.toggle(row)"></tr>
+                        ></tr>
                 </table>
             </div>
         </div>

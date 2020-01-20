@@ -75,7 +75,8 @@ export class ApiService {
   }
 
   getAllReg(){
-    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/listLiveTransactionQueueForRegistration/all/${sessionStorage.getItem('terminalId')}`);
+    return this.http.get<any[]>(`${environment.baseUrl}/liveTransactionQueues/listLiveTransactionQueueForRegistration/all/${sessionStorage.getItem('terminalId')}`)
+    .pipe(map(resp => {return resp.map(el => Helper.addPropToRawQ(el))}));
   }
 
   getMissReg(){
