@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 
 export class Helper {
-
+  static onTabIndexChanged: BehaviorSubject<''>;
 
   public static sortLocByOrderId(locList: any[]) {
     return locList.sort((a, b) => a.orderId - b.orderId);
@@ -62,4 +62,9 @@ export class Helper {
     queue.planList = (<Array<any>>queue.planList).filter(pl => !orderIdList.includes(pl.orderId));
     return queue;
   }
+
+  public static setTabIndex(index) {
+    this.onTabIndexChanged = index
+    console.log(this.onTabIndexChanged)
+ }
 }

@@ -285,7 +285,17 @@ export class RegistrationComponent implements OnInit {
   }
 
   onClickServeAndTransfer() {
-
+    if (this.servingQ) {
+      this.loading = true;
+      this.regQS.serveAndTransfer(this.servingQ).subscribe(
+        res => {
+          this.loading = false;
+        }
+      )
+    }
+    else{
+      
+    }
   }
 
   addRemark() {

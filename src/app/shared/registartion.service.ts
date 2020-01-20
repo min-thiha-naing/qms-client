@@ -50,7 +50,7 @@ export class RegistartionService {
 
   getRegAllQ() {
     this.api.getAllReg().subscribe(
-      resp => {Helper
+      resp => {
         this._regAllQs.next(resp)
       }
     )
@@ -77,4 +77,9 @@ export class RegistartionService {
     }))
   }
 
+  serveAndTransfer(queue: any) {
+    return this.api.serveAndTransfer(queue).pipe(tap(resp => {
+      Helper.removeFromQueueList(this._regAllQs, queue);
+    }));
+  }
 }
