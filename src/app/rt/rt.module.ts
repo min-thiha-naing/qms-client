@@ -13,6 +13,7 @@ import { NgxLoadingModule } from 'ngx-loading';
 import { SharedModule } from '../shared/shared.module';
 import { AppointmentModuleTabComponent } from './appointment-module-tab/appointment-module-tab.component';
 import { FreeCallComponent } from './free-call/free-call.component';
+import { RtSearchDialogComponent } from './rt-search-dialog/rt-search-dialog.component';
 
 const routes: Routes = [
   {
@@ -30,9 +31,11 @@ const routes: Routes = [
     AddServicePointComponent,
     AppointmentModuleTabComponent,
     FreeCallComponent,
+    RtSearchDialogComponent,
   ],
   entryComponents: [
     AddServicePointComponent,
+    RtSearchDialogComponent
   ],
   imports: [
     CommonModule,

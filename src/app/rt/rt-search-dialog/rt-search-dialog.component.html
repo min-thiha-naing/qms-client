@@ -1,0 +1,120 @@
+<div class="dialog-container">
+    <div mat-dialog-title >
+        <h3>Search Result</h3>
+    </div>
+    <div mat-dialog-content>
+        <div class="search">
+            <form #searchForm="ngForm">
+                <table style="margin: 0 auto;">
+                    <tr>
+                        <td colspan="2" style="text-align: center; font-weight: bold;font-size: 20px;">
+                            Queue Status:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 100px">
+                            <span class="label">Queue No</span>
+                        </td>
+                        <td style="width: 240px;">
+                            :<input autocomplete="off">
+                        </td>
+                        <td>
+                            <button mat-raised-button color="primary" (click)="pullEditClick()" style="line-height: 27px; width: 100%;">
+                                <mat-icon>volume_up</mat-icon>Pull & Call
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="label">IC/FIN</span>
+                        </td>
+                        <td>
+                            :<input>
+                        </td>
+                        <td>
+                            <button mat-raised-button color="primary"  style="line-height: 27px; width: 100%;">
+                                <mat-icon>call</mat-icon>Pull & S.Call
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="label">Name</span>
+                        </td>
+                        <td>
+                            :<input autocomplete="off" style="width: 50px; margin-right: 5px;">
+                            <input autocomplete="off" style="width: 140px">
+                        </td>
+                        <td>
+                            <button mat-raised-button color="warn" (click)="onCancel()" style="line-height: 27px; width: 100%;">
+                                <mat-icon>clear</mat-icon>Cancel
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="label">Class</span>
+                        </td>
+                        <td>
+                            :<input autocomplete="off">
+                        </td>
+                        <td>
+                            <button mat-raised-button color="warn" style="line-height: 27px; width: 100%;">
+                                <mat-icon>clear</mat-icon>Cancel Missed
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="label">Category</span>
+                        </td>
+                        <td>
+                            :<input autocomplete="off">
+                        </td>
+                        <td>
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center; font-weight: bold;font-size: 20px;">
+                            Queue Location Indicator:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="label">Clinic</span>
+                        </td>
+                        <td>
+                            :<input autocomplete="off">
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="label">Service List</span>
+                        </td>
+                        <td>
+                            :<input autocomplete="off">
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="label">Status</span>
+                        </td>
+                        <td>
+                            :<input autocomplete="off">
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <!-- <div mat-dialog-actions class="action-container">
+        <div class="action-row">
+            <button mat-button color="default" (click)="dialogRef.close(false)">Cancel</button>
+            <button mat-button (click)="dialogRef.close(true)">Delete</button>
+        </div>
+    </div> -->
+</div>

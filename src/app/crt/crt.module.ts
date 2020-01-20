@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ServicePointComponent } from './service-point/service-point.component';
 import { NgxLoadingModule } from 'ngx-loading';
+import { CrtSearchDialogComponent } from './crt-search-dialog/crt-search-dialog.component';
 
 const routes: Routes = [
   {
@@ -28,7 +29,8 @@ const routes: Routes = [
     CrtComponent,
     RegistrationComponent,
     AppointmentListComponent,
-    ServicePointComponent
+    ServicePointComponent,
+    CrtSearchDialogComponent
   ],
   imports: [
     CommonModule,
@@ -43,6 +45,6 @@ const routes: Routes = [
   exports: [
     RouterModule,
   ],
-  entryComponents:[ServicePointComponent]
+  entryComponents:[ServicePointComponent,CrtSearchDialogComponent]
 })
 export class CrtModule { }

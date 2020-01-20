@@ -1,0 +1,51 @@
+h3 {
+    margin: 0;
+}
+
+.dialog-container {
+
+    .mat-dialog-title{
+            h3{
+            padding-top: 0;
+        }
+    }
+    
+    .mat-dialog-content{
+        .search{
+            .label{
+                font-weight: bold;
+            }
+            input{
+                width: 200px;
+            }
+
+            table{
+                tr{
+                    height: 35px;
+                }
+            }
+        }
+    }
+}
+
+.dialog-container .action-container {
+    position: relative;
+}
+
+.dialog-container .action-container .action-row {
+    width: 100%;
+    display: inline-block;
+    text-align: right;
+}
+
+.dialog-container .action-container .action-row button {
+    margin-left: 20 !important;
+}
+
+.dialog-container .mat-dialog-actions:last-child {
+    margin-bottom: 0;
+}
+
+.dialog-container .mat-dialog-actions {
+    padding: 0;
+}

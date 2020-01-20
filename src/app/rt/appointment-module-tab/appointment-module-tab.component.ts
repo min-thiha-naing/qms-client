@@ -14,26 +14,10 @@ export class AppointmentModuleTabComponent implements OnInit {
   appointmentDisplayedColumns: string[] = ['no', 'patientTitle', 'patientName', 'patientNric', 'apptTimestamp', 'apptDoctorMCR'];
   appointmentDataSource: MatTableDataSource<any>;
   appointmentSelection = new SelectionModel<any>(true, []);
-  constructor() { }
-  control = new FormControl();
-  streets: string[] = ['Champs-Élysées', 'Lombard Street', 'Abbey Road', 'Fifth Avenue','Champs-Élysées', 'Lombard Street', 'Abbey Road', 'Fifth Avenue'];
-  filteredStreets: Observable<string[]>;
+  constructor() { } 
 
   ngOnInit() {
-    this.filteredStreets = this.control.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value))
-    );
+   
   }
-
-  private _filter(value: string): string[] {
-    const filterValue = this._normalizeValue(value);
-    return this.streets.filter(street => this._normalizeValue(street).includes(filterValue));
-  }
-
-  private _normalizeValue(value: string): string {
-    return value.toLowerCase().replace(/\s/g, '');
-  }
-  
 
 }

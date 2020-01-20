@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 
 export class Helper {
-  static onTabIndexChanged: BehaviorSubject<''>;
+  static onTabIndexChanged: BehaviorSubject<any>;
 
   public static sortLocByOrderId(locList: any[]) {
     return locList.sort((a, b) => a.orderId - b.orderId);
