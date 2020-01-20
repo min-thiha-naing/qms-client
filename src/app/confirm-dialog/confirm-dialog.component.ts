@@ -9,6 +9,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 export class ConfirmDialogComponent implements OnInit {
   title: string;
   message: string;
+  show = true;
   constructor(public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogModel) {
     dialogRef.disableClose = true;
@@ -18,6 +19,11 @@ export class ConfirmDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.data.confirm) {
+      this.show = true
+    }else{
+      this.show = false
+    }
   }
 
   onConfirm(): void {
@@ -32,6 +38,6 @@ export class ConfirmDialogComponent implements OnInit {
 }
 export class ConfirmDialogModel {
 
-  constructor(public title: string, public message: string) {
+  constructor(public title: string, public message: string, public confirm: boolean) {
   }
 }

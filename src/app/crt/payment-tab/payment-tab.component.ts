@@ -233,7 +233,7 @@ export class PaymentTabComponent implements OnInit {
   onClickExit() {
     const message = `Are you sure you want to do this?`;
 
-    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogData = new ConfirmDialogModel("Confirm Action", message , true);
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
