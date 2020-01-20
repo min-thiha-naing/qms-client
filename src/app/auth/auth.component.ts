@@ -43,6 +43,7 @@ export class AuthComponent implements OnInit {
     } ,
     er =>{
      if(er.status === 401){
+      this.loading = false;
       const dialogData = new ConfirmDialogModel("Unauthroized!", "Invalid Username Or Password!" , false);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         maxWidth: "400px",
