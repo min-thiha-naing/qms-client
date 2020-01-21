@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" class="footer-container">
     <span>Search:</span>
     <input [(ngModel)]="searchValue" class="starter-input" type="text">
-    <button (click)="onSearch()">Go</button> 
+    <button (click)="onSearch()" [disabled]="searchValue.length == 0" style="background-color: lightgray;">Go</button> 
 </div>

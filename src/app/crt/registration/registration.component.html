@@ -142,6 +142,11 @@
                     </td>
                 </ng-container>
 
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef> Status </th>
+                    <td class="row" mat-cell *matCellDef="let element"> {{element.status}} </td>
+                </ng-container>
+
                 <ng-container matColumnDef="remarks">
                     <th mat-header-cell *matHeaderCellDef> Remarks </th>
                     <td class="row" mat-cell *matCellDef="let element"> {{element.remark}} </td>
