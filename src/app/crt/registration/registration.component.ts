@@ -10,6 +10,7 @@ import { TransformerService } from 'src/app/shared/transformer.service';
 import { ApiService } from 'src/app/shared/api.service';
 import { PopUpWindowComponent } from 'src/app/pop-up-window/pop-up-window.component';
 import { RegistartionService } from 'src/app/shared/registartion.service';
+import { ConfirmDialogComponent, ConfirmDialogModel } from 'src/app/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-registration',
@@ -18,7 +19,7 @@ import { RegistartionService } from 'src/app/shared/registartion.service';
 })
 export class RegistrationComponent implements OnInit {
 
-  queueDisplayedColumns: string[] = ['qNo', 'name', 'mrn', 'visitType', 'apptTime', 'waitTime', 'tWaitTime', 'callTime', 'remarks'];
+  queueDisplayedColumns: string[] = ['qNo', 'name', 'mrn', 'visitType', 'apptTime', 'waitTime', 'tWaitTime', 'callTime','status', 'remarks'];
   queueSelection = new SelectionModel<any>(true, []);
 
   locationDisplayedColumns: string[] = ['location', 'inQ', 'orderId', 'select'];
@@ -99,6 +100,9 @@ export class RegistrationComponent implements OnInit {
           },
           fromPanel: 'all'
         };
+      }
+      else{
+        this.journeyDataSource = new MatTableDataSource<any>([])
       }
     }));
     console.log(this.selectedRowData)
@@ -294,7 +298,12 @@ export class RegistrationComponent implements OnInit {
       )
     }
     else{
-      
+      const dialogData = new ConfirmDialogModel("Warning!", "No serving Q for doing this task!" , false);
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        maxWidth: "400px",
+        data: dialogData,
+        disableClose : true
+      });
     }
   }
 
@@ -319,13 +328,13 @@ export class RegistrationComponent implements OnInit {
         }
       )
     } else {
-      this.loading = true;
-      this.regQS.regMissQ(this.selectedRowData.queue).subscribe(
-        res => {
-          console.log(res);
-          this.loading = false;
-        }
-      )
+      // this.loading = true;
+      // this.regQS.regMissQ(this.selectedRowData.queue).subscribe(
+      //   res => {
+      //     console.log(res);
+      //     this.loading = false;
+      //   }
+      // )
     }
   }
   ///////////////////////////////////////////

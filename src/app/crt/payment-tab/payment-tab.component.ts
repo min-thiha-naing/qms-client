@@ -19,7 +19,7 @@ import { CrtQueueService } from 'src/app/shared/crt-queue.service';
 })
 export class PaymentTabComponent implements OnInit {
 
-  qTableColumns = ['qNo', 'name', 'mrn', 'visitType', 'apptTime', 'waitTime', 'tWaitTime', 'callTime', 'remark'];
+  qTableColumns = ['qNo', 'name', 'mrn', 'visitType', 'apptTime', 'waitTime', 'tWaitTime', 'callTime',  'remark'];
   allQDS = new MatTableDataSource<any>([]);
   holdQDS = new MatTableDataSource<any>([]);
   missQDS = new MatTableDataSource<any>([]);
@@ -74,6 +74,7 @@ export class PaymentTabComponent implements OnInit {
         };
 
         if (this.allQDS.data[0]) {
+          console.log(this.allQDS.data[0])
           this.selectedRowData = {
             queue: {
               queueNo: this.allQDS.data[0].queueNo,
@@ -87,8 +88,8 @@ export class PaymentTabComponent implements OnInit {
     this.subs.add(this.crtQS._crtHoldQs.asObservable().subscribe(Qs => this.holdQDS = new MatTableDataSource<any>(Qs)));
     this.subs.add(this.crtQS._crtMissQs.asObservable().subscribe(Qs => this.missQDS = new MatTableDataSource<any>(Qs)));
 
-    this.subs.add(this.crtQS._crtServingQ.subscribe(Q => {
-      this.servingQ = Q;
+    this.subs.add(this.crtQS.ServingQ.subscribe(Q => {
+      this.servingQ = Q
       if (this.servingQ) {
         if (this.servingQ.planList) {
           this.journeyListDS = new MatTableDataSource<any>(Helper.transformPlanListToDestLocList(this.servingQ.planList));
@@ -168,6 +169,7 @@ export class PaymentTabComponent implements OnInit {
   }
 
   onClickNoResp() {
+    console.log(this.servingQ)
     if (this.servingQ) {
       this.loading = true;
       this.crtQS.crtMissQ(this.servingQ).subscribe(
@@ -228,6 +230,7 @@ export class PaymentTabComponent implements OnInit {
       queue: queue,
       fromPanel: fromPanel,
     };
+    console.log(this.selectedRowData)
   }
 
   onClickExit() {

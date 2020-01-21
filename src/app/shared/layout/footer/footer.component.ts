@@ -13,7 +13,7 @@ import { RtSearchDialogComponent } from 'src/app/rt/rt-search-dialog/rt-search-d
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-  searchValue: string;
+  searchValue: string = '';
   constructor(
     private router: Router,
     private dialog: MatDialog
@@ -23,7 +23,6 @@ export class FooterComponent implements OnInit {
     if (this.router.url === '/rt') {
       console.log('rt')
       console.log(Helper.onTabIndexChanged)
-
     } else {
       console.log('crt')
       console.log(Helper.onTabIndexChanged)
@@ -35,7 +34,7 @@ export class FooterComponent implements OnInit {
       console.log(Helper.onTabIndexChanged)
       const dialogRef = this.dialog.open(RtSearchDialogComponent, {
         maxWidth: "600px",
-        disableClose: false
+        disableClose: true
       });
 
       dialogRef.afterClosed().subscribe(dialogResult => {
@@ -46,7 +45,7 @@ export class FooterComponent implements OnInit {
       console.log(Helper.onTabIndexChanged)
       const dialogRef = this.dialog.open(CrtSearchDialogComponent, {
         maxWidth: "600px",
-        disableClose: false
+        disableClose: true
       });
 
       dialogRef.afterClosed().subscribe(dialogResult => {

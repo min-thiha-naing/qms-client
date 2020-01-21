@@ -50,10 +50,10 @@ export class Helper {
 
   public static addRespToQueueList(_queues: BehaviorSubject<any[]>, response, place?: string) {
     if (place && place == 'b') {
-      let newQs = [response, ..._queues.getValue(),];
+      let newQs = [..._queues.getValue(), response];
       _queues.next(newQs);
     } else {
-      let newQs = [..._queues.getValue(), response];
+      let newQs = [response, ..._queues.getValue()];
       _queues.next(newQs);
     }
   }
