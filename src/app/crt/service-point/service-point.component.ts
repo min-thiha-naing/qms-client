@@ -4,7 +4,7 @@ import { ApiService } from 'src/app/shared/api.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { map } from 'rxjs/operators';
-import { TransformerService } from 'src/app/shared/transformer.service';
+import { Helper } from 'src/app/shared/helper.class';
 
 @Component({
   selector: 'app-service-point',
@@ -35,14 +35,13 @@ export class ServicePointComponent implements OnInit {
     private dialogRef: MatDialogRef<ServicePointComponent>,
     @Inject(MAT_DIALOG_DATA) public servingQ: { planList: any[] },
     private api: ApiService,
-    private transform: TransformerService,
   ) { }
 
   ngOnInit() {
     console.log(this.servingQ)
     this.api.getDepartments().subscribe(resp => this.departments = resp);
 
-    this.destLocationDS = new MatTableDataSource<any>(this.transform.planListToDestLocList(this.servingQ.planList));
+    this.destLocationDS = new MatTableDataSource<any>(Helper.transformPlanListToDestLocList(this.servingQ.planList));
     console.log('DEST');
     console.log(this.destLocationDS.data);
   }

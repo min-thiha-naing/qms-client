@@ -9,67 +9,75 @@ import { Helper } from './helper.class';
 @Injectable({
   providedIn: 'root'
 })
-export class CrtQueueService {
-  private _crtAllQs = new BehaviorSubject<any[]>([]);
-  _crtHoldQs = new BehaviorSubject<any[]>([]);
-  _crtMissQs = new BehaviorSubject<any[]>([]);
-  _crtServingQ = new BehaviorSubject<any>({ queueNo: null });
-  
-  get crtAllQs() {
-    return this._crtAllQs.asObservable().pipe(map(allQs => {
+export class PaymentTabService {
+  private _allQs = new BehaviorSubject<any[]>([]);
+  private _holdQs = new BehaviorSubject<any[]>([]);
+  private _missQs = new BehaviorSubject<any[]>([]);
+  private _servingQ = new BehaviorSubject<any>({ queueNo: null });
+
+  get allQs() {
+    return this._allQs.asObservable().pipe(map(allQs => {
       // In case there is serving Q
       if (allQs[0] && allQs[0].queueStatusId == QueueStatus.SERVING) {
         allQs[0].planList = Helper.sortLocByOrderId(allQs[0].planList);
         console.log('serving Q passed');
         console.log(allQs[0]);
-        this._crtServingQ.next(allQs[0]);
+        this._servingQ.next(allQs[0]);
       } else if (allQs[0]) {
-        this._crtServingQ.next(null);
+        this._servingQ.next(null);
       }
       return allQs;
     }))
   }
 
-  get ServingQ() {
-    return this._crtServingQ.asObservable().pipe(map(sq => {
+  get servingQ() {
+    return this._servingQ.asObservable().pipe(map(sq => {
       if (sq && sq.planList)
         return { ...sq, planList: Helper.sortLocByOrderId(sq.planList) }
       else
         return sq;
     }));
   }
-  
+
+  get holdQs() {
+    return this._holdQs.asObservable();
+  }
+
+  get missQs() {
+    return this._missQs.asObservable();
+  }
+
   constructor(
     private api: ApiService,
     private socketClient: SocketClientService,
   ) {
     this.socketClient.onMessage('/user/queue/reply').subscribe(q => {
       if (q.queueStatusId === QueueStatus.MISS) {
-        // this.addRespToQueueList(this._crtMissQs, q);
+        // this.addRespToQueueList(this._missQs, q);
       }
     })
   }
 
-  getCrtAllQ() {
+  getAllQ() {
     this.api.getCRTAllQ().subscribe(
       resp => {
-        this._crtAllQs.next(resp);
+        this._allQs.next(resp);
       }
     );
   }
 
-  getCrtHoldQ() {
+  getHoldQ() {
     this.api.getCRTHoldQ().subscribe(
       resp => {
-        this._crtHoldQs.next(resp);
+        this._holdQs.next(resp);
       }
     );
   }
 
-  getCrtMissQ() {
+  getMissQ() {
     this.api.getCRTMissQ().subscribe(
       resp => {
-        this._crtMissQs.next(resp);
+        this._missQs.next(resp);
       }
     );
   }
@@ -78,21 +86,21 @@ export class CrtQueueService {
     return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
       // especially for serving Q which will be returned
       let newQ = Helper.returnQModifiedWithCallTime(queue, resp)
-      Helper.replaceCurrentQWithResp(this._crtAllQs, newQ);
+      Helper.replaceCurrentQWithResp(this._allQs, newQ);
     }));
   }
 
   crtServeAndTransfer(queue: any) {
     return this.api.serveAndTransfer(queue).pipe(tap(resp => {
-      Helper.removeFromQueueList(this._crtAllQs, queue);
+      Helper.removeFromQueueList(this._allQs, queue);
     }));
   }
 
   ringCrtHoldQ(queue: any) {
     return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
       let newQ = Helper.returnQModifiedWithCallTime(queue, resp)
-      Helper.removeFromQueueList(this._crtHoldQs, queue);
-      Helper.addRespToQueueList(this._crtAllQs, newQ, 'b');
+      Helper.removeFromQueueList(this._holdQs, queue);
+      Helper.addRespToQueueList(this._allQs, newQ, 'b');
     }));
   }
 
@@ -100,15 +108,15 @@ export class CrtQueueService {
     console.log(queue)
     return this.api.changeQ(queue.id, 'R').pipe(tap(resp => {
       let newQ = Helper.returnQModifiedWithCallTime(queue, resp)
-      Helper.removeFromQueueList(this._crtMissQs, queue);
-      Helper.addRespToQueueList(this._crtAllQs, newQ, 'b');
+      Helper.removeFromQueueList(this._missQs, queue);
+      Helper.addRespToQueueList(this._allQs, newQ, 'b');
     }));
   }
 
   crtMissQ(queue: any) {
     return this.api.changeQ(queue.id, 'm').pipe(tap(resp => {
-      Helper.removeFromQueueList(this._crtAllQs, resp);
-      Helper.addRespToQueueList(this._crtMissQs, resp);
+      Helper.removeFromQueueList(this._allQs, resp);
+      Helper.addRespToQueueList(this._missQs, resp);
     }));
   }
 
@@ -116,21 +124,21 @@ export class CrtQueueService {
     console.log("queue")
     console.log(queue)
     return this.api.changeQ(queue.id, 'h').pipe(tap(resp => {
-      Helper.removeFromQueueList(this._crtAllQs, resp);
-      Helper.addRespToQueueList(this._crtHoldQs, resp);
+      Helper.removeFromQueueList(this._allQs, resp);
+      Helper.addRespToQueueList(this._holdQs, resp);
     }));
   }
 
   crtAddServicePoint(payload) {
     return this.api.addServicePoint(payload).pipe(tap(queue => {
-      Helper.replaceCurrentQWithResp(this._crtAllQs, { ...this._crtServingQ.value, planList: [...queue.planList] });
+      Helper.replaceCurrentQWithResp(this._allQs, { ...this._servingQ.value, planList: [...queue.planList] });
     }));
   }
 
   deletePlanList(queue: any, orderIdList: number[]) {
     return this.api.deletePlanList(queue.visitId, orderIdList).pipe(tap(() => {
-      Helper.replaceCurrentQWithResp(this._crtAllQs, Helper.internalDeletePlanList(queue, orderIdList));
+      Helper.replaceCurrentQWithResp(this._allQs, Helper.internalDeletePlanList(queue, orderIdList));
     }))
   }
-  
+
 }

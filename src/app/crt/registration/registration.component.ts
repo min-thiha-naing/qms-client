@@ -6,10 +6,10 @@ import { takeUntil, map } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { QueueService } from 'src/app/shared/queue.service';
 import { QueueStatus, DestinationStatus } from 'src/app/model/queue-status';
-import { TransformerService } from 'src/app/shared/transformer.service';
 import { ApiService } from 'src/app/shared/api.service';
 import { PopUpWindowComponent } from 'src/app/pop-up-window/pop-up-window.component';
 import { RegistartionService } from 'src/app/shared/registartion.service';
+import { Helper } from 'src/app/shared/helper.class';
 
 @Component({
   selector: 'app-registration',
@@ -54,7 +54,6 @@ export class RegistrationComponent implements OnInit {
   constructor(
     private qS: QueueService,
     private regQS: RegistartionService,
-    private transform: TransformerService,
     private dialog: MatDialog,
     private api: ApiService
   ) { }
@@ -89,8 +88,7 @@ export class RegistrationComponent implements OnInit {
       console.log(this.servingQ)
       if (this.servingQ) {
         if (this.servingQ.planList) {
-          console.log(this.transform.planListToDestLocList(this.servingQ.planList));
-          this.journeyDataSource = new MatTableDataSource<any>(this.transform.planListToDestLocList(this.servingQ.planList));
+          this.journeyDataSource = new MatTableDataSource<any>(Helper.transformPlanListToDestLocList(this.servingQ.planList));
         }
         this.selectedRowData = {
           queue: {

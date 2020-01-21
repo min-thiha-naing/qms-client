@@ -7,8 +7,8 @@ import { SubSink } from 'subsink';
 import { QueueStatus, DestinationStatus } from 'src/app/model/queue-status';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AddServicePointComponent } from '../add-service-point/add-service-point.component';
-import { TransformerService } from 'src/app/shared/transformer.service';
 import { Helper } from 'src/app/shared/helper.class';
+import { RoomModuleService } from 'src/app/shared/room-module.service';
 
 @Component({
   selector: 'app-room-module-tab',
@@ -48,17 +48,17 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
   subs = new SubSink();
   loading = false;
   constructor(
-    private qS: QueueService,
+    private qS: RoomModuleService,
     private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
 
-    this.qS.getRtAllQ();
-    this.qS.getRtHoldQ();
-    this.qS.getRtMissQ();
-    
-    this.subs.add(this.qS.rtAllQs.subscribe(Qs => {
+    this.qS.getAllQ();
+    this.qS.getHoldQ();
+    this.qS.getMissQ();
+
+    this.subs.add(this.qS.allQs.subscribe(Qs => {
       this.allQDS = new MatTableDataSource<any>(Qs);
 
       if (Qs) {
@@ -81,8 +81,8 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
         }
       }
     }));
-    this.subs.add(this.qS._rtHoldQs.asObservable().subscribe(Qs => this.holdQDS = new MatTableDataSource<any>(Qs)));
-    this.subs.add(this.qS._rtMissQs.asObservable().subscribe(Qs => this.missQDS = new MatTableDataSource<any>(Qs)));
+    this.subs.add(this.qS.holdQs.subscribe(Qs => this.holdQDS = new MatTableDataSource<any>(Qs)));
+    this.subs.add(this.qS.missQs.subscribe(Qs => this.missQDS = new MatTableDataSource<any>(Qs)));
 
     this.subs.add(this.qS.servingQ.subscribe(Q => {
       this.servingQ = Q;

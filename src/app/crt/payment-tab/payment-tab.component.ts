@@ -6,11 +6,10 @@ import { SubSink } from 'subsink';
 import { QueueStatus, DestinationStatus } from 'src/app/model/queue-status';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/confirm-dialog/confirm-dialog.component';
-import { TransformerService } from 'src/app/shared/transformer.service';
 import { AddServicePointComponent } from 'src/app/rt/add-service-point/add-service-point.component';
 import { Helper } from 'src/app/shared/helper.class';
 import { ServicePointComponent } from '../service-point/service-point.component';
-import { CrtQueueService } from 'src/app/shared/crt-queue.service';
+import { PaymentTabService } from 'src/app/shared/payment-tab.service';
 
 @Component({
   selector: 'app-payment-tab',
@@ -50,18 +49,17 @@ export class PaymentTabComponent implements OnInit {
   subs = new SubSink();
   loading = false;
   constructor(
-    private qS: QueueService,
-    private crtQS: CrtQueueService,
+    private crtQS: PaymentTabService,
     private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
 
-    this.crtQS.getCrtAllQ();
-    this.crtQS.getCrtHoldQ();
-    this.crtQS.getCrtMissQ();
+    this.crtQS.getAllQ();
+    this.crtQS.getHoldQ();
+    this.crtQS.getMissQ();
 
-    this.subs.add(this.crtQS.crtAllQs.subscribe(Qs => {
+    this.subs.add(this.crtQS.allQs.subscribe(Qs => {
       this.allQDS = new MatTableDataSource<any>(Qs);
 
       if (Qs) {
@@ -84,10 +82,10 @@ export class PaymentTabComponent implements OnInit {
         }
       }
     }));
-    this.subs.add(this.crtQS._crtHoldQs.asObservable().subscribe(Qs => this.holdQDS = new MatTableDataSource<any>(Qs)));
-    this.subs.add(this.crtQS._crtMissQs.asObservable().subscribe(Qs => this.missQDS = new MatTableDataSource<any>(Qs)));
+    this.subs.add(this.crtQS.holdQs.subscribe(Qs => this.holdQDS = new MatTableDataSource<any>(Qs)));
+    this.subs.add(this.crtQS.missQs.subscribe(Qs => this.missQDS = new MatTableDataSource<any>(Qs)));
 
-    this.subs.add(this.crtQS._crtServingQ.subscribe(Q => {
+    this.subs.add(this.crtQS.servingQ.subscribe(Q => {
       this.servingQ = Q;
       if (this.servingQ) {
         if (this.servingQ.planList) {
@@ -233,20 +231,20 @@ export class PaymentTabComponent implements OnInit {
   onClickExit() {
     const message = `Are you sure you want to do this?`;
 
-    const dialogData = new ConfirmDialogModel("Confirm Action", message , true);
+    const dialogData = new ConfirmDialogModel("Confirm Action", message, true);
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: dialogData,
-      disableClose : true
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(dialogResult => {
       console.log(dialogResult);
     });
-}
+  }
 
-ngOnDestroy() {
-  this.subs.unsubscribe();
-}
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
 }
