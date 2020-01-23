@@ -5,6 +5,7 @@ import { MaterialModule } from '../material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FooterComponent } from './layout/footer/footer.component';
 import { FormsModule } from '@angular/forms';
+import { RoomModuleTabComponent } from '../rt/room-module-tab/room-module-tab.component';
 
 
 
@@ -22,6 +23,7 @@ import { FormsModule } from '@angular/forms';
   exports: [
     HeaderComponent,
     FooterComponent,
-  ]
+  ],
+  providers:[RoomModuleTabComponent]
 })
 export class SharedModule { }

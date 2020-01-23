@@ -4,17 +4,33 @@ import { BehaviorSubject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { QueueStatus } from '../model/queue-status';
 import { Helper } from './helper.class';
+import { queue } from 'rxjs/internal/scheduler/queue';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoomModuleService {
+ 
+  private selectedRowData = new BehaviorSubject<any>([
+    {
+      queue: {
+        queueNo: null
+      },
+      fromPanel: ''
+    }
+  ])
 
   private _allQs = new BehaviorSubject<any[]>([]);
   private _holdQs = new BehaviorSubject<any[]>([]);
   private _missQs = new BehaviorSubject<any[]>([]);
 
   private _servingQ = new BehaviorSubject<any>(null);
+
+  get searchRow() {
+    return this.selectedRowData.asObservable().pipe(map(r=>{
+      return r
+    }))
+  }
 
   get allQs() {
     return this._allQs.asObservable().pipe(map(allQs => {
@@ -136,4 +152,36 @@ export class RoomModuleService {
     }))
   }
 
+  searchAllQ(queueNo: any) {
+    return this._allQs.asObservable().pipe(map(allQs => {
+      let q = allQs.find(q => q.queueNo === queueNo)
+      this.selectedRowData.next({
+        queue: q,
+        fromPanel: 'all'
+      })
+      return this.selectedRowData
+    }))
+  }
+
+  searchHoldQ(queueNo: any) {
+    return this._holdQs.asObservable().pipe(map(holdQs => {
+      let q = holdQs.find(q => q.queueNo === queueNo)
+      this.selectedRowData.next({
+        queue: q,
+        fromPanel: 'hold'
+      })
+      return this.selectedRowData
+    }))
+  }
+
+  searchMissQ(queueNo: any) {
+    return this._missQs.asObservable().pipe(map(missOs => {
+      let q = missOs.find(q => q.queueNo === queueNo)
+      this.selectedRowData.next({
+        queue: q,
+        fromPanel: 'miss'
+      })
+      return this.selectedRowData
+    }))
+  }
 }

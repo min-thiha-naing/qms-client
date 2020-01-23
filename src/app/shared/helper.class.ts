@@ -2,7 +2,7 @@ import { BehaviorSubject } from 'rxjs';
 
 export class Helper {
   static onTabIndexChanged: BehaviorSubject<any>;
-
+  static searchRes: BehaviorSubject<boolean>;
   public static sortLocByOrderId(locList: any[]) {
     return locList.sort((a, b) => a.orderId - b.orderId);
   }
@@ -65,6 +65,9 @@ export class Helper {
 
   public static setTabIndex(index) {
     this.onTabIndexChanged = index
-    console.log(this.onTabIndexChanged)
- }
+  }
+
+  public static setSearch(search) {
+    this.searchRes = search
+  }
 }

@@ -4,7 +4,7 @@
     </div>
     <div mat-dialog-content>
         <div class="search">
-            <form #searchForm="ngForm">
+            <form [formGroup]="searchForm">
                 <table style="margin: 0 auto;">
                     <tr>
                         <td colspan="2" style="text-align: center; font-weight: bold;font-size: 20px;">
@@ -16,10 +16,10 @@
                             <span class="label">Queue No</span>
                         </td>
                         <td style="width: 240px;">
-                            :<input autocomplete="off">
+                            :<input formControlName="QNO" autocomplete="off" readonly>
                         </td>
                         <td>
-                            <button mat-raised-button color="primary" (click)="pullEditClick()" style="line-height: 27px; width: 100%;">
+                            <button mat-raised-button color="primary" (click)="pullEditClick()" style="line-height: 27px; width: 100%;" [disabled]="close || hold">
                                 <mat-icon>volume_up</mat-icon>Pull & Call
                             </button>
                         </td>
@@ -29,10 +29,10 @@
                             <span class="label">IC/FIN</span>
                         </td>
                         <td>
-                            :<input>
+                            :<input input formControlName="ICFIN" autocomplete="off" readonly>
                         </td>
                         <td>
-                            <button mat-raised-button color="primary"  style="line-height: 27px; width: 100%;">
+                            <button mat-raised-button color="primary"  style="line-height: 27px; width: 100%;" [disabled]="close || hold"> 
                                 <mat-icon>call</mat-icon>Pull & S.Call
                             </button>
                         </td>
@@ -42,8 +42,8 @@
                             <span class="label">Name</span>
                         </td>
                         <td>
-                            :<input autocomplete="off" style="width: 50px; margin-right: 5px;">
-                            <input autocomplete="off" style="width: 140px">
+                            :<input input formControlName="title" readonly autocomplete="off" style="width: 50px; margin-right: 5px;">
+                            <input input formControlName="name" readonly autocomplete="off" style="width: 140px">
                         </td>
                         <td>
                             <button mat-raised-button color="warn" (click)="onCancel()" style="line-height: 27px; width: 100%;">
@@ -59,7 +59,7 @@
                             :<input autocomplete="off">
                         </td>
                         <td>
-                            <button mat-raised-button color="warn" style="line-height: 27px; width: 100%;">
+                            <button mat-raised-button color="warn" style="line-height: 27px; width: 100%;" [disabled]="!miss">
                                 <mat-icon>clear</mat-icon>Cancel Missed
                             </button>
                         </td>
@@ -103,7 +103,7 @@
                             <span class="label">Status</span>
                         </td>
                         <td>
-                            :<input autocomplete="off">
+                            :<input formControlName="status" readonly autocomplete="off">
                         </td>
                         <td></td>
                     </tr>

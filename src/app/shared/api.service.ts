@@ -91,4 +91,11 @@ export class ApiService {
     return this.http.delete(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/removeplanListByVisitId/${visitId}/${orderIdList.toString()}`)
   }
 
+  search(Sval: string){
+    return this.http.get(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/findLiveTransactionQueue/${Sval}`)
+  }
+
+  addRemark(payload: any){
+    return this.http.post(`${environment.baseUrl}/remarks/createRemark`,payload)
+  }
 }

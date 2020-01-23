@@ -82,4 +82,12 @@ export class RegistartionService {
       Helper.removeFromQueueList(this._regAllQs, queue);
     }));
   }
+
+  remark(queue: any, dummy: any) {
+    console.log(queue)
+    return this.api.addRemark(dummy).pipe(tap(resp => {
+      Helper.removeFromQueueList(this._regAllQs, queue);
+      Helper.addRespToQueueList(this._regAllQs, queue)
+    }))
+  }
 }

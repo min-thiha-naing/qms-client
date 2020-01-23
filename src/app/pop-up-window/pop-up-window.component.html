@@ -1,10 +1,10 @@
 <div mat-dialog-content>
     <h3>Enter remarks for the patient.</h3>
     <mat-form-field style="width: 100%;">
-        <textarea matInput placeholder="Leave a remark" maxlength="256"></textarea>
+        <textarea matInput placeholder="Leave a remark" maxlength="256" [(ngModel)] = "remark"></textarea>
     </mat-form-field>
   </div>
   <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">No</button>
     <button mat-raised-button color="primary" (click)="onClick()">Ok</button>
-  </div>
+  </div> 
