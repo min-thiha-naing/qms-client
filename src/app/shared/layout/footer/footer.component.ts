@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Helper } from '../../helper.class';
-import { takeUntil } from 'rxjs/operators';
-import { Subject, BehaviorSubject } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { CrtSearchDialogComponent } from 'src/app/crt/crt-search-dialog/crt-search-dialog.component';
 import { RtSearchDialogComponent } from 'src/app/rt/rt-search-dialog/rt-search-dialog.component';
