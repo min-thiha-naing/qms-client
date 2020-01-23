@@ -81,6 +81,9 @@ export class RegistrationComponent implements OnInit {
           },
           fromPanel: 'all'
         }
+        this.api.search(this.allQDS.data[0].queueNo).subscribe(resp=>{
+          console.log(resp)
+        })
       }
     }));
 
@@ -98,6 +101,9 @@ export class RegistrationComponent implements OnInit {
           },
           fromPanel: 'all'
         };
+        this.api.search(this.servingQ.queueNo).subscribe(resp=>{
+          console.log(resp)
+        })
       }
       else{
         this.journeyDataSource = new MatTableDataSource<any>([])
@@ -111,6 +117,9 @@ export class RegistrationComponent implements OnInit {
       queue: queue,
       fromPanel: fromPanel,
     };
+    this.api.search(queue.queueNo).subscribe(resp=>{
+      console.log(resp)
+    })
     console.log(this.selectedRowData)
   }
 
@@ -311,8 +320,11 @@ export class RegistrationComponent implements OnInit {
       data: { queue: this.selectedRowData, remark: false }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
+    dialogRef.afterClosed().subscribe(res => {
+      console.log(res)
+      if(res.remark){
+        
+      }
     });
   }
 

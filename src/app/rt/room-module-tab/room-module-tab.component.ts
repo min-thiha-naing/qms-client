@@ -9,6 +9,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { AddServicePointComponent } from '../add-service-point/add-service-point.component';
 import { Helper } from 'src/app/shared/helper.class';
 import { RoomModuleService } from 'src/app/shared/room-module.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-room-module-tab',
@@ -29,6 +30,23 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
     missback: 0,
     waiting: 0,
   }
+
+  // private selectedRowData = new BehaviorSubject<any>([
+  //   {
+  //     queue: {
+  //       queueNo: null
+  //     },
+  //     fromPanel: ''
+  //   }
+  // ])
+
+  // public setRow(row: any) {
+  //   this.selectedRowData.next({
+  //     queue: row.value.queue,
+  //     fromPanel: row.value.fromPanel
+  //   })
+  //   console.log(this.selectedRowData)
+  // }
 
   selectedRowData = {
     queue: {
@@ -58,6 +76,13 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
     this.qS.getHoldQ();
     this.qS.getMissQ();
 
+
+    // this.selectedRowData = {
+    //   queue: ,
+    //   fromPanel: 'all'
+    // };
+
+
     this.subs.add(this.qS.allQs.subscribe(Qs => {
       this.allQDS = new MatTableDataSource<any>(Qs);
 
@@ -71,6 +96,13 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
         };
 
         if (this.allQDS.data[0]) {
+          // this.selectedRowData.next({
+          //   queue: {
+          //     queueNo: this.allQDS.data[0].queueNo,
+          //     ...this.allQDS.data[0],
+          //   },
+          //   fromPanel: 'all'
+          // })
           this.selectedRowData = {
             queue: {
               queueNo: this.allQDS.data[0].queueNo,
@@ -92,6 +124,13 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
         } else {
           this.journeyListDS = new MatTableDataSource<any>()
         }
+        // this.selectedRowData.next({
+        //   queue: {
+        //     queueNo: this.servingQ.queueNo,
+        //     ...this.servingQ,
+        //   },
+        //   fromPanel: 'all'
+        // })
         this.selectedRowData = {
           queue: {
             queueNo: this.servingQ.queueNo,
@@ -105,6 +144,7 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
 
   onClickRing() {
     switch (this.selectedRowData.fromPanel) {
+    // switch (this.selectedRowData.value.fromPanel) {
       case 'all': {
         if (this.servingQ) {
           //  all Q highlighted , serving Q exist -> serve serving Q AGAIN
@@ -223,6 +263,11 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
       queue: queue,
       fromPanel: fromPanel,
     };
+    // this.selectedRowData.next({
+    //   queue: queue,
+    //   fromPanel: fromPanel,
+    // });
+    console.log(this.selectedRowData)
   }
 
   ngOnDestroy() {
