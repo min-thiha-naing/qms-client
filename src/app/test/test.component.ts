@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-test',
@@ -6,17 +6,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
-
-  value: any
+  @ViewChild('input1',{static:true}) inputEl: ElementRef;
   constructor(
   ) { }
 
   ngOnInit() {
   }
 
-  onChange(ev){
-    console.log(ev);
-    console.log(this.value);
+  // ngAfterViewInit() {
+  //   setTimeout(() => this.inputEl.nativeElement.focus());
+  // }
+  onfocus(){
+    this.inputEl.nativeElement.focus()
   }
 
 }

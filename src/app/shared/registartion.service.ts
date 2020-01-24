@@ -94,4 +94,16 @@ export class RegistartionService {
       Helper.addRespToQueueList(this._regAllQs, queue)
     }))
   }
+
+  search(searchValue: String) {
+    let result = Helper.searchQByQNo(searchValue, this._regAllQs.value);
+    if (result) {
+      return {
+        queue: result,
+        fromPanel: 'all'
+      };
+    } else {
+      return null;
+    }
+  }
 }

@@ -11,6 +11,8 @@ import { SubSink } from 'subsink';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/confirm-dialog/confirm-dialog.component';
 import { RoomModuleTabComponent } from 'src/app/rt/room-module-tab/room-module-tab.component';
 import { MessengerService, Tabs } from '../../messenger.service';
+import { RegistartionService } from '../../registartion.service';
+import { PaymentTabService } from '../../payment-tab.service';
 
 @Component({
   selector: 'app-footer',
@@ -28,6 +30,8 @@ export class FooterComponent implements OnInit {
     private rMS: RoomModuleService,
     private api: ApiService,
     private messenger: MessengerService,
+    private regService: RegistartionService,
+    private pMService: PaymentTabService,
   ) { }
 
   ngOnInit() {
@@ -54,9 +58,15 @@ export class FooterComponent implements OnInit {
           break;
         }
         case Tabs.PAYMENT_TAB: {
-
+          localSearchResult = this.pMService.search(this.searchValue);
         }
         case Tabs.REGISTRATION_MODULE: {
+          localSearchResult = this.regService.search(this.searchValue);
+        }
+        case Tabs.APPOINTMENT_RT: {
+
+        }
+        case Tabs.APPOINTMENT_CRT: {
 
         }
       }

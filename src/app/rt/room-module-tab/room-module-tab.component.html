@@ -194,7 +194,7 @@
 
                     <mat-header-row *matHeaderRowDef="qTableColumns; sticky: true"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: qTableColumns;" (click)="onClickRow(row, 'miss')"
-                        [ngClass]="{'selected': row.queueNo == selectedRowData.queue.queueNo}"></mat-row>
+                        [ngClass]="{'selected': row.queueNo == selectedRowData.queue.queueNo}" ></mat-row>
                 </mat-table>
             </div>
         </div>

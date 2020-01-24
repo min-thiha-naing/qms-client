@@ -9,7 +9,7 @@ export class MessengerService {
 
   private _tabIndex: number;
   private _servingQ = new BehaviorSubject<any>(null);
-  
+
   private _searchResultFoundFrontend = new Subject<any>();
 
   set tabIndex(ind: number) {
@@ -24,7 +24,7 @@ export class MessengerService {
     this._servingQ.next(queue);
   }
 
-  get searchResultFoundFrontend(){
+  get searchResultFoundFrontend() {
     return this._searchResultFoundFrontend.asObservable();
   }
 
@@ -55,6 +55,8 @@ export class MessengerService {
         switch (tabIndex) {
           case 0:
             return Tabs.ROOM_MODULE
+          case 1:
+            return Tabs.APPOINTMENT_RT
           default:
             return Tabs.NONE
         }
@@ -63,6 +65,8 @@ export class MessengerService {
         switch (tabIndex) {
           case 0:
             return Tabs.REGISTRATION_MODULE
+          case 1:
+            return Tabs.APPOINTMENT_CRT
           case 2:
             return Tabs.PAYMENT_TAB
           default:
@@ -78,5 +82,7 @@ export const Tabs = {
   ROOM_MODULE: 'Room Module',
   REGISTRATION_MODULE: 'Registration Module',
   PAYMENT_TAB: 'Payment Tab',
-  NONE: 'none'
+  APPOINTMENT_RT: 'RT Appointment Tap',
+  APPOINTMENT_CRT: 'CRT Appointment Tap',
+  NONE: 'none',
 }

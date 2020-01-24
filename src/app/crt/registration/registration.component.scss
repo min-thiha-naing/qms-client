@@ -4,6 +4,7 @@
     width: 100%;
     .header {
       padding: 6px;
+      margin: 1vw;
       background: #3f51b5;
       color: #fff;
 
@@ -15,7 +16,7 @@
 
     .info {
       margin-bottom: 20px;
-
+      margin: 1vw;
       table,
       td {
         border: 1px solid rgba(0, 0, 0, 0.12);
@@ -39,6 +40,7 @@
 
   .registration {
     background: #fff;
+    margin: 1vw;
     .header {
       padding: 10px;
       background: #3f51b5;
@@ -118,7 +120,7 @@
 
   .service {
     margin: 20px 0px;
-
+    margin: 1vw;
     .location {
       border: 1px solid rgba(0, 0, 0, 0.12);
       background: #fff;

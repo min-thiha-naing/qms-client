@@ -10,6 +10,7 @@ import { PopUpWindowComponent } from 'src/app/pop-up-window/pop-up-window.compon
 import { RegistartionService } from 'src/app/shared/registartion.service';
 import { Helper } from 'src/app/shared/helper.class';
 import { ConfirmDialogComponent, ConfirmDialogModel } from 'src/app/confirm-dialog/confirm-dialog.component';
+import { MessengerService } from 'src/app/shared/messenger.service';
 
 @Component({
   selector: 'app-registration',
@@ -54,7 +55,8 @@ export class RegistrationComponent implements OnInit {
   constructor(
     private regQS: RegistartionService,
     private dialog: MatDialog,
-    private api: ApiService
+    private api: ApiService,
+    private messenger: MessengerService
   ) { }
   ngOnInit() {
 
@@ -108,6 +110,9 @@ export class RegistrationComponent implements OnInit {
       }
     }));
     console.log(this.selectedRowData)
+
+     //  NOTE Search
+     this.subs.add(this.messenger.searchResultFoundFrontend.subscribe(res => this.selectedRowData = res));
   }
 
   onClickRow(queue, fromPanel) {

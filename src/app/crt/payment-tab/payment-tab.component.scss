@@ -5,6 +5,14 @@
   color: white;
   background-color: mat-color($starter-theme-primary);
   padding: 12px;
+
+}
+.header {
+  //font-size: 14px;
+  color: white;
+  background-color: mat-color($starter-theme-primary);
+  padding: 12px;
+  margin-right: 1vw
 }
 
 //  Left size
@@ -47,6 +55,8 @@
 //  Right side
 .btn-grid {
   background-color: lightsteelblue;
+  margin-right: 1vw;
+ 
   mat-grid-tile {
     button {
       font-size: 12px;
@@ -66,6 +76,7 @@
   height: 40vh;
   overflow: auto;
   padding: 0px 2px;
+  margin-right: 1vw;
   border: 0.5px solid grey;
   ::ng-deep {
     .mat-tab-label,
