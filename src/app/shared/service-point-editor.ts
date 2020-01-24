@@ -7,4 +7,6 @@ export class ServicePointEditor {
     ){
         this.servingQ = servingQ;
     }
+
+    
 }

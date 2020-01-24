@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Helper } from '../shared/helper.class';
-import { MatTabChangeEvent } from '@angular/material';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
 import { SubSink } from 'subsink';
 import { SocketClientService } from '../socket-client.service';
 import { Router } from '@angular/router';
+import { MessengerService } from '../shared/messenger.service';
 
 @Component({
   selector: 'app-crt',
@@ -12,12 +13,19 @@ import { Router } from '@angular/router';
 })
 export class CrtComponent implements OnInit {
   private subs = new SubSink();
+
+  @ViewChild('Tabs', { static: true }) tabs: MatTabGroup;
+
   constructor(
     private socketClient: SocketClientService,
-    private router: Router,
-  ) {}
+    private messenger: MessengerService,
+  ) { }
 
   ngOnInit() {
+    //  for initial selected tab
+    setTimeout(() => {
+      this.messenger.tabIndex = this.tabs.selectedIndex;
+    }, 1000)
     Helper.setTabIndex(0)
     this.subs.add(
       this.socketClient.onMessage('/user/queue/reply')
@@ -28,9 +36,7 @@ export class CrtComponent implements OnInit {
   }
 
   tabChanged(tabChangeEvent: MatTabChangeEvent): void {
-    console.log(tabChangeEvent);
-    console.log(tabChangeEvent.index);
-    Helper.setTabIndex(tabChangeEvent.index);
+    this.messenger.tabIndex = tabChangeEvent.index;
   }
 
   ngOnDestroy() {

@@ -5,6 +5,7 @@ import { SocketClientService } from '../socket-client.service';
 import { QueueStatus } from '../model/queue-status';
 import { map, tap } from 'rxjs/operators';
 import { Helper } from './helper.class';
+import { MessengerService } from './messenger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class PaymentTabService {
   private _allQs = new BehaviorSubject<any[]>([]);
   private _holdQs = new BehaviorSubject<any[]>([]);
   private _missQs = new BehaviorSubject<any[]>([]);
-  private _servingQ = new BehaviorSubject<any>({ queueNo: null });
+  private _servingQ = new BehaviorSubject<any>(null);
 
   get allQs() {
     return this._allQs.asObservable().pipe(map(allQs => {
@@ -31,12 +32,14 @@ export class PaymentTabService {
   }
 
   get servingQ() {
-    return this._servingQ.asObservable().pipe(map(sq => {
-      if (sq && sq.planList)
-        return { ...sq, planList: Helper.sortLocByOrderId(sq.planList) }
-      else
-        return sq;
-    }));
+    return this._servingQ.asObservable().pipe(
+      map(sq => {
+        if (sq && sq.planList)
+          return { ...sq, planList: Helper.sortLocByOrderId(sq.planList) }
+        else
+          return sq;
+      }),
+      tap(sq => this.messenger.servingQ = sq));
   }
 
   get holdQs() {
@@ -50,6 +53,7 @@ export class PaymentTabService {
   constructor(
     private api: ApiService,
     private socketClient: SocketClientService,
+    private messenger: MessengerService,
   ) {
     this.socketClient.onMessage('/user/queue/reply').subscribe(q => {
       if (q.queueStatusId === QueueStatus.MISS) {

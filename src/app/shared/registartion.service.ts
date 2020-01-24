@@ -5,13 +5,14 @@ import { map, tap } from 'rxjs/operators';
 import { Helper } from './helper.class';
 import { ApiService } from './api.service';
 import { SocketClientService } from '../socket-client.service';
+import { MessengerService } from './messenger.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegistartionService {
   private _regAllQs = new BehaviorSubject<any[]>([]);
-  _regServingQ = new BehaviorSubject<any>({ queueNo: null });
+  _regServingQ = new BehaviorSubject<any>(null);
 
   get CrtRegAllQs() {
     return this._regAllQs.asObservable().pipe(map(allQs => {
@@ -28,17 +29,20 @@ export class RegistartionService {
   }
 
   get ServingQ() {
-    return this._regServingQ.asObservable().pipe(map(sq => {
-      if (sq && sq.planList)
-        return { ...sq, planList: Helper.sortLocByOrderId(sq.planList) }
-      else
-        return sq;
-    }));
+    return this._regServingQ.asObservable().pipe(
+      map(sq => {
+        if (sq && sq.planList)
+          return { ...sq, planList: Helper.sortLocByOrderId(sq.planList) }
+        else
+          return sq;
+      }),
+      tap(sq => this.messenger.servingQ = sq));
   }
 
   constructor(
     private api: ApiService,
     private socketClient: SocketClientService,
+    private messenger: MessengerService,
   ) {
     this.socketClient.onMessage('/user/queue/reply').subscribe(q => {
       if (q.queueStatusId === QueueStatus.MISS) {
@@ -67,10 +71,10 @@ export class RegistartionService {
     }));
   }
 
-  regMissQ(queue: any){
-    return this.api.changeQ(queue.id, 'm').pipe(tap(resp=>{
+  regMissQ(queue: any) {
+    return this.api.changeQ(queue.id, 'm').pipe(tap(resp => {
       let oldQ = queue;
-      let newQ = Helper.returnQModifiedWithCallTime(queue,resp);
+      let newQ = Helper.returnQModifiedWithCallTime(queue, resp);
       oldQ.queueStatusId = newQ.queueStatusId;
       Helper.removeFromQueueList(this._regAllQs, resp);
       Helper.addRespToQueueList(this._regAllQs, oldQ, 'b');

@@ -1,8 +1,11 @@
 import { BehaviorSubject } from 'rxjs';
 
 export class Helper {
-  static onTabIndexChanged: BehaviorSubject<any>;
+  static onTabIndexChanged: number;
   static searchRes: BehaviorSubject<boolean>;
+
+  static servingQ = new BehaviorSubject<any>(null);
+
   public static sortLocByOrderId(locList: any[]) {
     return locList.sort((a, b) => a.orderId - b.orderId);
   }
@@ -70,4 +73,10 @@ export class Helper {
   public static setSearch(search) {
     this.searchRes = search
   }
+
+  public static searchQByQNo(queueNo: any, queueList: any[]) {
+    return queueList.find(el => el.queueNo == queueNo);
+  }
+
 }
+

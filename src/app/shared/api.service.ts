@@ -91,7 +91,7 @@ export class ApiService {
     return this.http.delete(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/removeplanListByVisitId/${visitId}/${orderIdList.toString()}`)
   }
 
-  search(Sval: string){
+  search(Sval: String){
     return this.http.get(`${environment.baseUrl}/liveTransactionQueues/liveTransactionQueue/findLiveTransactionQueue/${Sval}`)
   }
 

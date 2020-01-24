@@ -1,24 +1,17 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { QueueStatus } from '../model/queue-status';
 import { Helper } from './helper.class';
 import { queue } from 'rxjs/internal/scheduler/queue';
+import { MessengerService } from './messenger.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoomModuleService {
- 
-  private selectedRowData = new BehaviorSubject<any>([
-    {
-      queue: {
-        queueNo: null
-      },
-      fromPanel: ''
-    }
-  ])
+
 
   private _allQs = new BehaviorSubject<any[]>([]);
   private _holdQs = new BehaviorSubject<any[]>([]);
@@ -26,11 +19,9 @@ export class RoomModuleService {
 
   private _servingQ = new BehaviorSubject<any>(null);
 
-  get searchRow() {
-    return this.selectedRowData.asObservable().pipe(map(r=>{
-      return r
-    }))
-  }
+  private _searchResultFoundFrontend = new Subject<any>();
+  private _searchResultFoundBackend = new Subject<any>();
+  private _searchResultNotFound = new Subject<any>();
 
   get allQs() {
     return this._allQs.asObservable().pipe(map(allQs => {
@@ -47,12 +38,14 @@ export class RoomModuleService {
   }
 
   get servingQ() {
-    return this._servingQ.asObservable().pipe(map(sq => {
-      if (sq && sq.planList)
-        return { ...sq, planList: Helper.sortLocByOrderId(sq.planList) }
-      else
-        return sq;
-    }));
+    return this._servingQ.asObservable().pipe(
+      map(sq => {
+        if (sq && sq.planList)
+          return { ...sq, planList: Helper.sortLocByOrderId(sq.planList) }
+        else
+          return sq;
+      }),
+      tap(sq => this.messenger.servingQ = sq));
   }
 
   get holdQs() {
@@ -63,7 +56,17 @@ export class RoomModuleService {
     return this._missQs.asObservable();
   }
 
-  constructor(private api: ApiService) { }
+  get searchResultFoundFrontend() {
+    return this._searchResultFoundFrontend.asObservable();
+  }
+
+  get searchResultFoundBackend() {
+    return this._searchResultFoundBackend.asObservable();
+  }
+  constructor(
+    private api: ApiService,
+    private messenger: MessengerService
+  ) { }
 
 
   getAllQ() {
@@ -152,36 +155,33 @@ export class RoomModuleService {
     }))
   }
 
-  searchAllQ(queueNo: any) {
-    return this._allQs.asObservable().pipe(map(allQs => {
-      let q = allQs.find(q => q.queueNo === queueNo)
-      this.selectedRowData.next({
-        queue: q,
+
+  performSearchFeature(searchValue: String) {
+    let result = Helper.searchQByQNo(searchValue, this._allQs.value);
+    if (result) {
+      this._searchResultFoundFrontend.next({
+        queue: result,
         fromPanel: 'all'
-      })
-      return this.selectedRowData
-    }))
+      });
+    } else {
+      result = Helper.searchQByQNo(searchValue, this._missQs.value);
+      if (result) {
+        this._searchResultFoundFrontend.next({
+          queue: result,
+          fromPanel: 'miss'
+        });
+      } else {
+        this.api.search(searchValue).subscribe(
+          res=>{
+            if(res){
+              
+            } else {
+              this._searchResultNotFound.next('Not Found');
+            }
+          }
+        )
+      }
+    }
   }
 
-  searchHoldQ(queueNo: any) {
-    return this._holdQs.asObservable().pipe(map(holdQs => {
-      let q = holdQs.find(q => q.queueNo === queueNo)
-      this.selectedRowData.next({
-        queue: q,
-        fromPanel: 'hold'
-      })
-      return this.selectedRowData
-    }))
-  }
-
-  searchMissQ(queueNo: any) {
-    return this._missQs.asObservable().pipe(map(missOs => {
-      let q = missOs.find(q => q.queueNo === queueNo)
-      this.selectedRowData.next({
-        queue: q,
-        fromPanel: 'miss'
-      })
-      return this.selectedRowData
-    }))
-  }
 }

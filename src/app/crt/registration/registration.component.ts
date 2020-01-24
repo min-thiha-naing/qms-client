@@ -4,7 +4,6 @@ import { MatTableDataSource, MatTable, MatDialog } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { takeUntil, map } from 'rxjs/operators';
 import { SubSink } from 'subsink';
-import { QueueService } from 'src/app/shared/queue.service';
 import { QueueStatus, DestinationStatus } from 'src/app/model/queue-status';
 import { ApiService } from 'src/app/shared/api.service';
 import { PopUpWindowComponent } from 'src/app/pop-up-window/pop-up-window.component';
@@ -53,7 +52,6 @@ export class RegistrationComponent implements OnInit {
   fetch = false;
   qServingStatus = QueueStatus.SERVING;
   constructor(
-    private qS: QueueService,
     private regQS: RegistartionService,
     private dialog: MatDialog,
     private api: ApiService

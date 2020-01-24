@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-import { QueueService } from 'src/app/shared/queue.service';
 import { SubSink } from 'subsink';
 import { QueueStatus, DestinationStatus } from 'src/app/model/queue-status';
-import { SelectionModel } from '@angular/cdk/collections';
 import { ConfirmDialogModel, ConfirmDialogComponent } from 'src/app/confirm-dialog/confirm-dialog.component';
 import { AddServicePointComponent } from 'src/app/rt/add-service-point/add-service-point.component';
 import { Helper } from 'src/app/shared/helper.class';

@@ -1,7 +1,7 @@
 <app-header></app-header>
 <mat-divider></mat-divider>
 
-<mat-tab-group color="accent" class="body" (selectedTabChange)="tabChanged($event)">
+<mat-tab-group #Tabs color="accent" class="body" (selectedTabChange)="tabChanged($event)">
     <!-- Registration Module -->
     <mat-tab label="Registration Module" checked>
         <app-registration></app-registration>
