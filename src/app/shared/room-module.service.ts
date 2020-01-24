@@ -19,10 +19,6 @@ export class RoomModuleService {
 
   private _servingQ = new BehaviorSubject<any>(null);
 
-  private _searchResultFoundFrontend = new Subject<any>();
-  private _searchResultFoundBackend = new Subject<any>();
-  private _searchResultNotFound = new Subject<any>();
-
   get allQs() {
     return this._allQs.asObservable().pipe(map(allQs => {
 
@@ -56,13 +52,6 @@ export class RoomModuleService {
     return this._missQs.asObservable();
   }
 
-  get searchResultFoundFrontend() {
-    return this._searchResultFoundFrontend.asObservable();
-  }
-
-  get searchResultFoundBackend() {
-    return this._searchResultFoundBackend.asObservable();
-  }
   constructor(
     private api: ApiService,
     private messenger: MessengerService
@@ -156,32 +145,25 @@ export class RoomModuleService {
   }
 
 
-  performSearchFeature(searchValue: String) {
+  search(searchValue: String) {
     let result = Helper.searchQByQNo(searchValue, this._allQs.value);
     if (result) {
-      this._searchResultFoundFrontend.next({
+      return {
         queue: result,
         fromPanel: 'all'
-      });
+      };
     } else {
       result = Helper.searchQByQNo(searchValue, this._missQs.value);
       if (result) {
-        this._searchResultFoundFrontend.next({
+        return {
           queue: result,
           fromPanel: 'miss'
-        });
+        };
       } else {
-        this.api.search(searchValue).subscribe(
-          res=>{
-            if(res){
-              
-            } else {
-              this._searchResultNotFound.next('Not Found');
-            }
-          }
-        )
+        return null;
       }
     }
   }
-
 }
+
+

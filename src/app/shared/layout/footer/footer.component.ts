@@ -43,10 +43,15 @@ export class FooterComponent implements OnInit {
       });
       return;
     } else {
+
+      let localSearchResult;
       let currentDir = this.messenger.getCurrentDirectory();
+
+      // NOTE  Search from suitable service according to currentDir
       switch (currentDir) {
         case Tabs.ROOM_MODULE: {
-          this.rMS.performSearchFeature(this.searchValue);
+          localSearchResult = this.rMS.search(this.searchValue);
+          break;
         }
         case Tabs.PAYMENT_TAB: {
 
@@ -55,65 +60,37 @@ export class FooterComponent implements OnInit {
 
         }
       }
+
+      if (localSearchResult) {
+        //  if search result found in frontend
+        this.messenger.emitSearchResultFoundFrontend(localSearchResult);
+      } else {
+        this.api.search(this.searchValue).subscribe(resp => {
+          this.searchRes = resp;
+          if (this.searchRes.liveTransactionQueue != null && this.searchRes.liveAppointmentPatient != null) {
+            const dialogData = new DialogModel(this.searchRes);
+            const dialogRef = this.dialog.open(RtSearchDialogComponent, {
+              maxWidth: "600px",
+              data: dialogData,
+              disableClose: true
+            });
+            dialogRef.afterClosed().subscribe(dialogResult => {
+            });
+          } else {
+            const dialogData = new ConfirmDialogModel("No Q Found!", '', false);
+            this.dialog.open(ConfirmDialogComponent, {
+              maxWidth: "400px",
+              data: dialogData,
+              disableClose: true
+            });
+          }
+
+        });
+      }
     }
-
-
-    // if (this.router.url === '/rt') {
-    //   this.tab = Helper.onTabIndexChanged
-    //   if (this.tab == 0) {
-    //     this.rtService.searchAllQ(this.searchValue).subscribe(resp => {
-    //       this.searchRes = resp;
-    //     })
-    //     if (this.searchRes.value.queue) {
-    //       Helper.setSearch(true);
-    //       console.log(this.searchRes)
-    //       // this.RMT.setRow(this.searchRes);
-    //     } else {
-    //       Helper.setSearch(false);
-    //       this.rtService.searchHoldQ(this.searchValue).subscribe(resp => {
-    //         this.searchRes = resp;
-    //       })
-    //       if (this.searchRes.value.queue) {
-    //         Helper.setSearch(true);
-    //         console.log(this.searchRes)
-    //         // this.RMT.setRow(this.searchRes);
-    //       } else {
-    //         Helper.setSearch(false);
-    //         this.rtService.searchMissQ(this.searchValue).subscribe(resp => {
-    //           this.searchRes = resp;
-    //         })
-    //         if (this.searchRes.value.queue) {
-    //           Helper.setSearch(true);
-    //           console.log(this.searchRes)
-    //           // this.RMT.setRow(this.searchRes);
-    //         } else {
-    //           Helper.setSearch(false);
-    //           this.api.search(this.searchValue).subscribe(resp => {
-    //             this.searchRes = resp
-    //             console.log(this.searchRes)
-    //             if (this.searchRes.liveTransactionQueue != null && this.searchRes.liveAppointmentPatient != null) {
-    //               const dialogData = new DialogModel(this.searchRes);
-    //               const dialogRef = this.dialog.open(RtSearchDialogComponent, {
-    //                 maxWidth: "600px",
-    //                 data: dialogData,
-    //                 disableClose: true
-    //               });
-
-    //               dialogRef.afterClosed().subscribe(dialogResult => {
-    //                 console.log(dialogResult);
-    //               });
-    //             } else {
-    //               console.log('Not fond')
-    //             }
-    //           })
-    //         }
-    //       }
-    //     }
-    //   }
-    // } else {
-
-    // }
   }
+
+
   ngOnDestroy() {
     this.subs.unsubscribe();
   }

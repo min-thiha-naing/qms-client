@@ -9,6 +9,7 @@ import { AddServicePointComponent } from '../add-service-point/add-service-point
 import { Helper } from 'src/app/shared/helper.class';
 import { RoomModuleService } from 'src/app/shared/room-module.service';
 import { BehaviorSubject } from 'rxjs';
+import { MessengerService } from 'src/app/shared/messenger.service';
 
 @Component({
   selector: 'app-room-module-tab',
@@ -50,6 +51,7 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
   constructor(
     private qS: RoomModuleService,
     private dialog: MatDialog,
+    private messenger: MessengerService,
   ) { }
 
   ngOnInit() {
@@ -103,14 +105,13 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
       }
     }));
 
-    //  Search
-    this.subs.add(this.qS.searchResultFoundFrontend.subscribe(res => this.selectedRowData = res));
-    this.subs.add(this.qS.searchResultFoundBackend.subscribe(res => ))
+    //  NOTE Search
+    this.subs.add(this.messenger.searchResultFoundFrontend.subscribe(res => this.selectedRowData = res));
   }
 
   onClickRing() {
     switch (this.selectedRowData.fromPanel) {
-    // switch (this.selectedRowData.value.fromPanel) {
+      // switch (this.selectedRowData.value.fromPanel) {
       case 'all': {
         if (this.servingQ) {
           //  all Q highlighted , serving Q exist -> serve serving Q AGAIN

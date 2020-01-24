@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,7 @@ export class MessengerService {
   private _tabIndex: number;
   private _servingQ = new BehaviorSubject<any>(null);
   
+  private _searchResultFoundFrontend = new Subject<any>();
 
   set tabIndex(ind: number) {
     this._tabIndex = ind;
@@ -21,6 +22,14 @@ export class MessengerService {
 
   set servingQ(queue: any) {
     this._servingQ.next(queue);
+  }
+
+  get searchResultFoundFrontend(){
+    return this._searchResultFoundFrontend.asObservable();
+  }
+
+  emitSearchResultFoundFrontend(result) {
+    this._searchResultFoundFrontend.next(result);
   }
 
 
