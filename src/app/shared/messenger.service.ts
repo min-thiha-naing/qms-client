@@ -11,6 +11,7 @@ export class MessengerService {
   private _servingQ = new BehaviorSubject<any>(null);
 
   private _searchResultFoundFrontend = new Subject<any>();
+  private _searchAppointmentResult = new Subject<any>();
 
   set tabIndex(ind: number) {
     this._tabIndex = ind;
@@ -32,6 +33,13 @@ export class MessengerService {
     this._searchResultFoundFrontend.next(result);
   }
 
+  get appointmentSearchResult(){
+    return this._searchAppointmentResult.asObservable();
+  }
+
+  emitAppointmentSearchResult(result) {
+    this._searchAppointmentResult.next(result);
+  }
 
   constructor(
     private router: Router,
@@ -56,7 +64,7 @@ export class MessengerService {
           case 0:
             return Tabs.ROOM_MODULE
           case 1:
-            return Tabs.APPOINTMENT_RT
+            return Tabs.RTAP_TAP
           default:
             return Tabs.NONE
         }
@@ -66,7 +74,7 @@ export class MessengerService {
           case 0:
             return Tabs.REGISTRATION_MODULE
           case 1:
-            return Tabs.APPOINTMENT_CRT
+            return Tabs.CRTAP_TAP
           case 2:
             return Tabs.PAYMENT_TAB
           default:
@@ -82,7 +90,7 @@ export const Tabs = {
   ROOM_MODULE: 'Room Module',
   REGISTRATION_MODULE: 'Registration Module',
   PAYMENT_TAB: 'Payment Tab',
-  APPOINTMENT_RT: 'RT Appointment Tap',
-  APPOINTMENT_CRT: 'CRT Appointment Tap',
+  RTAP_TAP: 'Appointment',
+  CRTAP_TAP: 'Appointment',
   NONE: 'none',
 }

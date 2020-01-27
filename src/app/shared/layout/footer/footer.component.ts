@@ -13,6 +13,7 @@ import { RoomModuleTabComponent } from 'src/app/rt/room-module-tab/room-module-t
 import { MessengerService, Tabs } from '../../messenger.service';
 import { RegistartionService } from '../../registartion.service';
 import { PaymentTabService } from '../../payment-tab.service';
+import { AppointmentService } from '../../appointment.service';
 
 @Component({
   selector: 'app-footer',
@@ -32,6 +33,7 @@ export class FooterComponent implements OnInit {
     private messenger: MessengerService,
     private regService: RegistartionService,
     private pMService: PaymentTabService,
+    private APService: AppointmentService
   ) { }
 
   ngOnInit() {
@@ -49,6 +51,7 @@ export class FooterComponent implements OnInit {
     } else {
 
       let localSearchResult;
+      let localAppointment;
       let currentDir = this.messenger.getCurrentDirectory();
 
       // NOTE  Search from suitable service according to currentDir
@@ -59,44 +62,50 @@ export class FooterComponent implements OnInit {
         }
         case Tabs.PAYMENT_TAB: {
           localSearchResult = this.pMService.search(this.searchValue);
+          break;
         }
         case Tabs.REGISTRATION_MODULE: {
           localSearchResult = this.regService.search(this.searchValue);
+          break;
         }
-        case Tabs.APPOINTMENT_RT: {
-
+        case Tabs.RTAP_TAP: {
+          localAppointment = this.APService.search(this.searchValue);
+          break;
         }
-        case Tabs.APPOINTMENT_CRT: {
-
+        case Tabs.CRTAP_TAP: {
+          localAppointment = this.APService.search(this.searchValue);
+          break;
         }
       }
+      if (localAppointment) {
+        this.messenger.emitAppointmentSearchResult(localAppointment);
+      } else
+        if (localSearchResult) {
+          //  if search result found in frontend
+          this.messenger.emitSearchResultFoundFrontend(localSearchResult);
+        } else {
+          this.api.search(this.searchValue).subscribe(resp => {
+            this.searchRes = resp;
+            if (this.searchRes.liveTransactionQueue != null && this.searchRes.liveAppointmentPatient != null) {
+              const dialogData = new DialogModel(this.searchRes);
+              const dialogRef = this.dialog.open(RtSearchDialogComponent, {
+                maxWidth: "600px",
+                data: dialogData,
+                disableClose: true
+              });
+              dialogRef.afterClosed().subscribe(dialogResult => {
+              });
+            } else {
+              const dialogData = new ConfirmDialogModel("No Q Found!", '', false);
+              this.dialog.open(ConfirmDialogComponent, {
+                maxWidth: "400px",
+                data: dialogData,
+                disableClose: true
+              });
+            }
 
-      if (localSearchResult) {
-        //  if search result found in frontend
-        this.messenger.emitSearchResultFoundFrontend(localSearchResult);
-      } else {
-        this.api.search(this.searchValue).subscribe(resp => {
-          this.searchRes = resp;
-          if (this.searchRes.liveTransactionQueue != null && this.searchRes.liveAppointmentPatient != null) {
-            const dialogData = new DialogModel(this.searchRes);
-            const dialogRef = this.dialog.open(RtSearchDialogComponent, {
-              maxWidth: "600px",
-              data: dialogData,
-              disableClose: true
-            });
-            dialogRef.afterClosed().subscribe(dialogResult => {
-            });
-          } else {
-            const dialogData = new ConfirmDialogModel("No Q Found!", '', false);
-            this.dialog.open(ConfirmDialogComponent, {
-              maxWidth: "400px",
-              data: dialogData,
-              disableClose: true
-            });
-          }
-
-        });
-      }
+          });
+        }
     }
   }
 

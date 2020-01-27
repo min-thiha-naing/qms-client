@@ -81,9 +81,9 @@ export class RegistrationComponent implements OnInit {
           },
           fromPanel: 'all'
         }
-        this.api.search(this.allQDS.data[0].queueNo).subscribe(resp=>{
-          console.log(resp)
-        })
+        // this.api.search(this.allQDS.data[0].queueNo).subscribe(resp=>{
+        //   console.log(resp)
+        // })
       }
     }));
 
@@ -101,9 +101,9 @@ export class RegistrationComponent implements OnInit {
           },
           fromPanel: 'all'
         };
-        this.api.search(this.servingQ.queueNo).subscribe(resp=>{
-          console.log(resp)
-        })
+        // this.api.search(this.servingQ.queueNo).subscribe(resp=>{
+        //   console.log(resp)
+        // })
       }
       else{
         this.journeyDataSource = new MatTableDataSource<any>([])

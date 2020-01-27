@@ -67,5 +67,9 @@ export class Helper {
     return queueList.find(el => el.queueNo == queueNo);
   }
 
+  public static searchAppointment(nric: any, appList: any[]) {
+    return appList.find(el => el.patientNric === nric)
+  }
+
 }
 
