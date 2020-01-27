@@ -14,7 +14,7 @@
 
             </div>
             <div class="src-table-container">
-                <mat-table [dataSource]="srcLocationDS">
+                <mat-table [dataSource]="servicePointEditor.srcLocationDS">
                     <!-- Location Column -->
                     <ng-container matColumnDef="location">
                         <mat-header-cell *matHeaderCellDef> Location </mat-header-cell>
@@ -70,7 +70,7 @@
             </div>
 
             <div class="src-table-container">
-                <mat-table [dataSource]="destLocationDS">
+                <mat-table [dataSource]="servicePointEditor.destLocationDS">
                     <!-- Clinic Column -->
                     <ng-container matColumnDef="clinic">
                         <mat-header-cell *matHeaderCellDef> Clinic </mat-header-cell>

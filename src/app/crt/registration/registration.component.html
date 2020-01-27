@@ -269,7 +269,7 @@
             <mat-divider></mat-divider>
 
             <div class="location-list">
-                <table mat-table [dataSource]="srcLocationDS">
+                <table mat-table [dataSource]="servicePointEditor.srcLocationDS">
 
                     <!-- Checkbox Column -->
                     <ng-container matColumnDef="select">
@@ -337,7 +337,7 @@
         </div>
         <div class="info">
             <div class="journey-list">
-                <table #journeyTable mat-table [dataSource]="journeyDataSource">
+                <table #journeyTable mat-table [dataSource]="servicePointEditor.destLocationDS">
 
                     <!-- Checkbox Column -->
                     <ng-container matColumnDef="select">
