@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutGap="1vw" style="padding: 1vh 0">
+<div fxLayout="row" fxLayoutGap="1vw" style="padding: 1vh 0 ;margin-top: 5px;">
   <ngx-loading [show]="loading"></ngx-loading>
   <!-- Left section -->
   <div fxFlex="70%" fxLayout="column" fxLayoutGap="1vh">
@@ -201,9 +201,9 @@
   </div>
 
   <!-- Right section -->
-  <div style="width: 400px;" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="1vh">
+  <div style="width: 400px;" fxFlex="30%" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="1vh">
       <div>
-          <div class="header-bar">
+          <div class="header">
               STANDARD Action
           </div>
           <div class="btn-grid">
@@ -232,7 +232,7 @@
           </div>
       </div>
       <div>
-          <div class="header-bar">
+          <div class="header">
               SPECIAL Action
           </div>
           <div class="btn-grid">

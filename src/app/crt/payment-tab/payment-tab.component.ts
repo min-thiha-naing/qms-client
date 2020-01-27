@@ -8,6 +8,7 @@ import { AddServicePointComponent } from 'src/app/rt/add-service-point/add-servi
 import { Helper } from 'src/app/shared/helper.class';
 import { ServicePointComponent } from '../service-point/service-point.component';
 import { PaymentTabService } from 'src/app/shared/payment-tab.service';
+import { MessengerService } from 'src/app/shared/messenger.service';
 
 @Component({
   selector: 'app-payment-tab',
@@ -49,6 +50,7 @@ export class PaymentTabComponent implements OnInit {
   constructor(
     private crtQS: PaymentTabService,
     private dialog: MatDialog,
+    private messenger: MessengerService,
   ) { }
 
   ngOnInit() {
@@ -101,6 +103,9 @@ export class PaymentTabComponent implements OnInit {
         };
       }
     }));
+
+    //  NOTE Search
+    this.subs.add(this.messenger.searchResultFoundFrontend.subscribe(res => this.selectedRowData = res));
   }
 
   onClickRing() {

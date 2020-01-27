@@ -145,4 +145,23 @@ export class PaymentTabService {
     }))
   }
 
+  search(searchValue: String) {
+    let result = Helper.searchQByQNo(searchValue, this._allQs.value);
+    if (result) {
+      return {
+        queue: result,
+        fromPanel: 'all'
+      };
+    } else {
+      result = Helper.searchQByQNo(searchValue, this._missQs.value);
+      if (result) {
+        return {
+          queue: result,
+          fromPanel: 'miss'
+        };
+      } else {
+        return null;
+      }
+    }
+  }
 }

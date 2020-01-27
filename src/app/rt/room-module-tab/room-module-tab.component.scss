@@ -35,7 +35,6 @@
             color: white;
           }
         }
-
         mat-cell {
           font-size: 12px;
         }
@@ -121,3 +120,10 @@
 button{
   background: whitesmoke;
 }
+
+// .table-row:focus {
+//   background: mat-color($row-selected);
+// }
+// .table-row:focus mat-cell {
+//   color: white; 
+// }

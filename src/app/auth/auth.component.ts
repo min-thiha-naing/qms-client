@@ -35,26 +35,35 @@ export class AuthComponent implements OnInit {
 
   login() {
     this.loading = true;
-    this.authService.authenticate(this.loginForm.value).subscribe(resp=>{
-      if(resp){
+    this.authService.authenticate(this.loginForm.value).subscribe(resp => {
+      if (resp) {
         this.loading = false;
       }
       this.router.navigateByUrl('/rt')
-    } ,
-    er =>{
-     if(er.status === 401){
-      this.loading = false;
-      const dialogData = new ConfirmDialogModel("Unauthroized!", "Invalid Username Or Password!" , false);
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        maxWidth: "400px",
-        data: dialogData,
-        disableClose : true
-      });
-     }
-    }
+    },
+      er => {
+        console.log(er)
+        if (er.status === 401) {
+          this.loading = false;
+          const dialogData = new ConfirmDialogModel("Unauthroized!", "Invalid Username Or Password!", false);
+          const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            maxWidth: "400px",
+            data: dialogData,
+            disableClose: true
+          });
+        } else if (er.status === 0) {
+          this.loading = false;
+          const dialogData = new ConfirmDialogModel("", "Can't connect to the server!", false);
+          const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            maxWidth: "400px",
+            data: dialogData,
+            disableClose: true
+          });
+        }
+      }
       // () => this.router.navigateByUrl('/rt')
     );
-   
+
   }
 
 }

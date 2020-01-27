@@ -10,6 +10,7 @@ import { PopUpWindowComponent } from 'src/app/pop-up-window/pop-up-window.compon
 import { RegistartionService } from 'src/app/shared/registartion.service';
 import { Helper } from 'src/app/shared/helper.class';
 import { ConfirmDialogComponent, ConfirmDialogModel } from 'src/app/confirm-dialog/confirm-dialog.component';
+import { MessengerService } from 'src/app/shared/messenger.service';
 
 @Component({
   selector: 'app-registration',
@@ -54,7 +55,8 @@ export class RegistrationComponent implements OnInit {
   constructor(
     private regQS: RegistartionService,
     private dialog: MatDialog,
-    private api: ApiService
+    private api: ApiService,
+    private messenger: MessengerService
   ) { }
   ngOnInit() {
 
@@ -79,9 +81,9 @@ export class RegistrationComponent implements OnInit {
           },
           fromPanel: 'all'
         }
-        this.api.search(this.allQDS.data[0].queueNo).subscribe(resp=>{
-          console.log(resp)
-        })
+        // this.api.search(this.allQDS.data[0].queueNo).subscribe(resp=>{
+        //   console.log(resp)
+        // })
       }
     }));
 
@@ -99,15 +101,18 @@ export class RegistrationComponent implements OnInit {
           },
           fromPanel: 'all'
         };
-        this.api.search(this.servingQ.queueNo).subscribe(resp=>{
-          console.log(resp)
-        })
+        // this.api.search(this.servingQ.queueNo).subscribe(resp=>{
+        //   console.log(resp)
+        // })
       }
       else{
         this.journeyDataSource = new MatTableDataSource<any>([])
       }
     }));
     console.log(this.selectedRowData)
+
+     //  NOTE Search
+     this.subs.add(this.messenger.searchResultFoundFrontend.subscribe(res => this.selectedRowData = res));
   }
 
   onClickRow(queue, fromPanel) {

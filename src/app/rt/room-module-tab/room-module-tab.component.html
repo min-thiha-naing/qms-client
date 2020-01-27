@@ -201,7 +201,7 @@
     </div>
 
     <!-- Right section -->
-    <div style="width: 400px;" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="1vh">
+    <div style="width: 400px;" fxFlex="30%" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="1vh">
         <div>
             <div class="header-bar">
                 STANDARD Action
@@ -209,13 +209,13 @@
             <div class="btn-grid">
                 <mat-grid-list cols="3" rowHeight="3em">
                     <mat-grid-tile>
-                        <button mat-flat-button>Preview</button>
+                        <button mat-flat-button (click)="onClickPreview()">Preview</button>
                     </mat-grid-tile>
                     <mat-grid-tile>
                         <button mat-flat-button (click)="onClickRing()">Ring</button>
                     </mat-grid-tile>
                     <mat-grid-tile>
-                        <button mat-flat-button (click)="onClinkRing()">Silent Ring</button>
+                        <button mat-flat-button (click)="onClickRing()">Silent Ring</button>
                     </mat-grid-tile>
                     <mat-grid-tile>
                         <button mat-flat-button (click)="onClickNoResp()">No Response</button>
@@ -226,7 +226,7 @@
                         <button mat-flat-button (click)="serveAndTransfer()">Serve & Transfer</button>
                     </mat-grid-tile>
                     <mat-grid-tile>
-                        <button mat-flat-button>Cancel Ring</button>
+                        <button mat-flat-button (click)="onClickCancelRing()">Cancel Ring</button>
                     </mat-grid-tile>
                 </mat-grid-list>
             </div>
@@ -257,7 +257,7 @@
             </div>
         </div>
         <div class="right-bottom-tabs">
-            <mat-tab-group>
+            <mat-tab-group [selectedIndex]="index">
                 <mat-tab label="Journey List">
                     <div class="journey-list-container">
                         <mat-table [dataSource]="journeyListDS">
@@ -298,7 +298,17 @@
                         </mat-table>
                     </div>
                 </mat-tab>
-                <mat-tab label="Remark"></mat-tab>
+                <mat-tab label="Remark">
+                    <div style="margin: 1vw;height:200px;overflow: auto;">
+                        <!-- <h2>{{remark}}</h2> -->
+                        <textarea [(ngModel)]="remark" matInput style="width:98% ;height: 150px;font-size: 24px;font-weight: bolder;border: none;"></textarea>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div style="margin: 1vw;">
+                        <mat-checkbox><b>Special Priority</b></mat-checkbox>
+                        <button style="float: right; width: 40%; background: lightgray;" mat-flat-button (click)="onUpdate()">Update</button>
+                    </div>
+                </mat-tab>
                 <mat-tab label="Revert"></mat-tab>
             </mat-tab-group>
         </div>
