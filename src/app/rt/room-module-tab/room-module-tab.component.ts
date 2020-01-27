@@ -17,7 +17,8 @@ import { MessengerService } from 'src/app/shared/messenger.service';
   styleUrls: ['./room-module-tab.component.scss']
 })
 export class RoomModuleTabComponent implements OnInit, OnDestroy {
-
+  index: number;
+  remark: any = "This is a testing software message. Please share your concern."
   qTableColumns = ['qNo', 'name', 'mrn', 'visitType', 'apptTime', 'waitTime', 'tWaitTime', 'callTime', 'remark'];
   allQDS = new MatTableDataSource<any>([]);
   holdQDS = new MatTableDataSource<any>([]);
@@ -110,6 +111,7 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
   }
 
   onClickRing() {
+    this.index = 0;
     switch (this.selectedRowData.fromPanel) {
       // switch (this.selectedRowData.value.fromPanel) {
       case 'all': {
@@ -170,6 +172,7 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
   }
 
   onClickNoResp() {
+    this.index = 1;
     if (this.servingQ) {
       this.loading = true;
       this.qS.missQ(this.servingQ).subscribe(
@@ -192,6 +195,7 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
   }
 
   serveAndTransfer() {
+    this.index = 1;
     if (this.servingQ) {
       this.loading = true;
       this.qS.serveAndTransfer(this.servingQ).subscribe(
@@ -225,6 +229,18 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
     }
   }
 
+  onClickPreview() {
+    let data: any = this.selectedRowData.queue
+    this.index = 1;
+    console.log(data)
+    this.remark = data.remark
+  }
+
+  onClickCancelRing() {
+    this.index = 1;
+    this.remark = '';
+  }
+
   onClickRow(queue, fromPanel) {
     this.selectedRowData = {
       queue: queue,
@@ -235,6 +251,25 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
     //   fromPanel: fromPanel,
     // });
     console.log(this.selectedRowData)
+  }
+
+  onUpdate() {
+    if(this.servingQ){
+      let rowData: any = this.selectedRowData
+      let dummy = {
+        "terminalId": sessionStorage.getItem('terminalId'),
+        "transactionId": rowData.queue.id,
+        "remark": this.remark,
+        "remarkTime": new Date().toISOString(),
+        "visitid": rowData.queue.visitId,
+        "remarkType": 1
+      }
+      rowData.queue.remark = this.remark;
+      this.qS.remark(rowData.queue, dummy).subscribe(resp => {
+        console.log(resp)
+      })
+    }
+   
   }
 
   ngOnDestroy() {
