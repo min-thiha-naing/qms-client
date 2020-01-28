@@ -11,6 +11,7 @@ import { RegistartionService } from 'src/app/shared/registartion.service';
 import { Helper } from 'src/app/shared/helper.class';
 import { ConfirmDialogComponent, ConfirmDialogModel } from 'src/app/confirm-dialog/confirm-dialog.component';
 import { MessengerService } from 'src/app/shared/messenger.service';
+import { ServicePointEditor } from 'src/app/shared/service-point-editor';
 
 @Component({
   selector: 'app-registration',
@@ -19,7 +20,7 @@ import { MessengerService } from 'src/app/shared/messenger.service';
 })
 export class RegistrationComponent implements OnInit {
 
-  queueDisplayedColumns: string[] = ['qNo', 'name', 'mrn', 'visitType', 'apptTime', 'waitTime', 'tWaitTime', 'callTime','status', 'remarks'];
+  queueDisplayedColumns: string[] = ['qNo', 'name', 'mrn', 'visitType', 'apptTime', 'waitTime', 'tWaitTime', 'callTime', 'status', 'remarks'];
   queueSelection = new SelectionModel<any>(true, []);
 
   locationDisplayedColumns: string[] = ['location', 'inQ', 'orderId', 'select'];
@@ -28,7 +29,6 @@ export class RegistrationComponent implements OnInit {
 
   @ViewChild('journeyTable', { static: true }) journeyTable: MatTable<any>;
   journeyDisplayedColumns: string[] = ['clinic', 'location', 'apptTime', 'createdBy', 'status', 'select'];
-  journeyDataSource: MatTableDataSource<any>;
 
   allQDS: MatTableDataSource<any>;
   allQTableHeader = {
@@ -52,6 +52,8 @@ export class RegistrationComponent implements OnInit {
   loading = false;
   fetch = false;
   qServingStatus = QueueStatus.SERVING;
+
+  servicePointEditor = new ServicePointEditor();
   constructor(
     private regQS: RegistartionService,
     private dialog: MatDialog,
@@ -92,7 +94,7 @@ export class RegistrationComponent implements OnInit {
       console.log(this.servingQ)
       if (this.servingQ) {
         if (this.servingQ.planList) {
-          this.journeyDataSource = new MatTableDataSource<any>(Helper.transformPlanListToDestLocList(this.servingQ.planList));
+          this.servicePointEditor.setDestLocationDS(Helper.transformPlanListToDestLocList(this.servingQ.planList));
         }
         this.selectedRowData = {
           queue: {
@@ -105,14 +107,14 @@ export class RegistrationComponent implements OnInit {
         //   console.log(resp)
         // })
       }
-      else{
-        this.journeyDataSource = new MatTableDataSource<any>([])
+      else {
+        this.servicePointEditor.setDestLocationDS([]);
       }
     }));
     console.log(this.selectedRowData)
 
-     //  NOTE Search
-     this.subs.add(this.messenger.searchResultFoundFrontend.subscribe(res => this.selectedRowData = res));
+    //  NOTE Search
+    this.subs.add(this.messenger.searchResultFoundFrontend.subscribe(res => this.selectedRowData = res));
   }
 
   onClickRow(queue, fromPanel) {
@@ -120,7 +122,7 @@ export class RegistrationComponent implements OnInit {
       queue: queue,
       fromPanel: fromPanel,
     };
-    this.api.search(queue.queueNo).subscribe(resp=>{
+    this.api.search(queue.queueNo).subscribe(resp => {
       console.log(resp)
     })
     console.log(this.selectedRowData)
@@ -129,107 +131,31 @@ export class RegistrationComponent implements OnInit {
   ////////ADD SERVICE POINT////////////////
   onChangeDepartment(ev) {
     this.api.getWorkgroupsByDpt(ev.target.value)
-      .pipe(map(resp => {
-        return resp.map(element => this.transformWGtoSrcLoc(element))
-      }))
       .subscribe(resp => {
-        this.srcLocationDS = new MatTableDataSource(resp);
-        console.log('SRC: ');
-        console.log(this.srcLocationDS.data);
+        this.servicePointEditor.setSrcLocationDS(resp);
       });
   }
 
-  transformWGtoSrcLoc(wg: any) {
-    return {
-      ...wg,
-      workgroupId: wg.id,
-      isSelected: false,
-      orderId: null,
-    };
-  }
-
   onToggleSrcLoc(srcEl) {
-    //  auto increment orderId
-    if (srcEl.isSelected) {
-      srcEl.orderId = Math.max(...(this.srcLocationDS.data.filter(el => el.isSelected == true).map(el => el.orderId))) + 1;
-    } else {
-      srcEl.orderId = null;
-    }
-  }
-
-  sortChosenSrcLocsByOrder(srcLocs: any[]) {
-    return srcLocs
-      .filter(el => el.isSelected == true)
-      .sort((a, b) => {
-        return a.orderId - b.orderId;
-      })
-  }
-
-  transformSrcToDestLoc(srcLocs: any[]) {
-    // make sure src is already sorted
-    return srcLocs.map(el => {
-      return {
-        ...el,
-        actFlag: this.destStatus.WAITING,
-        isSelected: false,
-      }
-    })
-  }
-
-  incrementOrderId(list: any[], startingOrderId: number) {
-    return list.map(el => { return { ...el, orderId: startingOrderId++ } });
-  }
-
-  computeLargestOrderId(list: any[]): number {
-    return Math.max(...list.map(el => el.orderId));
+    this.servicePointEditor.onToggleSrcLoc(srcEl);
   }
 
   addToFirst() {
-    let upperDestLs = this.journeyDataSource.data.filter(el => el.actFlag != this.destStatus.WAITING);
-
-    let newDestLs = this.sortChosenSrcLocsByOrder(this.srcLocationDS.data);
-    newDestLs = this.transformSrcToDestLoc(newDestLs);
-    newDestLs = this.incrementOrderId(newDestLs, this.computeLargestOrderId(upperDestLs) + 1);
-
-    let belowDestLs = this.journeyDataSource.data.filter(el => el.actFlag == this.destStatus.WAITING);
-    belowDestLs = this.incrementOrderId(belowDestLs, this.computeLargestOrderId(newDestLs) + 1);
-
-    this.journeyDataSource = new MatTableDataSource<any>([
-      ...upperDestLs,
-      ...newDestLs,
-      ...belowDestLs].sort((a, b) => { return a.orderId - b.orderId }));
-    console.log('DEST');
-    console.log(this.journeyDataSource.data);
+    this.servicePointEditor.addToFirst();
   }
 
   addToLast() {
-    let upperDestLs = this.journeyDataSource.data;
-
-    let newDestLs = this.sortChosenSrcLocsByOrder(this.srcLocationDS.data);
-    newDestLs = this.transformSrcToDestLoc(newDestLs);
-    newDestLs = this.incrementOrderId(newDestLs, this.computeLargestOrderId(upperDestLs) + 1);
-
-    this.journeyDataSource = new MatTableDataSource<any>([
-      ...upperDestLs,
-      ...newDestLs].sort((a, b) => { return a.orderId - b.orderId }));
-    console.log('DEST');
-    console.log(this.journeyDataSource.data);
+    this.servicePointEditor.addToLast();
   }
 
   onRemove() {
-    this.journeyDataSource = new MatTableDataSource(this.journeyDataSource.data.filter(el => el.isSelected == false));
+    this.servicePointEditor.onRemove();
   }
 
   onDeselectAll() {
-    this.srcLocationDS.data.forEach(el => {
-      el.isSelected = false;
-      el.orderId = null;
-    })
+    this.servicePointEditor.onDeselectAll();
   }
 
-  getDestLocsByActFlag(destLocs: any[], status: any) {
-    return destLocs.filter(el => el.actFlag == status);
-  }
   //////////////////////////////////////////////////////////////
   /////////STANDARE ACTION///////////////////
   onClickRing() {
@@ -307,12 +233,12 @@ export class RegistrationComponent implements OnInit {
         }
       )
     }
-    else{
-      const dialogData = new ConfirmDialogModel("Warning!", "No serving Q for doing this task!" , false);
+    else {
+      const dialogData = new ConfirmDialogModel("Warning!", "No serving Q for doing this task!", false);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         maxWidth: "400px",
         data: dialogData,
-        disableClose : true
+        disableClose: true
       });
     }
   }
@@ -325,8 +251,8 @@ export class RegistrationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(res => {
       console.log(res)
-      if(res.remark){
-        
+      if (res.remark) {
+
       }
     });
   }

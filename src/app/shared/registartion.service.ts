@@ -95,6 +95,13 @@ export class RegistartionService {
     }))
   }
 
+  //  return all plan list of serving Q
+  addServicePoint(payload) {
+    return this.api.addServicePoint(payload).pipe(tap(queue => {
+      Helper.replaceCurrentQWithResp(this._regAllQs, { ...this._regServingQ.value, planList: [...queue.planList] });
+    }));
+  }
+
   search(searchValue: String) {
     let result = Helper.searchQByQNo(searchValue, this._regAllQs.value);
     if (result) {
