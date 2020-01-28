@@ -4,7 +4,6 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { QueueStatus } from '../model/queue-status';
 import { Helper } from './helper.class';
-import { queue } from 'rxjs/internal/scheduler/queue';
 import { MessengerService } from './messenger.service';
 
 @Injectable({
@@ -96,7 +95,7 @@ export class RoomModuleService {
       let newQ = Helper.returnQModifiedWithCallTime(queue, resp);
       newQ.planList = queue.planList;
       Helper.removeFromQueueList(this._holdQs, queue);
-      Helper.addRespToQueueList(this._allQs, newQ, 'b');
+      Helper.addRespToQueueList(this._allQs, newQ);
     }));
   }
 
@@ -105,7 +104,7 @@ export class RoomModuleService {
       let newQ = Helper.returnQModifiedWithCallTime(queue, resp);
       newQ.planList = queue.planList;
       Helper.removeFromQueueList(this._missQs, queue);
-      Helper.addRespToQueueList(this._allQs, newQ, 'b');
+      Helper.addRespToQueueList(this._allQs, newQ);
     }));
   }
 
@@ -113,7 +112,7 @@ export class RoomModuleService {
     return this.api.changeQ(queue.id, 'm').pipe(tap(resp => {
       let newQ = Helper.returnQModifiedWithCallTime(queue, resp);
       Helper.removeFromQueueList(this._allQs, resp);
-      Helper.addRespToQueueList(this._missQs, newQ);
+      Helper.addRespToQueueList(this._missQs, newQ, 'b');
     }));
   }
 
@@ -121,7 +120,7 @@ export class RoomModuleService {
     return this.api.changeQ(queue.id, 'h').pipe(tap(resp => {
       let newQ = Helper.returnQModifiedWithCallTime(queue, resp);
       Helper.removeFromQueueList(this._allQs, resp);
-      Helper.addRespToQueueList(this._holdQs, newQ);
+      Helper.addRespToQueueList(this._holdQs, newQ, 'b');
     }));
   }
 
@@ -145,7 +144,7 @@ export class RoomModuleService {
   }
 
 
-  search(searchValue: String) {
+  search(searchValue: String): {queue: any, fromPanel: String} {
     let result = Helper.searchQByQNo(searchValue, this._allQs.value);
     if (result) {
       return {

@@ -8,7 +8,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { AddServicePointComponent } from '../add-service-point/add-service-point.component';
 import { Helper } from 'src/app/shared/helper.class';
 import { RoomModuleService } from 'src/app/shared/room-module.service';
-import { BehaviorSubject } from 'rxjs';
 import { MessengerService } from 'src/app/shared/messenger.service';
 
 @Component({
@@ -93,7 +92,7 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
         if (this.servingQ.planList) {
           this.journeyListDS = new MatTableDataSource<any>(Helper.transformPlanListToDestLocList(this.servingQ.planList));
         } else {
-          this.journeyListDS = new MatTableDataSource<any>()
+          this.journeyListDS = new MatTableDataSource<any>([]);
         }
 
         this.selectedRowData = {
@@ -246,10 +245,6 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
       queue: queue,
       fromPanel: fromPanel,
     };
-    // this.selectedRowData.next({
-    //   queue: queue,
-    //   fromPanel: fromPanel,
-    // });
     console.log(this.selectedRowData)
   }
 

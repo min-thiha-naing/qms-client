@@ -63,7 +63,7 @@
 
                     <mat-header-row *matHeaderRowDef="qTableColumns; sticky: true"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: qTableColumns;" (click)="onClickRow(allQDS.data[0], 'all')"
-                        [ngClass]="{'selected': row.queueNo == selectedRowData.queue.queueNo,                                
+                        [ngClass]="{'selected': (row.queueNo == selectedRowData.queue.queueNo),                                
                     'serving': row.queueStatusId == qServingStatus}"></mat-row>
                 </mat-table>
             </div>
