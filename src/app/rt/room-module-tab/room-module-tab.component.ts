@@ -255,21 +255,21 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
 
   onUpdate() {
     if(this.servingQ){
-      let rowData: any = this.selectedRowData
+      console.log(this.servingQ)
+      let rowData: any = this.servingQ
       let dummy = {
         "terminalId": sessionStorage.getItem('terminalId'),
-        "transactionId": rowData.queue.id,
+        "transactionId": this.servingQ.id,
         "remark": this.remark,
         "remarkTime": new Date().toISOString(),
-        "visitid": rowData.queue.visitId,
+        "visitid": this.servingQ.visitId,
         "remarkType": 1
       }
-      rowData.queue.remark = this.remark;
-      this.qS.remark(rowData.queue, dummy).subscribe(resp => {
+      rowData.remark = this.remark;
+      this.qS.remark(rowData, dummy).subscribe(resp => {
         console.log(resp)
       })
-    }
-   
+    }   
   }
 
   ngOnDestroy() {

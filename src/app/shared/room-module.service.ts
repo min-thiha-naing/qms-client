@@ -167,10 +167,10 @@ export class RoomModuleService {
 
   remark(queue: any, dummy: any) {
     console.log(queue)
-    return this.api.addRemark(dummy).pipe(tap(resp => {
-      Helper.removeFromQueueList(this._allQs, queue);
-      Helper.addRespToQueueList(this._allQs, queue)
-    }))
+      return this.api.addRemark(dummy).pipe(tap(resp => {
+        Helper.removeFromQueueList(this._allQs, queue);
+        Helper.addRespToQueueList(this._allQs, queue)
+      }))
   }
 }
 
