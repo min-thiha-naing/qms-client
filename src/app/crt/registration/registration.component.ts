@@ -142,14 +142,17 @@ export class RegistrationComponent implements OnInit {
 
   addToFirst() {
     this.servicePointEditor.addToFirst();
+    this.regQS.addServicePoint(this.servicePointEditor.getApiReqPayload(this.servingQ)).subscribe();
   }
 
   addToLast() {
     this.servicePointEditor.addToLast();
+    this.regQS.addServicePoint(this.servicePointEditor.getApiReqPayload(this.servingQ)).subscribe();
   }
 
   onRemove() {
     this.servicePointEditor.onRemove();
+    this.regQS.addServicePoint(this.servicePointEditor.getApiReqPayload(this.servingQ)).subscribe();
   }
 
   onDeselectAll() {
@@ -244,19 +247,19 @@ export class RegistrationComponent implements OnInit {
   }
 
   addRemark() {
-    if(this.servingQ){
+    if (this.servingQ) {
       const dialogRef = this.dialog.open(PopUpWindowComponent, {
         width: '400px',
         data: { queue: this.selectedRowData, remark: false }
       });
-  
+
       dialogRef.afterClosed().subscribe(res => {
         console.log(res)
-        if(res.remark){
-          
+        if (res.remark) {
+
         }
       });
-    }  
+    }
   }
 
   onClickNoResponse() {

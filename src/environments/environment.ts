@@ -15,7 +15,6 @@ export const environment = {
   oauth2ClientPassword: 'Admin',
   // oauth2ClientID: 'easy-note-api-client-id',
   // oauth2ClientPassword: 'easy-note-api-client-password'
-
   terminalId: '3227',
 };
 
