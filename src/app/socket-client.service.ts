@@ -9,8 +9,8 @@ import { AuthService } from './auth/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class SocketClientService implements OnDestroy{
-  
+export class SocketClientService implements OnDestroy {
+
   private client: Client;
   private state: BehaviorSubject<SocketClientState>;
 
@@ -19,7 +19,9 @@ export class SocketClientService implements OnDestroy{
   ) {
     this.client = over(new SockJS(environment.rootUrl + '/qms' + '?access_token=' + this.authService.getAccessToken()));
     this.state = new BehaviorSubject<SocketClientState>(SocketClientState.ATTEMPTING);
-    this.client.connect({}, () => {
+    this.client.connect({
+      user: sessionStorage.getItem('USER')
+    }, () => {
       this.state.next(SocketClientState.CONNECTED);
     });
   }
@@ -35,7 +37,7 @@ export class SocketClientService implements OnDestroy{
   static jsonHandler(message: Message): any {
     return JSON.parse(message.body);
   }
-  
+
   static textHandler(message: Message): string {
     return message.body;
   }
@@ -46,7 +48,7 @@ export class SocketClientService implements OnDestroy{
         const subscription: StompSubscription = client.subscribe(topic, message => {
           observer.next(handler(message));
         });
-        return () => client.unsubscribe(subscription .id);
+        return () => client.unsubscribe(subscription.id);
       });
     }));
   }
@@ -60,7 +62,7 @@ export class SocketClientService implements OnDestroy{
       .pipe(first())
       .subscribe(client => client.send(topic, {}, JSON.stringify(payload)));
   }
-  
+
 
   ngOnDestroy(): void {
     this.connect().pipe(first()).subscribe(client => client.disconnect(null));

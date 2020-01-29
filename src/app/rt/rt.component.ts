@@ -3,10 +3,7 @@ import { SocketClientService } from '../socket-client.service';
 import { SubSink } from 'subsink';
 import { Router } from '@angular/router';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
-import { RtService } from './rt.service';
-import { Helper } from '../shared/helper.class';
 import { MessengerService } from '../shared/messenger.service';
-import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-rt',

@@ -14,13 +14,13 @@
                         <span class="label">1. NRIC/FIN: *</span>
                     </td>
                     <td>
-                        :<input #nirc name="nirc" autocomplete="off">
+                        :<input class="starter-input" #nirc name="nirc" autocomplete="off">
                     </td>
                     <td>
                         <span class="label">4. Category*</span>
                     </td>
                     <td>
-                        :<input #category name="category" autocomplete="off">
+                        :<input class="starter-input" #category name="category" autocomplete="off">
                         <!-- <select required>
                             <option *ngFor="let category of categories" [value]="category.id">
                                 {{category.categoryName}}</option>
@@ -44,7 +44,7 @@
                         <span class="label">2. Name</span>
                     </td>
                     <td>
-                        :<input #nirc name="nirc" autocomplete="off">
+                        :<input class="starter-input" #nirc name="nirc" autocomplete="off">
                     </td>
                     <td>
                         <span class="label">5. Questionnaire</span>
@@ -61,7 +61,7 @@
                         <span class="label">3. Vasit Type</span>
                     </td>
                     <td>
-                        :<input #visitType name="visitType" autocomplete="off">
+                        :<input class="starter-input" #visitType name="visitType" autocomplete="off">
                         <!-- :<select required>
                             <option *ngFor="let visitType of visitTypes" [value]="visitType.id">
                                 {{visitType.name}}</option>
@@ -291,14 +291,14 @@
                     <!-- InQ Column -->
                     <ng-container matColumnDef="inQ">
                         <th mat-header-cell *matHeaderCellDef> In Q </th>
-                        <td mat-cell *matCellDef="let element"><input type="number"></td>
+                        <td mat-cell *matCellDef="let element"><input class="starter-input" type="number"></td>
                     </ng-container>
                     &nbsp;
 
                     <!-- Order Column -->
                     <ng-container matColumnDef="orderId">
                         <th mat-header-cell *matHeaderCellDef> Order </th>
-                        <td mat-cell *matCellDef="let element"><input type="number" [(ngModel)]="element.orderId"
+                        <td mat-cell *matCellDef="let element"><input class="starter-input" type="number" [(ngModel)]="element.orderId"
                                 [disabled]="!element.isSelected"></td>
                     </ng-container>
 
