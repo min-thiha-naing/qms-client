@@ -1,16 +1,11 @@
-<!-- <mat-checkbox [(ngModel)]="value" (change)="onChange($event)"></mat-checkbox>  -->
-<table>
-    <tr>
-        <th>1</th>
-        <th>2</th>
-        <th>3</th>
-        <th>4</th>
-    </tr>
-    <tr>
-        <td #input1>a</td>
-        <td>b</td>
-        <td>c</td>
-        <td>d</td>
-    </tr>
-</table>
-<button (click)="onfocus()">focus</button>
+
+   <div id="printArea">
+    <div style="text-align: center;">
+        <p>National University Policlinics 
+         Pioneer Polyclinic</p>
+    </div>
+    <div style="text-align: center;">
+       <p>Footer</p> 
+    </div>
+   </div>
+    <button (click)="onPrint('printArea')">Print</button>

@@ -6,18 +6,18 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
   styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
-  @ViewChild('input1',{static:true}) inputEl: ElementRef;
+  @ViewChild('input1', { static: true }) inputEl: ElementRef;
   constructor(
   ) { }
 
   ngOnInit() {
   }
 
-  // ngAfterViewInit() {
-  //   setTimeout(() => this.inputEl.nativeElement.focus());
-  // }
-  onfocus(){
-    this.inputEl.nativeElement.focus()
+  onPrint(area) {
+    var printContents = document.getElementById(area).innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
   }
-
 }
