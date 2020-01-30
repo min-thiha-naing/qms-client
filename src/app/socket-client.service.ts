@@ -17,12 +17,13 @@ export class SocketClientService implements OnDestroy {
   constructor(
     private authService: AuthService,
   ) {
+    console.log('SocketClientService => ' + sessionStorage.getItem('USER'));
     this.client = over(new SockJS(environment.rootUrl + '/qms' + '?access_token=' + this.authService.getAccessToken()));
     this.state = new BehaviorSubject<SocketClientState>(SocketClientState.ATTEMPTING);
     this.client.connect({
-      user: sessionStorage.getItem('USER')
+        user: sessionStorage.getItem('USER')
     }, () => {
-      this.state.next(SocketClientState.CONNECTED);
+        this.state.next(SocketClientState.CONNECTED);
     });
   }
 

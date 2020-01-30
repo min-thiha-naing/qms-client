@@ -54,7 +54,7 @@ export class PaymentTabComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
+    console.log('another damn');
     this.crtQS.getAllQ();
     this.crtQS.getHoldQ();
     this.crtQS.getMissQ();

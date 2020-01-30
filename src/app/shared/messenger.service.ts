@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { SocketClientService } from '../socket-client.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,17 +14,7 @@ export class MessengerService {
   private _searchResultFoundFrontend = new Subject<any>();
   private _searchAppointmentResult = new Subject<any>();
 
-  set tabIndex(ind: number) {
-    this._tabIndex = ind;
-  }
 
-  get servingQ() {
-    return this._servingQ.asObservable();
-  }
-
-  set servingQ(queue: any) {
-    this._servingQ.next(queue);
-  }
 
   get searchResultFoundFrontend() {
     return this._searchResultFoundFrontend.asObservable();
@@ -33,7 +24,7 @@ export class MessengerService {
     this._searchResultFoundFrontend.next(result);
   }
 
-  get appointmentSearchResult(){
+  get appointmentSearchResult() {
     return this._searchAppointmentResult.asObservable();
   }
 
@@ -43,14 +34,32 @@ export class MessengerService {
 
   constructor(
     private router: Router,
-  ) { }
+  ) {
 
+    console.log("this is messenger");
+  }
+
+  //  SECTION  Serving Queue ----------------------------------------
+  get servingQ() {
+    return this._servingQ.asObservable();
+  }
+
+  set servingQ(queue: any) {
+    this._servingQ.next(queue);
+  }
 
   isThereServingQ() {
     if (this._servingQ.value)
       return true;
     else
       return false;
+  }
+  //------------------------------------------------------------------
+
+  //  SECTION  Active Tab --------------------------------------------
+
+  set tabIndex(ind: number) {
+    this._tabIndex = ind;
   }
 
   getCurrentDirectory(): String {
@@ -83,6 +92,7 @@ export class MessengerService {
       }
     }
   }
+  //-------------------------------------------------------------
 }
 
 

@@ -3,7 +3,8 @@ import { SocketClientService } from '../socket-client.service';
 import { SubSink } from 'subsink';
 import { Router } from '@angular/router';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
-import { MessengerService } from '../shared/messenger.service';
+import { MessengerService, Tabs } from '../shared/messenger.service';
+import { RoomModuleService } from '../shared/room-module.service';
 
 @Component({
   selector: 'app-rt',
@@ -17,8 +18,8 @@ export class RtComponent implements OnInit, OnDestroy {
 
   constructor(
     private socketClient: SocketClientService,
-    private messenger: MessengerService
-
+    private messenger: MessengerService,
+    private rMS: RoomModuleService,
   ) { }
 
   ngOnInit() {
@@ -28,11 +29,18 @@ export class RtComponent implements OnInit, OnDestroy {
       this.messenger.tabIndex = this.tabs.selectedIndex;
     }, 1000)
 
-    // Helper.setTabIndex(0)
     this.subs.add(
-      this.socketClient.onMessage('/user/queue/reply')
-        .subscribe(queues => {
-          console.log(queues);
+      this.socketClient.onMessage(`/user/${sessionStorage.getItem('USER')}/queue/reply`)
+        .subscribe(queue => {
+          if(queue){
+            //  NOTE decide active tab and perform its function
+            switch(this.messenger.getCurrentDirectory()){
+              case Tabs.ROOM_MODULE: {
+                this.rMS.handleWebSocketQ(queue);
+              }
+            }
+          }
+
         })
     );
     //this.qS.getAllQueues().subscribe(res=>console.log(res))

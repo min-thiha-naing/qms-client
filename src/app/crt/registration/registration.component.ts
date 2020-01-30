@@ -61,7 +61,7 @@ export class RegistrationComponent implements OnInit {
     private messenger: MessengerService
   ) { }
   ngOnInit() {
-
+    console.log('damn');
     this.regQS.getRegAllQ();
     this.api.getDepartments().subscribe(resp => this.departments = resp);
     this.subs.add(this.regQS.CrtRegAllQs.subscribe(Qs => {

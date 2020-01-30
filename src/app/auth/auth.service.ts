@@ -28,8 +28,8 @@ export class AuthService implements Resolve<any> {
 
     return this.http.post<any>(environment.rootUrl + '/oauth/token', body.toString(), httpOptions)
       .pipe(tap(res => {
-        console.log(user.name);
-        sessionStorage.setItem('USER', user.name);
+        console.log(user.username);
+        sessionStorage.setItem('USER', user.username);
         sessionStorage.setItem('ACCESS_TOKEN', res.access_token);
         sessionStorage.setItem('REFRESH_TOKEN', res.refresh_token);
       }

@@ -52,14 +52,9 @@ export class PaymentTabService {
 
   constructor(
     private api: ApiService,
-    private socketClient: SocketClientService,
     private messenger: MessengerService,
   ) {
-    this.socketClient.onMessage('/user/queue/reply').subscribe(q => {
-      if (q.queueStatusId === QueueStatus.MISS) {
-        // this.addRespToQueueList(this._missQs, q);
-      }
-    })
+
   }
 
   getAllQ() {

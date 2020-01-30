@@ -27,12 +27,12 @@ export class CrtComponent implements OnInit {
       this.messenger.tabIndex = this.tabs.selectedIndex;
     }, 1000)
     // Helper.setTabIndex(0)
-    this.subs.add(
-      this.socketClient.onMessage('/user/queue/reply')
-        .subscribe(queues => {
-          console.log(queues);
-        })
-    );
+    // this.subs.add(
+    //   this.socketClient.onMessage('/user/queue/reply')
+    //     .subscribe(queues => {
+    //       console.log(queues);
+    //     })
+    // );
   }
 
   tabChanged(tabChangeEvent: MatTabChangeEvent): void {

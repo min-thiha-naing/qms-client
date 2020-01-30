@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   // baseUrl: 'http://192.168.200.10:8080/api/',
   // rootUrl: 'http://192.168.200.10:8080/',
-  baseUrl: 'http://192.168.1.99:8081',
-  rootUrl: 'http://192.168.1.99:8081',
+  baseUrl: 'http://192.168.1.9:8081',
+  rootUrl: 'http://192.168.1.9:8081',
 
   // baseUrl: 'http://localhost:8081/',
   // rootUrl: 'http://localhost:8081/',
