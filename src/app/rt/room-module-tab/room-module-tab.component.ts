@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { QTableRowData } from 'src/app/model/queue.model';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 import { SubSink } from 'subsink';
@@ -9,6 +9,9 @@ import { AddServicePointComponent } from '../add-service-point/add-service-point
 import { Helper } from 'src/app/shared/helper.class';
 import { RoomModuleService } from 'src/app/shared/room-module.service';
 import { MessengerService } from 'src/app/shared/messenger.service';
+import { PrintPageComponent } from 'src/app/print-page/print-page.component';
+
+
 
 @Component({
   selector: 'app-room-module-tab',
@@ -52,6 +55,7 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
     private qS: RoomModuleService,
     private dialog: MatDialog,
     private messenger: MessengerService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -265,6 +269,17 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
         console.log(resp)
       })
     }   
+  }
+
+  onPrint(){
+    if(this.servingQ){
+      let navigationExtras: NavigationExtras = {
+        state: {
+          queue: this.servingQ 
+        }
+      };
+     this.router.navigate(['/print'] , navigationExtras)
+    }
   }
 
   ngOnDestroy() {

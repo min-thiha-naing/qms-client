@@ -26,6 +26,10 @@ const routes: Routes = [
     loadChildren: './crt/crt.module#CrtModule',
   },
   {
+    path: 'print',
+    loadChildren: './print-page/print-page.module#PrintPageModule',
+  },
+  {
     path: '**',
     redirectTo: 'login',
     pathMatch: 'full',

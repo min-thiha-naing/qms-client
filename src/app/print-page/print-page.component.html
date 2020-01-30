@@ -1,0 +1,42 @@
+<div style="padding: 1vw;">
+   <!-- header -->
+   <div style="text-align: center;">
+      National University Policlinics<br>
+      Pioneer Polyclinic
+   </div>
+   <!-- body -->
+   <div fxLayout="column" style="text-align: center;">
+      <ngx-barcode *ngFor="let bcValue of values" [bc-element-type]="elementType" [bc-value]="bcValue"
+         [bc-format]="format" [bc-line-color]="lineColor" [bc-width]="width" [bc-height]="height"
+         [bc-display-value]="displayValue" [bc-font-options]="fontOptions" [bc-font]="font" [bc-text-align]="textAlign"
+         [bc-text-position]="textPosition" [bc-text-margin]="textMargin" [bc-font-size]="fontSize"
+         [bc-background]="background" [bc-margin-top]="marginTop" [bc-margin-bottom]="marginBottom"
+         [bc-margin-left]="marginLeft" [bc-margin-right]="marginRight">
+      </ngx-barcode>
+      <span style="font-size: 50px;font-weight: bolder;">{{queueNo}}</span>
+      <span style="border: 0.5px dotted black;"></span>
+      <span style="font-size: 20px;font-weight: bold;">Your Itinerary for Today</span>
+      <span style="border: 0.5px dotted black;"></span>
+      <div style="text-align: left !important;" *ngFor="let location of locations; let i=index">
+         <span>
+            <span style="font-size: 20px;font-weight: bold;">[{{i+1}}] {{location.workgroupName}}</span><br>
+            <span style="font-size: 10px;font-weight: bold;">Appt Time: {{location.appointmentTime | date:'shortTime' }}</span><br>
+            <span style="font-size: 10px;font-weight: bold;">Location : {{location.departmentName }}</span><br>
+            <span fxLayout="row" style="border: 0.5px dotted black;"></span>
+         </span>
+      </div>
+      <span style="border: 0.5px dotted black;"></span>
+
+   <!-- footer -->
+   <div style="text-align: center;">
+      {{date | date:'medium'}}<br>
+      Patient's Copy<br>
+      <span style="float: left;">Thank You for you visit</span>
+      <span style="float: right;">Reg-01</span>
+   </div>
+   <br>
+   <br>
+   <div style="text-align: center;">
+      <button style="width: 30%;" mat-flat-button class="hide" color="primary" (click)="onPrint()">Print</button>
+   </div>
+</div>

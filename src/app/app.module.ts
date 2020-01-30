@@ -18,14 +18,15 @@ import { NgxLoadingModule } from 'ngx-loading';
 import { MatDialog } from '@angular/material';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { PopUpWindowComponent } from './pop-up-window/pop-up-window.component';
-
+import { NgxPrintModule } from 'ngx-print';
+import { PrintPageComponent } from './print-page/print-page.component';
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
     TestComponent,
     ConfirmDialogComponent,
-    PopUpWindowComponent
+    PopUpWindowComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,6 +42,7 @@ import { PopUpWindowComponent } from './pop-up-window/pop-up-window.component';
       { delay: 0, passThruUnknownUrl: true }
     ),
     NgxLoadingModule.forRoot({}),
+    NgxPrintModule,
   ],
   providers: [
     {
