@@ -17,7 +17,7 @@ import { MessengerService } from 'src/app/shared/messenger.service';
 })
 export class PaymentTabComponent implements OnInit {
 
-  qTableColumns = ['qNo', 'name', 'mrn', 'visitType', 'apptTime', 'waitTime', 'tWaitTime', 'callTime',  'remark'];
+  qTableColumns = ['qNo', 'name', 'mrn', 'visitType', 'apptTime', 'waitTime', 'tWaitTime', 'callTime', 'remark'];
   allQDS = new MatTableDataSource<any>([]);
   holdQDS = new MatTableDataSource<any>([]);
   missQDS = new MatTableDataSource<any>([]);
@@ -91,8 +91,6 @@ export class PaymentTabComponent implements OnInit {
       if (this.servingQ) {
         if (this.servingQ.planList) {
           this.journeyListDS = new MatTableDataSource<any>(Helper.transformPlanListToDestLocList(this.servingQ.planList));
-        } else {
-          this.journeyListDS = new MatTableDataSource<any>()
         }
         this.selectedRowData = {
           queue: {
@@ -101,6 +99,8 @@ export class PaymentTabComponent implements OnInit {
           },
           fromPanel: 'all'
         };
+      } else {
+        this.journeyListDS = new MatTableDataSource<any>()
       }
     }));
 

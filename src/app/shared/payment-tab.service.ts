@@ -159,4 +159,18 @@ export class PaymentTabService {
       }
     }
   }
+
+  handleWebSocketQ(queue){
+    switch(queue.queueStatusId){
+      case QueueStatus.SERVING: {
+        Helper.removeFromQueueList(this._allQs, queue);
+        Helper.removeFromQueueList(this._missQs, queue)
+        break;
+      }
+      case QueueStatus.MISS: {
+        Helper.addRespToQueueList(this._missQs, queue, 'b');
+        break;
+      }
+    }
+  }
 }

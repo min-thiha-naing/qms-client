@@ -4,7 +4,9 @@ import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
 import { SubSink } from 'subsink';
 import { SocketClientService } from '../socket-client.service';
 import { Router } from '@angular/router';
-import { MessengerService } from '../shared/messenger.service';
+import { MessengerService, Tabs } from '../shared/messenger.service';
+import { RegistartionService } from '../shared/registartion.service';
+import { PaymentTabService } from '../shared/payment-tab.service';
 
 @Component({
   selector: 'app-crt',
@@ -19,6 +21,8 @@ export class CrtComponent implements OnInit {
   constructor(
     private socketClient: SocketClientService,
     private messenger: MessengerService,
+    private regS: RegistartionService,
+    private pTabS: PaymentTabService
   ) { }
 
   ngOnInit() {
@@ -26,13 +30,26 @@ export class CrtComponent implements OnInit {
     setTimeout(() => {
       this.messenger.tabIndex = this.tabs.selectedIndex;
     }, 1000)
-    // Helper.setTabIndex(0)
-    // this.subs.add(
-    //   this.socketClient.onMessage('/user/queue/reply')
-    //     .subscribe(queues => {
-    //       console.log(queues);
-    //     })
-    // );
+
+    this.subs.add(
+      this.socketClient.onMessage(`/user/${sessionStorage.getItem('USER')}/queue/reply`)
+        .subscribe(queue => {
+          if(queue){
+            //  NOTE decide active tab and perform its function
+            switch(this.messenger.getCurrentDirectory()){
+              case Tabs.REGISTRATION_MODULE: {
+                this.regS.handleWebSocketQ(queue);
+                break;
+              }
+              case Tabs.PAYMENT_TAB: {
+                this.pTabS.handleWebSocketQ(queue);
+                break;
+              }
+            }
+          }
+
+        })
+    );
   }
 
   tabChanged(tabChangeEvent: MatTabChangeEvent): void {

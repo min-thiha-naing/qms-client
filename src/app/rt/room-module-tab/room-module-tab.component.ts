@@ -95,8 +95,6 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
       if (this.servingQ) {
         if (this.servingQ.planList) {
           this.journeyListDS = new MatTableDataSource<any>(Helper.transformPlanListToDestLocList(this.servingQ.planList));
-        } else {
-          this.journeyListDS = new MatTableDataSource<any>([]);
         }
 
         this.selectedRowData = {
@@ -106,6 +104,8 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
           },
           fromPanel: 'all'
         };
+      } else {
+        this.journeyListDS = new MatTableDataSource<any>([]);
       }
     }));
 
@@ -253,7 +253,7 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
   }
 
   onUpdate() {
-    if(this.servingQ){
+    if (this.servingQ) {
       console.log(this.servingQ)
       let rowData: any = this.servingQ
       let dummy = {
@@ -268,17 +268,17 @@ export class RoomModuleTabComponent implements OnInit, OnDestroy {
       this.qS.remark(rowData, dummy).subscribe(resp => {
         console.log(resp)
       })
-    }   
+    }
   }
 
-  onPrint(){
-    if(this.servingQ){
+  onPrint() {
+    if (this.servingQ) {
       let navigationExtras: NavigationExtras = {
         state: {
-          queue: this.servingQ 
+          queue: this.servingQ
         }
       };
-     this.router.navigate(['/print'] , navigationExtras)
+      this.router.navigate(['/print'], navigationExtras)
     }
   }
 

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { TestService } from './test.service';
 
 @Component({
   selector: 'app-test',
@@ -6,18 +7,37 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
   styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
-  @ViewChild('input1', { static: true }) inputEl: ElementRef;
+
+  obj: { a: any, b: any } = null;
+  obj2: { a: any, b: any } = null;
+
   constructor(
+    private testS: TestService,
   ) { }
 
   ngOnInit() {
+    this.testS.vara.asObservable().subscribe(res => {
+      console.log('emitted for obj1');
+      this.obj = res
+    }
+    );
+    this.testS.vara.asObservable().subscribe(res => {
+      console.log('emitted for obj2');
+      this.obj2 = res
+    }
+    );
   }
 
-  onPrint(area) {
-    var printContents = document.getElementById(area).innerHTML;
-    var originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
+  emit() {
+    this.testS.vara.next({ a: 'Next', b: 'Next B' });
+  }
+
+  check() {
+    console.log(this.obj === this.obj2);
+  }
+
+
+  change() {
+    this.obj2.a = "A has been changed !!!!";
   }
 }

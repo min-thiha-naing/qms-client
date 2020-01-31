@@ -107,4 +107,17 @@ export class RegistartionService {
       return null;
     }
   }
+
+  handleWebSocketQ(queue){
+    switch(queue.queueStatusId){
+      case QueueStatus.SERVING: {
+        Helper.removeFromQueueList(this._regAllQs, queue);
+        break;
+      }
+      case QueueStatus.MISS: {
+        Helper.addRespToQueueList(this._regAllQs, queue, 'b');
+        break;
+      }
+    }
+  }
 }
